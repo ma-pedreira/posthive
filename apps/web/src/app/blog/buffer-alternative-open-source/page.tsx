@@ -10,7 +10,7 @@ const articleSchema = {
   headline: "The Best Open-Source Buffer Alternative in 2026",
   description: "Looking for a Buffer alternative that's open source, self-hostable, and supports more platforms? Posthive does everything Buffer does — and more — for less.",
   datePublished: "2026-07-07",
-  dateModified: "2026-08-01",
+  dateModified: "2026-08-28",
   image: `${WEB_URL}/og/landingogimage.png`,
   author: { "@type": "Person", name: "Guna", url: "https://x.com/gunaa_dev" },
   publisher: { "@type": "Organization", name: "Posthive", url: WEB_URL },
@@ -29,7 +29,12 @@ const faqSchema = {
     {
       "@type": "Question",
       name: "What platforms does Posthive support compared to Buffer?",
-      acceptedAnswer: { "@type": "Answer", text: "Posthive supports multiple platforms: Bluesky, Threads, Instagram, LinkedIn, Mastodon, YouTube, Facebook Pages, Pinterest, Telegram, Nostr, and X. Buffer supports fewer platforms and does not support Bluesky, Mastodon, Threads, or Telegram." },
+      acceptedAnswer: { "@type": "Answer", text: "Posthive supports 15 platforms: Bluesky, Threads, Instagram, LinkedIn, Mastodon, YouTube, Facebook Pages, Pinterest, Telegram, Nostr, X (Twitter), Discord, Tumblr, TikTok, and Lemmy. Buffer supports Instagram, Facebook, X, LinkedIn, Pinterest, TikTok, and YouTube — and does not support Bluesky, Mastodon, Threads, Telegram, Discord, Tumblr, Nostr, or Lemmy." },
+    },
+    {
+      "@type": "Question",
+      name: "Can I use AI agents like Claude or ChatGPT to schedule posts with Posthive?",
+      acceptedAnswer: { "@type": "Answer", text: "Yes. Posthive has a built-in MCP server that lets Claude, ChatGPT, and Grok Bot schedule posts directly — no UI required. Connect once via OAuth and your AI agent can create, schedule, and manage posts across all your connected accounts. Buffer has no equivalent." },
     },
     {
       "@type": "Question",
@@ -156,11 +161,15 @@ export default function BufferAlternativePage() {
                   ["X (Twitter)", true, true],
                   ["Pinterest", true, true],
                   ["YouTube", true, true],
+                  ["TikTok", true, true],
                   ["Bluesky", false, true],
                   ["Threads", false, true],
                   ["Mastodon", false, true],
                   ["Telegram", false, true],
+                  ["Discord", false, true],
+                  ["Tumblr", false, true],
                   ["Nostr", false, true],
+                  ["Lemmy", false, true],
                 ].map(([platform, buffer, posthive]) => (
                   <tr key={platform as string} style={{ borderBottom: "1px solid #111" }}>
                     <td style={{ padding: "10px 14px", color: "#aaa", fontSize: 14 }}>{platform as string}</td>
@@ -184,6 +193,38 @@ export default function BufferAlternativePage() {
             Posthive&apos;s hosted plan starts at $9/month with no per-channel pricing. Or self-host it for free — your only cost is the VPS or cloud instance, which can be near-zero on Railway&apos;s or Fly.io&apos;s hobby tier.
           </p>
 
+          {/* Pricing comparison table */}
+          <div style={{ overflowX: "auto", marginBottom: 32 }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: "left", padding: "10px 14px", borderBottom: "1px solid #1e1e1e", color: "#555", fontWeight: 700, fontSize: 12 }}>Scenario</th>
+                  <th style={{ textAlign: "center", padding: "10px 14px", borderBottom: "1px solid #1e1e1e", color: "#555", fontWeight: 700, fontSize: 12 }}>Buffer/mo</th>
+                  <th style={{ textAlign: "center", padding: "10px 14px", borderBottom: "1px solid #1e1e1e", color: "#9ba2ee", fontWeight: 700, fontSize: 12 }}>Posthive/mo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ["1 brand, 3 accounts", "$18", "$9"],
+                  ["1 brand, 6 accounts", "$36", "$9"],
+                  ["2 brands, 10 accounts", "$60", "$9"],
+                  ["Agency, 20+ accounts", "$120+", "$17"],
+                  ["Self-hosted (any accounts)", "N/A", "Free"],
+                ].map(([scenario, buffer, posthive]) => (
+                  <tr key={scenario} style={{ borderBottom: "1px solid #111" }}>
+                    <td style={{ padding: "10px 14px", color: "#aaa", fontSize: 14 }}>{scenario}</td>
+                    <td style={{ textAlign: "center", padding: "10px 14px", color: "#666", fontSize: 14 }}>{buffer}</td>
+                    <td style={{ textAlign: "center", padding: "10px 14px", fontSize: 14, color: "#9ba2ee", fontWeight: 600 }}>{posthive}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p style={{ marginBottom: 24 }}>
+            Buffer&apos;s per-channel model makes sense if you manage one or two accounts. The moment you scale — multiple brands, client accounts, or a team — Posthive&apos;s flat pricing wins decisively.
+          </p>
+
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#ededed", margin: "40px 0 14px", letterSpacing: "-0.01em" }}>
             Open source: full control, no lock-in
           </h2>
@@ -202,10 +243,12 @@ export default function BufferAlternativePage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
             {[
+              { title: "MCP / AI agent scheduling", desc: "Claude, ChatGPT, and Grok Bot can schedule posts directly through Posthive via MCP — no UI required. Buffer has no AI agent integration." },
               { title: "Bulk CSV scheduling", desc: "Upload a spreadsheet and schedule hundreds of posts at once. Specify different platforms per row with pipe-separated account names." },
-              { title: "First comment automation", desc: "Post a first comment — hashtags, a link, a CTA — automatically the moment your content goes live. Buffer has no equivalent." },
+              { title: "First comment automation", desc: "Post a first comment — hashtags, a link, a CTA — automatically the moment your content goes live. Supported on Instagram, YouTube, Bluesky, and more." },
               { title: "Per-platform overrides", desc: "Write one base post and customise the text independently per platform. LinkedIn gets the long version, Bluesky gets the 300-char summary." },
               { title: "Drag-to-reschedule calendar", desc: "A visual content calendar where you can drag posts to new dates instantly. No form-filling, no dropdowns." },
+              { title: "Self-hostable + open source", desc: "AGPL-3.0. Full codebase on GitHub. OAuth tokens AES-256-GCM encrypted at rest. Buffer is closed-source SaaS — your credentials live on their servers." },
             ].map((f) => (
               <div key={f.title} style={{ background: "#111", border: "1px solid #1e1e1e", borderRadius: 12, padding: "16px 20px" }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#ededed", marginBottom: 6 }}>✓ {f.title}</div>
@@ -219,11 +262,11 @@ export default function BufferAlternativePage() {
           </h2>
 
           <p style={{ marginBottom: 24 }}>
-            Buffer is polished, battle-tested, and has a great mobile app. If you need TikTok support, a native mobile scheduler, or don&apos;t want to manage your own infrastructure, Buffer is still a solid option. It&apos;s also the safer choice for non-technical teams who aren&apos;t comfortable with self-hosting.
+            Buffer is polished, battle-tested, and has a great mobile app. If you need a native mobile scheduler or don&apos;t want to manage your own infrastructure, Buffer is still a solid option. It&apos;s also the safer choice for non-technical teams who aren&apos;t comfortable with self-hosting.
           </p>
 
           <p style={{ marginBottom: 24 }}>
-            But if you post to Bluesky, Threads, Mastodon, or Telegram — or if you care about open source and data ownership — Posthive is the better fit.
+            But if you post to Bluesky, Threads, Mastodon, Telegram, Discord, or Tumblr — or if you care about open source, data ownership, or AI agent scheduling — Posthive is the better fit.
           </p>
 
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#ededed", margin: "40px 0 14px", letterSpacing: "-0.01em" }}>
