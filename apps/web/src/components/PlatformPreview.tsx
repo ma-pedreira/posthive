@@ -453,15 +453,12 @@ function LinkedInPreview({ account, text, commentText, images }: {
           ))}
         </div>
 
-        {/* First comment */}
+        {/* First comment — LinkedIn API removed first comment support */}
         {commentText && (
-          <div className="mt-3 pt-2.5 flex gap-2" style={{ borderTop: "1px solid #1a1a1a" }}>
-            <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-white"
-              style={{ background: "#0077b5" }}>{initial}</div>
-            <div className="flex-1 rounded-lg px-3 py-2" style={{ backgroundColor: "#111111" }}>
-              <p className="text-xs font-semibold mb-0.5" style={{ color: "#ededed" }}>{account.displayName}</p>
-              <p className="text-xs" style={{ color: "#aaa" }}>{commentText}</p>
-            </div>
+          <div className="mt-3 pt-2.5" style={{ borderTop: "1px solid #1a1a1a" }}>
+            <p className="text-xs" style={{ color: "#888" }}>
+              ⚠️ LinkedIn no longer supports first comments via API — this won&apos;t be posted.
+            </p>
           </div>
         )}
       </div>
