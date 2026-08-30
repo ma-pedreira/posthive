@@ -66,8 +66,9 @@ async function refreshIfNeeded(account: Account): Promise<Account> {
     }),
   });
   if (!res.ok) {
-    console.error("[youtube] token refresh failed:", await res.text());
-    return account;
+    const body = await res.text();
+    console.error("[youtube] token refresh failed:", body);
+    throw new Error(`YouTube token refresh failed — please reconnect your YouTube account. (${res.status})`);
   }
   const data = await res.json() as { access_token: string; expires_in: number };
   const newCreds: YouTubeCredentials = {
