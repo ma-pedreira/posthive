@@ -4,6 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import esLocale from "@fullcalendar/core/locales/es";
 import type { EventDropArg, EventContentArg } from "@fullcalendar/core";
 import type { CalendarApi } from "@fullcalendar/core";
 import { useRef, useEffect, useCallback, useState } from "react";
@@ -394,7 +395,10 @@ export function CalendarView({ jobs, onReschedule, onEdit }: Props) {
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
-        buttonText={{ month: "Month", week: "Week", day: "Day", today: "Today" }}
+        locale={esLocale}
+        buttonText={{ month: "Mes", week: "Semana", day: "Día", today: "Hoy" }}
+        slotLabelFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
+        eventTimeFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
         events={events}
         editable={!isTouchDevice}
         eventDragStart={() => { isDragging.current = true; }}

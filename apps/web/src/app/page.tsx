@@ -14,21 +14,21 @@ const PLATFORMS_GRID = [
   {
     name: "Bluesky",
     domain: "bsky.app",
-    meta: "300 chars · AT Protocol",
+    meta: "300 caracteres · AT Protocol",
     accent: "#0085ff",
     platform: "bluesky",
   },
   {
     name: "Threads",
     domain: "threads.net",
-    meta: "500 chars · Meta OAuth",
+    meta: "500 caracteres · Meta OAuth",
     accent: "#e6e6e6",
     platform: "threads",
   },
   {
     name: "Instagram",
     domain: "instagram.com",
-    meta: "Posts, Reels & Stories",
+    meta: "Posts, Reels e Historias",
     accent: "#e1306c",
     platform: "instagram",
   },
@@ -42,63 +42,63 @@ const PLATFORMS_GRID = [
   {
     name: "Facebook Pages",
     domain: "facebook.com",
-    meta: "Pages · Graph API",
+    meta: "Páginas · Graph API",
     accent: "#1877f2",
     platform: "facebook",
   },
   {
     name: "LinkedIn",
     domain: "linkedin.com",
-    meta: "3,000 chars · Professional",
+    meta: "3.000 caracteres · Profesional",
     accent: "#0a66c2",
     platform: "linkedin",
   },
   {
     name: "X (Twitter)",
     domain: "x.com",
-    meta: "100 tweets/mo · Pro & Team",
+    meta: "100 tweets/mes · Pro y Team",
     accent: "#e7e7e7",
     platform: "twitter",
   },
   {
     name: "Mastodon",
     domain: "mastodon.social",
-    meta: "500 chars · Federated",
+    meta: "500 caracteres · Federado",
     accent: "#6364ff",
     platform: "mastodon",
   },
   {
     name: "Pixelfed",
     domain: "pixelfed.social",
-    meta: "2,001 chars · Photo-first · Fediverse",
+    meta: "2.001 caracteres · Enfocado en fotos · Fediverse",
     accent: "#ff8c00",
     platform: "pixelfed",
   },
   {
     name: "YouTube",
     domain: "youtube.com",
-    meta: "Shorts & video · Google OAuth",
+    meta: "Shorts y video · Google OAuth",
     accent: "#ff0000",
     platform: "youtube",
   },
   {
     name: "Pinterest",
     domain: "pinterest.com",
-    meta: "Pins · image required",
+    meta: "Pins · imagen requerida",
     accent: "#e60023",
     platform: "pinterest",
   },
   {
     name: "Telegram",
     domain: "telegram.org",
-    meta: "4,096 chars · Bot API",
+    meta: "4.096 caracteres · Bot API",
     accent: "#229ED9",
     platform: "telegram",
   },
   {
     name: "Nostr",
     domain: "nostr.com",
-    meta: "Keypair · decentralized · no approval",
+    meta: "Keypair · descentralizado · sin aprobación",
     accent: "#8B5CF6",
     platform: "nostr",
     iconUrl: "/Nostr.svg",
@@ -106,21 +106,21 @@ const PLATFORMS_GRID = [
   {
     name: "Discord",
     domain: "discord.com",
-    meta: "2,000 chars · Bot + webhook",
+    meta: "2.000 caracteres · Bot + webhook",
     accent: "#5865F2",
     platform: "discord",
   },
   {
     name: "Tumblr",
     domain: "tumblr.com",
-    meta: "4,096 chars · OAuth 1.0a",
+    meta: "4.096 caracteres · OAuth 1.0a",
     accent: "#35465c",
     platform: "tumblr",
   },
   {
     name: "Lemmy",
     domain: "join-lemmy.org",
-    meta: "Federated · username + password",
+    meta: "Federado · usuario + contraseña",
     accent: "#ff6314",
     platform: "lemmy",
   },
@@ -131,8 +131,8 @@ const HERO_CARD_SCHEDULED = [
   {
     platform: "bluesky",
     name: "Bluesky",
-    text: "Write once, post to multi platforms. This is the tool I have been waiting for.",
-    pill: "Fires in 2h",
+    text: "Escribe una vez, publica en varias plataformas. Esta es la herramienta que estaba esperando.",
+    pill: "Se publica en 2h",
     pillBg: "#fef3c7",
     pillColor: "#92400e",
     time: "9:00 AM",
@@ -140,8 +140,8 @@ const HERO_CARD_SCHEDULED = [
   {
     platform: "mastodon",
     name: "Mastodon",
-    text: "Finally a scheduler that supports the fediverse. Set it and forget it.",
-    pill: "Fires in 45m",
+    text: "Por fin un programador que soporta el fediverso. Lo configuras y te olvidas.",
+    pill: "Se publica en 45m",
     pillBg: "#fef3c7",
     pillColor: "#92400e",
     time: "10:15 AM",
@@ -149,8 +149,8 @@ const HERO_CARD_SCHEDULED = [
   {
     platform: "twitter",
     name: "X (Twitter)",
-    text: "Scheduled 30 tweets for the whole week in under 10 minutes.",
-    pill: "Tomorrow 8AM",
+    text: "Programé 30 tweets para toda la semana en menos de 10 minutos.",
+    pill: "Mañana 8AM",
     pillBg: "#ede9fe",
     pillColor: "#5b21b6",
     time: "8:00 AM",
@@ -158,8 +158,8 @@ const HERO_CARD_SCHEDULED = [
   {
     platform: "pinterest",
     name: "Pinterest",
-    text: "Pinned my product catalogue to 6 boards on autopilot every morning.",
-    pill: "Fires in 1h",
+    text: "Publiqué mi catálogo de productos en 6 tableros automáticamente cada mañana.",
+    pill: "Se publica en 1h",
     pillBg: "#fef3c7",
     pillColor: "#92400e",
     time: "7:30 AM",
@@ -170,16 +170,16 @@ const HERO_CARD_FIRST_COMMENT = [
   {
     platform: "threads",
     name: "Threads",
-    text: "First comment fires automatically right after the post goes live.",
-    pill: "Sent",
+    text: "El primer comentario se publica automáticamente justo después de la publicación.",
+    pill: "Enviado",
     pillBg: "#dcfce7",
     pillColor: "#166534",
-    time: "Just now",
+    time: "Recién",
   },
   {
     platform: "linkedin",
     name: "LinkedIn",
-    text: "Added my link in the first comment automatically. Algorithm loves it.",
+    text: "Agregué mi enlace en el primer comentario automáticamente. Al algoritmo le encanta.",
     pill: "Sent",
     pillBg: "#dcfce7",
     pillColor: "#166534",
@@ -188,20 +188,20 @@ const HERO_CARD_FIRST_COMMENT = [
   {
     platform: "instagram",
     name: "Instagram",
-    text: "Drop hashtags in the first comment without cluttering the caption.",
-    pill: "Sent",
+    text: "Pongo los hashtags en el primer comentario sin saturar la descripción.",
+    pill: "Enviado",
     pillBg: "#dcfce7",
     pillColor: "#166534",
-    time: "Just now",
+    time: "Recién",
   },
   {
     platform: "facebook",
     name: "Facebook",
-    text: "First comment auto-posted with the full article link seconds after.",
-    pill: "Sent",
+    text: "El primer comentario se publicó automáticamente con el enlace completo del artículo segundos después.",
+    pill: "Enviado",
     pillBg: "#dcfce7",
     pillColor: "#166534",
-    time: "1m ago",
+    time: "hace 1m",
   },
 ];
 
@@ -209,8 +209,8 @@ const HERO_CARD_POSTED = [
   {
     platform: "linkedin",
     name: "LinkedIn",
-    text: "Bulk scheduled 30 days of content in one afternoon with CSV upload.",
-    pill: "Live",
+    text: "Programé 30 días de contenido en una tarde subiendo un CSV.",
+    pill: "En vivo",
     pillBg: "#dcfce7",
     pillColor: "#166534",
     time: "8:47 AM",
@@ -218,8 +218,8 @@ const HERO_CARD_POSTED = [
   {
     platform: "youtube",
     name: "YouTube Short",
-    text: "Short went live at peak hour. Views are already rolling in.",
-    pill: "Live",
+    text: "El Short se publicó en la hora pico. Ya está sumando vistas.",
+    pill: "En vivo",
     pillBg: "#dcfce7",
     pillColor: "#166534",
     time: "12:00 PM",
@@ -227,8 +227,8 @@ const HERO_CARD_POSTED = [
   {
     platform: "facebook",
     name: "Facebook Page",
-    text: "Posted to 3 Facebook Pages at once from a single compose window.",
-    pill: "Live",
+    text: "Publiqué en 3 Páginas de Facebook a la vez desde una sola ventana de redacción.",
+    pill: "En vivo",
     pillBg: "#dcfce7",
     pillColor: "#166534",
     time: "9:00 AM",
@@ -236,8 +236,8 @@ const HERO_CARD_POSTED = [
   {
     platform: "nostr",
     name: "Nostr",
-    text: "Decentralized post published. No algorithm, no gatekeeping.",
-    pill: "Live",
+    text: "Publicación descentralizada publicada. Sin algoritmo, sin filtros.",
+    pill: "En vivo",
     pillBg: "#dcfce7",
     pillColor: "#166534",
     time: "11:22 AM",
@@ -245,20 +245,20 @@ const HERO_CARD_POSTED = [
   {
     platform: "discord",
     name: "Discord",
-    text: "Announcement scheduled to the community server. Done in seconds.",
-    pill: "Live",
+    text: "Anuncio programado al servidor de la comunidad. Listo en segundos.",
+    pill: "En vivo",
     pillBg: "#dcfce7",
     pillColor: "#166534",
-    time: "3m ago",
+    time: "hace 3m",
   },
   {
     platform: "tumblr",
     name: "Tumblr",
-    text: "Blog post queued and published to Tumblr right on schedule.",
-    pill: "Live",
+    text: "Publicación del blog programada y publicada en Tumblr puntualmente.",
+    pill: "En vivo",
     pillBg: "#dcfce7",
     pillColor: "#166534",
-    time: "1m ago",
+    time: "hace 1m",
   },
 ];
 
@@ -266,8 +266,8 @@ const HERO_CARD_RESCHEDULED = [
   {
     platform: "instagram",
     name: "Instagram Reel",
-    text: "Dragged to a better time slot on the calendar. Done in 2 seconds.",
-    pill: "Tomorrow 9AM",
+    text: "Lo arrastré a un mejor horario en el calendario. Listo en 2 segundos.",
+    pill: "Mañana 9AM",
     pillBg: "#ede9fe",
     pillColor: "#5b21b6",
     time: "",
@@ -275,8 +275,8 @@ const HERO_CARD_RESCHEDULED = [
   {
     platform: "telegram",
     name: "Telegram",
-    text: "Moved the channel broadcast to Friday peak hours in one tap.",
-    pill: "Fri 6:00 PM",
+    text: "Moví el anuncio del canal al horario pico del viernes con un toque.",
+    pill: "Vie 6:00 PM",
     pillBg: "#ede9fe",
     pillColor: "#5b21b6",
     time: "",
@@ -284,8 +284,8 @@ const HERO_CARD_RESCHEDULED = [
   {
     platform: "bluesky",
     name: "Bluesky",
-    text: "Rescheduled after spotting a typo. No stress, just drag and drop.",
-    pill: "Mon 8:00 AM",
+    text: "Reprogramado después de notar un error de tipeo. Sin estrés, solo arrastrar y soltar.",
+    pill: "Lun 8:00 AM",
     pillBg: "#ede9fe",
     pillColor: "#5b21b6",
     time: "",
@@ -293,8 +293,8 @@ const HERO_CARD_RESCHEDULED = [
   {
     platform: "twitter",
     name: "X (Twitter)",
-    text: "Shifted the thread to avoid the weekend lull. Better reach guaranteed.",
-    pill: "Next Mon",
+    text: "Moví el hilo para evitar el bajón del fin de semana. Mejor alcance garantizado.",
+    pill: "Próximo lun",
     pillBg: "#ede9fe",
     pillColor: "#5b21b6",
     time: "",
@@ -305,69 +305,69 @@ const PLANS = [
   {
     id: "creator",
     name: "Creator",
-    desc: "For solo creators finding their rhythm.",
+    desc: "Para creadores solitarios encontrando su ritmo.",
     inr: "₹550",
     usd: "$9",
     features: [
-      { text: "5 connected accounts", included: true },
-      { text: "400 posts / month", included: true },
-      { text: "All core platforms", included: true },
-      { text: "Bulk CSV scheduling", included: true },
-      { text: "Post templates", included: true },
-      { text: "Calendar & drag-reschedule", included: true },
-      { text: "First comment automation", included: true },
-      { text: "1 team member", included: true },
-      { text: "Reels & Stories", included: true },
-      { text: "Per-platform overrides", included: true },
-      { text: "X/Twitter posting", included: false },
-      { text: "API access & MCP", included: false },
-      { text: "Webhook outbound", included: false },
+      { text: "5 cuentas conectadas", included: true },
+      { text: "400 publicaciones / mes", included: true },
+      { text: "Todas las plataformas principales", included: true },
+      { text: "Programación masiva por CSV", included: true },
+      { text: "Plantillas de publicaciones", included: true },
+      { text: "Calendario y arrastrar para reprogramar", included: true },
+      { text: "Automatización de primer comentario", included: true },
+      { text: "1 miembro de equipo", included: true },
+      { text: "Reels e Historias", included: true },
+      { text: "Personalización por plataforma", included: true },
+      { text: "Publicar en X/Twitter", included: false },
+      { text: "Acceso a API y MCP", included: false },
+      { text: "Webhooks salientes", included: false },
     ],
     popular: false,
   },
   {
     id: "pro",
     name: "Pro",
-    desc: "For creators who are serious about growth.",
+    desc: "Para creadores que se toman en serio el crecimiento.",
     inr: "₹1,700",
     usd: "$29",
     features: [
-      { text: "15 connected accounts", included: true },
-      { text: "Unlimited posts", included: true },
-      { text: "All core platforms", included: true },
-      { text: "Bulk CSV scheduling", included: true },
-      { text: "Post templates", included: true },
-      { text: "Calendar & drag-reschedule", included: true },
-      { text: "First comment automation", included: true },
-      { text: "2 team members", included: true },
-      { text: "Reels & Stories", included: true },
-      { text: "Per-platform overrides", included: true },
-      { text: "X/Twitter posting (100/mo, no links)*", included: true },
-      { text: "API access & MCP", included: true },
-      { text: "Webhook outbound", included: true },
+      { text: "15 cuentas conectadas", included: true },
+      { text: "Publicaciones ilimitadas", included: true },
+      { text: "Todas las plataformas principales", included: true },
+      { text: "Programación masiva por CSV", included: true },
+      { text: "Plantillas de publicaciones", included: true },
+      { text: "Calendario y arrastrar para reprogramar", included: true },
+      { text: "Automatización de primer comentario", included: true },
+      { text: "2 miembros de equipo", included: true },
+      { text: "Reels e Historias", included: true },
+      { text: "Personalización por plataforma", included: true },
+      { text: "Publicar en X/Twitter (100/mes, sin enlaces)*", included: true },
+      { text: "Acceso a API y MCP", included: true },
+      { text: "Webhooks salientes", included: true },
     ],
     popular: true,
   },
   {
     id: "team",
     name: "Team",
-    desc: "For agencies and fast-moving teams.",
+    desc: "Para agencias y equipos de ritmo acelerado.",
     inr: "₹2,600",
     usd: "$49",
     features: [
-      { text: "50 connected accounts", included: true },
-      { text: "Unlimited posts", included: true },
-      { text: "All core platforms", included: true },
-      { text: "Bulk CSV scheduling", included: true },
-      { text: "Post templates", included: true },
-      { text: "Calendar & drag-reschedule", included: true },
-      { text: "First comment automation", included: true },
-      { text: "4 team members", included: true },
-      { text: "Reels & Stories", included: true },
-      { text: "Per-platform overrides", included: true },
-      { text: "X/Twitter posting (100/mo, no links)*", included: true },
-      { text: "API access & MCP", included: true },
-      { text: "Webhook outbound", included: true },
+      { text: "50 cuentas conectadas", included: true },
+      { text: "Publicaciones ilimitadas", included: true },
+      { text: "Todas las plataformas principales", included: true },
+      { text: "Programación masiva por CSV", included: true },
+      { text: "Plantillas de publicaciones", included: true },
+      { text: "Calendario y arrastrar para reprogramar", included: true },
+      { text: "Automatización de primer comentario", included: true },
+      { text: "4 miembros de equipo", included: true },
+      { text: "Reels e Historias", included: true },
+      { text: "Personalización por plataforma", included: true },
+      { text: "Publicar en X/Twitter (100/mes, sin enlaces)*", included: true },
+      { text: "Acceso a API y MCP", included: true },
+      { text: "Webhooks salientes", included: true },
     ],
     popular: false,
   },
@@ -410,8 +410,8 @@ export default function RootPage() {
   const [isIndia, setIsIndia] = useIsIndia();
   useScrollReveal();
   const ctaHref = user ? "/compose" : "/register";
-  const ctaLabel = user ? "Go to scheduler" : "Get started free";
-  const navCtaLabel = user ? "Go to scheduler" : "Get started free";
+  const ctaLabel = user ? "Ir al programador" : "Comienza gratis";
+  const navCtaLabel = user ? "Ir al programador" : "Comienza gratis";
 
   const [cardIdx, setCardIdx] = useState([0, 0, 0, 0]);
   const [fade, setFade] = useState([true, true, true, true]);
@@ -726,7 +726,7 @@ export default function RootPage() {
                   >
                     <path d="M5 1 C2 1 1 4 2 7 L2 11 M2 11 L4 9 M2 11 L0 9" />
                   </svg>
-                  Scheduled
+                  Programado
                 </div>
                 <div
                   className="hero-card"
@@ -777,7 +777,7 @@ export default function RootPage() {
                   >
                     <path d="M5 1 C2 1 1 4 2 7 L2 11 M2 11 L4 9 M2 11 L0 9" />
                   </svg>
-                  First comment
+                  Primer comentario
                 </div>
                 <div
                   className="hero-card"
@@ -833,10 +833,10 @@ export default function RootPage() {
                 }}
               >
                 <span style={{ display: "block", marginBottom: 14 }}>
-                  Automate your social media
+                  Automatiza tus redes sociales
                 </span>
                 <span style={{ color: "#f4f4f4" }}>
-                  with{" "}
+                  con{" "}
                   <span
                     style={{
                       display: "inline-block",
@@ -848,7 +848,7 @@ export default function RootPage() {
                       transformOrigin: "center",
                     }}
                   >
-                    AI agents.
+                    agentes de IA.
                   </span>
                 </span>
               </h1>
@@ -865,9 +865,10 @@ export default function RootPage() {
                   fontFamily: "var(--font-figtree), system-ui, sans-serif",
                 }}
               >
-                Plan, create, review, and schedule posts across every major
-                social network. Connect Claude, Cursor, Codex, ChatGPT or any
-                MCP-compatible AI agent to automate your social media workflow.
+                Planifica, crea, revisa y programa publicaciones en todas las
+                redes sociales principales. Conecta Claude, Cursor, Codex,
+                ChatGPT o cualquier agente de IA compatible con MCP para
+                automatizar tu flujo de trabajo en redes sociales.
               </p>
 
               <div
@@ -898,7 +899,7 @@ export default function RootPage() {
                   </Link>
                 )}
                 <Link href="/docs" className="ph-btn-secondary">
-                  View docs
+                  Ver documentación
                 </Link>
               </div>
 
@@ -907,7 +908,7 @@ export default function RootPage() {
                   className="anim-5 mono"
                   style={{ fontSize: 13, color: "#999", margin: "0 0 52px" }}
                 >
-                  14-day free trial · no credit card · cancel anytime
+                  14 días de prueba gratis · sin tarjeta de crédito · cancela cuando quieras
                 </p>
               )}
 
@@ -931,7 +932,7 @@ export default function RootPage() {
                     fontWeight: 600,
                   }}
                 >
-                  PUBLISH TO
+                  PUBLICA EN
                 </span>
                 {PLATFORMS_GRID.map((p) => (
                   <span
@@ -980,7 +981,7 @@ export default function RootPage() {
                   >
                     <path d="M5 1 C2 1 1 4 2 7 L2 11 M2 11 L4 9 M2 11 L0 9" />
                   </svg>
-                  Posted
+                  Publicado
                 </div>
                 <div
                   className="hero-card"
@@ -1031,7 +1032,7 @@ export default function RootPage() {
                   >
                     <path d="M5 1 C2 1 1 4 2 7 L2 11 M2 11 L4 9 M2 11 L0 9" />
                   </svg>
-                  Rescheduled
+                  Reprogramado
                 </div>
                 <div
                   className="hero-card"
@@ -1138,7 +1139,7 @@ export default function RootPage() {
               </div>
               <Image
                 src="/app-screenshot.png"
-                alt="Posthive composer — schedule posts across all platforms"
+                alt="Editor de Posthive — programa publicaciones en todas las plataformas"
                 width={1120}
                 height={630}
                 style={{ width: "100%", height: "auto", display: "block" }}
@@ -1211,7 +1212,7 @@ export default function RootPage() {
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
               <span>
-                Featured in{" "}
+                Destacado en{" "}
                 <span style={{ color: "#ededed", fontWeight: 500 }}>
                   awesome-mcp-servers
                 </span>
@@ -1227,7 +1228,7 @@ export default function RootPage() {
           style={{ maxWidth: 1120, margin: "0 auto", padding: "104px 40px" }}
         >
           <div style={{ textAlign: "center", marginBottom: 60 }}>
-            <span className="section-label">FEATURES</span>
+            <span className="section-label">FUNCIONALIDADES</span>
             <h2
               style={{
                 fontSize: 44,
@@ -1237,7 +1238,7 @@ export default function RootPage() {
                 color: "#f2f2f2",
               }}
             >
-              Everything you need to post consistently
+              Todo lo que necesitas para publicar de forma consistente
             </h2>
             <p
               style={{
@@ -1248,8 +1249,8 @@ export default function RootPage() {
                 lineHeight: 1.6,
               }}
             >
-              A complete scheduling workflow built for creators and teams,
-              without the manual grind.
+              Un flujo de programación completo pensado para creadores y
+              equipos, sin el trabajo manual repetitivo.
             </p>
           </div>
           <div
@@ -1263,57 +1264,57 @@ export default function RootPage() {
             {[
               {
                 icon: <ChatIcon />,
-                title: "First comment automation",
+                title: "Automatización de primer comentario",
                 href: "/features/first-comment",
-                body: "Schedule a reply that fires the second your post goes live on Bluesky, Threads, Mastodon, and LinkedIn. Other tools do this only on Instagram. We do it everywhere.",
+                body: "Programa una respuesta que se publica en el segundo en que tu post sale al aire en Bluesky, Threads, Mastodon y LinkedIn. Otras herramientas solo lo hacen en Instagram. Nosotros lo hacemos en todos lados.",
               },
               {
                 icon: <LayersIcon />,
-                title: "Multi-platform posting",
+                title: "Publicación multiplataforma",
                 href: "/features/multi-platform-posting",
-                body: "Draft once and ship to all nine networks in a single click.",
+                body: "Redacta una vez y publica en las nueve redes con un solo clic.",
               },
               {
                 icon: <PlayIcon />,
-                title: "Reels & Stories scheduling",
+                title: "Programación de Reels e Historias",
                 href: "/features/instagram-reels-scheduler",
-                body: "Full Instagram media support plus YouTube Shorts with native previews.",
+                body: "Soporte completo de medios de Instagram, además de YouTube Shorts con vistas previas nativas.",
               },
               {
                 icon: <CalGridIcon />,
-                title: "Drag-to-reschedule calendar",
+                title: "Calendario con arrastrar para reprogramar",
                 href: "/features/drag-to-reschedule",
-                body: "See your whole week at a glance. Drag any post to a new slot in seconds.",
+                body: "Mira toda tu semana de un vistazo. Arrastra cualquier post a un nuevo horario en segundos.",
               },
               {
                 icon: <PenIcon />,
-                title: "Per-platform text overrides",
+                title: "Texto personalizado por plataforma",
                 href: "/features/per-platform-overrides",
-                body: "Tweak copy and media per network without leaving the composer.",
+                body: "Ajusta el texto y los medios por red sin salir del editor.",
               },
               {
                 icon: <ServerIcon />,
-                title: "Reliable scheduling",
+                title: "Programación confiable",
                 href: "/features/multi-platform-posting",
-                body: "Posts fire at the exact second. BullMQ-backed queue with automatic retries.",
+                body: "Las publicaciones salen en el segundo exacto. Cola respaldada por BullMQ con reintentos automáticos.",
               },
               {
                 icon: <CsvIcon />,
-                title: "Bulk CSV scheduling",
+                title: "Programación masiva por CSV",
                 href: "/features/bulk-csv-scheduling",
-                body: "Upload a CSV and schedule hundreds of posts at once. Exclude platforms per row with !platform syntax.",
+                body: "Sube un CSV y programa cientos de publicaciones a la vez. Excluye plataformas por fila con la sintaxis !plataforma.",
               },
               {
                 icon: <McpIcon />,
-                title: "Give your agents hands",
+                title: "Dale manos a tus agentes",
                 href: "/docs#mcp-overview",
-                body: "Drive Posthive from Claude Code or Cursor via MCP. Your agent drafts and schedules nothing publishes without your approval.",
+                body: "Controla Posthive desde Claude Code o Cursor vía MCP. Tu agente redacta y programa nada se publica sin tu aprobación.",
               },
               {
                 icon: <SparklesIcon />,
-                title: "AI caption assist",
+                title: "Asistente de IA para descripciones",
                 href: "/features/ai-caption-assist",
-                body: "Fix grammar, make it concise, expand, rephrase, or polish your caption in one click. Powered by Claude, built into the composer.",
+                body: "Corrige la gramática, hazlo más conciso, amplía, reformula o pule tu descripción con un clic. Impulsado por Claude, integrado en el editor.",
               },
             ].map(({ icon, title, href, body }) => (
               <Link
@@ -1414,9 +1415,9 @@ export default function RootPage() {
                   lineHeight: 1.2,
                 }}
               >
-                Write once,
+                Escribe una vez,
                 <br />
-                post everywhere
+                publica en todos lados
               </h2>
               <p
                 style={{
@@ -1426,10 +1427,10 @@ export default function RootPage() {
                   marginBottom: 28,
                 }}
               >
-                Compose your post in a single editor and publish to every
-                connected account simultaneously. Each platform renders its own
-                preview character limits, hashtags, and link handling all
-                accounted for.
+                Redacta tu publicación en un solo editor y publícala en todas
+                tus cuentas conectadas a la vez. Cada plataforma muestra su
+                propia vista previa límites de caracteres, hashtags y manejo
+                de enlaces, todo contemplado.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {PLATFORMS_GRID.map((p) => (
@@ -1516,9 +1517,9 @@ export default function RootPage() {
                   lineHeight: 1.2,
                 }}
               >
-                Reels, Stories,
+                Reels, Historias
                 <br />
-                and Carousels
+                y Carruseles
               </h2>
               <p
                 style={{
@@ -1528,16 +1529,17 @@ export default function RootPage() {
                   marginBottom: 24,
                 }}
               >
-                Full Instagram media support baked in. Schedule a Reel, a Story,
-                or a carousel with up to 10 slides all from the same composer.
+                Soporte completo de medios de Instagram incluido. Programa un
+                Reel, una Historia o un carrusel de hasta 10 imágenes, todo
+                desde el mismo editor.
               </p>
               <div
                 style={{ display: "flex", flexDirection: "column", gap: 10 }}
               >
                 {[
-                  "Reel - short-form video with caption",
-                  "Story - image or video, 24-hour expiry",
-                  "Post - static or carousel up to 10 images",
+                  "Reel - video corto con descripción",
+                  "Historia - imagen o video, expira en 24 horas",
+                  "Post - imagen fija o carrusel de hasta 10 imágenes",
                 ].map((item) => (
                   <div
                     key={item}
@@ -1610,9 +1612,9 @@ export default function RootPage() {
                   lineHeight: 1.2,
                 }}
               >
-                Drag to reschedule.
+                Arrastra para reprogramar.
                 <br />
-                Instantly.
+                Al instante.
               </h2>
               <p
                 style={{
@@ -1622,17 +1624,18 @@ export default function RootPage() {
                   marginBottom: 24,
                 }}
               >
-                See your entire content pipeline on a month, week, or day
-                calendar. Drag any scheduled post to a new date and time the job
-                is rescheduled server-side in real time.
+                Mira todo tu contenido planificado en un calendario mensual,
+                semanal o diario. Arrastra cualquier publicación programada a
+                una nueva fecha y hora se reprograma en el servidor en tiempo
+                real.
               </p>
               <div
                 style={{ display: "flex", flexDirection: "column", gap: 10 }}
               >
                 {[
-                  "Month, week, and day views",
-                  "Drag-and-drop rescheduling",
-                  "Color-coded by platform",
+                  "Vistas mensual, semanal y diaria",
+                  "Reprogramar arrastrando y soltando",
+                  "Colores según la plataforma",
                 ].map((item) => (
                   <div
                     key={item}
@@ -1704,9 +1707,9 @@ export default function RootPage() {
                   lineHeight: 1.2,
                 }}
               >
-                First comment.
+                Primer comentario.
                 <br />
-                On every platform.
+                En todas las plataformas.
               </h2>
               <p
                 style={{
@@ -1716,19 +1719,20 @@ export default function RootPage() {
                   marginBottom: 24,
                 }}
               >
-                Buffer and Hootsuite do first comments on Instagram. That&apos;s
-                it. Posthive fires a reply the second your post goes live on
-                Bluesky, Threads, Mastodon, and LinkedIn too. Hashtag stacks,
-                affiliate links, thread continuations without cluttering your
-                main copy.
+                Buffer y Hootsuite hacen primeros comentarios solo en
+                Instagram. Eso es todo. Posthive publica una respuesta en el
+                segundo en que tu post sale al aire, también en Bluesky,
+                Threads, Mastodon y LinkedIn. Bloques de hashtags, enlaces de
+                afiliados, continuaciones de hilo sin saturar tu texto
+                principal.
               </p>
               <div
                 style={{ display: "flex", flexDirection: "column", gap: 10 }}
               >
                 {[
-                  "Works on Bluesky, Threads, Mastodon & LinkedIn",
-                  "Fires within seconds of the main post",
-                  "Per-platform override different comment per network",
+                  "Funciona en Bluesky, Threads, Mastodon y LinkedIn",
+                  "Se publica segundos después del post principal",
+                  "Personalizable por plataforma un comentario distinto por red",
                 ].map((item) => (
                   <div
                     key={item}
@@ -1801,9 +1805,9 @@ export default function RootPage() {
                   lineHeight: 1.2,
                 }}
               >
-                Tailor every post
+                Personaliza cada post
                 <br />
-                per account
+                por cuenta
               </h2>
               <p
                 style={{
@@ -1813,17 +1817,18 @@ export default function RootPage() {
                   marginBottom: 24,
                 }}
               >
-                One base post, multiple voices. Override the caption and first
-                comment for each connected account. Your Bluesky audience gets
-                the long-form take; your Threads followers get the hook.
+                Un post base, múltiples voces. Personaliza la descripción y el
+                primer comentario para cada cuenta conectada. Tu audiencia de
+                Bluesky recibe la versión extendida; tus seguidores de Threads
+                reciben el gancho.
               </p>
               <div
                 style={{ display: "flex", flexDirection: "column", gap: 10 }}
               >
                 {[
-                  "Override text per connected account",
-                  "Override first comment per account",
-                  "Fallback to global copy if no override set",
+                  "Personaliza el texto por cada cuenta conectada",
+                  "Personaliza el primer comentario por cuenta",
+                  "Usa el texto general si no hay personalización",
                 ].map((item) => (
                   <div
                     key={item}
@@ -1895,9 +1900,9 @@ export default function RootPage() {
                   lineHeight: 1.2,
                 }}
               >
-                Schedule hundreds
+                Programa cientos
                 <br />
-                of posts from a CSV
+                de posts desde un CSV
               </h2>
               <p
                 style={{
@@ -1907,18 +1912,19 @@ export default function RootPage() {
                   marginBottom: 24,
                 }}
               >
-                Upload a spreadsheet and Posthive schedules every row
-                automatically. Mix platforms per row, attach images, exclude
-                specific networks all from a single file.
+                Sube una planilla y Posthive programa cada fila
+                automáticamente. Combina plataformas por fila, adjunta
+                imágenes, excluye redes específicas todo desde un solo
+                archivo.
               </p>
               <div
                 style={{ display: "flex", flexDirection: "column", gap: 10 }}
               >
                 {[
-                  "Schedule dozens of posts in seconds with a CSV upload",
-                  "Exclude platforms per row !instagram, !linkedin",
-                  "Attach image URLs per row (up to 4, semicolon-separated)",
-                  "Preview table shows ✓ Ready or ✕ error before sending",
+                  "Programa docenas de posts en segundos subiendo un CSV",
+                  "Excluye plataformas por fila !instagram, !linkedin",
+                  "Adjunta URLs de imágenes por fila (hasta 4, separadas por punto y coma)",
+                  "La tabla de vista previa muestra ✓ Listo o ✕ error antes de enviar",
                 ].map((item) => (
                   <div
                     key={item}
@@ -1973,9 +1979,9 @@ export default function RootPage() {
                     lineHeight: 1.1,
                   }}
                 >
-                  Use with Claude,
+                  Úsalo con Claude,
                   <br />
-                  Cursor, or any AI agent.
+                  Cursor, o cualquier agente de IA.
                 </h2>
                 <p
                   className="scroll-hidden d3"
@@ -1986,9 +1992,9 @@ export default function RootPage() {
                     margin: "0 0 32px",
                   }}
                 >
-                  Posthive speaks MCP the Model Context Protocol. Connect your
-                  AI agent once and let it draft, schedule, and manage posts
-                  across all your accounts without leaving the chat.
+                  Posthive habla MCP el Model Context Protocol. Conecta tu
+                  agente de IA una vez y deja que redacte, programe y gestione
+                  publicaciones en todas tus cuentas sin salir del chat.
                 </p>
                 <div
                   className="scroll-hidden d4"
@@ -2000,10 +2006,10 @@ export default function RootPage() {
                   }}
                 >
                   {[
-                    "Schedule posts from Claude or Cursor",
-                    "Approve drafts without opening the app",
-                    "Works with any MCP-compatible client",
-                    "Pro & Team plans one URL to connect",
+                    "Programa posts desde Claude o Cursor",
+                    "Aprueba borradores sin abrir la app",
+                    "Funciona con cualquier cliente compatible con MCP",
+                    "Planes Pro y Team una sola URL para conectar",
                   ].map((item) => (
                     <div
                       key={item}
@@ -2052,7 +2058,7 @@ export default function RootPage() {
                     textDecoration: "none",
                   }}
                 >
-                  Read MCP docs
+                  Leer documentación de MCP
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <path
                       d="M2 7h10M7 2l5 5-5 5"
@@ -2158,7 +2164,7 @@ export default function RootPage() {
             style={{ maxWidth: 1120, margin: "0 auto", padding: "104px 40px" }}
           >
             <div style={{ textAlign: "center", marginBottom: 56 }}>
-              <span className="section-label">SUPPORTED PLATFORMS</span>
+              <span className="section-label">PLATAFORMAS SOPORTADAS</span>
               <h2
                 style={{
                   fontSize: 44,
@@ -2168,7 +2174,7 @@ export default function RootPage() {
                   color: "#f2f2f2",
                 }}
               >
-                Multiple networks. One workflow.
+                Varias redes. Un solo flujo de trabajo.
               </h2>
               <p
                 style={{
@@ -2179,8 +2185,8 @@ export default function RootPage() {
                   lineHeight: 1.6,
                 }}
               >
-                Native support for the platforms creators and indie builders
-                actually use.
+                Soporte nativo para las plataformas que realmente usan
+                creadores y desarrolladores independientes.
               </p>
             </div>
             <div
@@ -2286,13 +2292,13 @@ export default function RootPage() {
                 <span
                   style={{ fontSize: 15.5, fontWeight: 600, color: "#ededed" }}
                 >
-                  More coming
+                  Vienen más
                 </span>
                 <span
                   className="mono"
                   style={{ fontSize: 12.5, color: "#888" }}
                 >
-                  Request a platform →
+                  Pide una plataforma →
                 </span>
               </a>
             </div>
@@ -2306,7 +2312,7 @@ export default function RootPage() {
           style={{ maxWidth: 1120, margin: "0 auto", padding: "104px 40px" }}
         >
           <div style={{ textAlign: "center", marginBottom: 60 }}>
-            <span className="section-label">HOW IT WORKS</span>
+            <span className="section-label">CÓMO FUNCIONA</span>
             <h2
               style={{
                 fontSize: 44,
@@ -2316,7 +2322,7 @@ export default function RootPage() {
                 color: "#f2f2f2",
               }}
             >
-              From zero to scheduled in minutes
+              De cero a programado en minutos
             </h2>
           </div>
           <div
@@ -2330,18 +2336,18 @@ export default function RootPage() {
             {[
               {
                 n: "01",
-                title: "Connect your accounts",
-                desc: "Authenticate all your networks in a couple of clicks. OAuth, encrypted at rest.",
+                title: "Conecta tus cuentas",
+                desc: "Autentica todas tus redes en un par de clics. OAuth, cifrado en reposo.",
               },
               {
                 n: "02",
-                title: "Compose & tailor",
-                desc: "Write once, then fine-tune copy and media per platform. Preview exactly what each network shows.",
+                title: "Redacta y personaliza",
+                desc: "Escribe una vez y luego ajusta el texto y los medios por plataforma. Previsualiza exactamente lo que muestra cada red.",
               },
               {
                 n: "03",
-                title: "Set it and forget it",
-                desc: "Pick a date and time. Posthive fires on the second. Drag to reschedule from the calendar.",
+                title: "Configúralo y olvídate",
+                desc: "Elige una fecha y hora. Posthive publica en el segundo exacto. Arrastra para reprogramar desde el calendario.",
               },
             ].map(({ n, title, desc }) => (
               <div
@@ -2428,13 +2434,13 @@ export default function RootPage() {
                 margin: "0 0 4px",
               }}
             >
-              Hey, I&apos;m Guna
+              Hola, soy Guna
             </p>
             <p
               className="mono"
               style={{ fontSize: 13, color: "#888", margin: "0 0 24px" }}
             >
-              frontend dev by day · indie builder by night
+              desarrollador frontend de día · creador independiente de noche
             </p>
             <div
               style={{
@@ -2452,9 +2458,10 @@ export default function RootPage() {
                   margin: 0,
                 }}
               >
-                I was building in public sharing updates on Bluesky, Threads,
-                LinkedIn, and Mastodon at the same time. Copy-pasting the same
-                post into five different apps every single day.
+                Estaba construyendo en público, compartiendo actualizaciones en
+                Bluesky, Threads, LinkedIn y Mastodon al mismo tiempo. Copiando y
+                pegando el mismo post en cinco aplicaciones distintas todos los
+                días.
               </p>
               <p
                 style={{
@@ -2464,9 +2471,9 @@ export default function RootPage() {
                   margin: 0,
                 }}
               >
-                Every tool I tried was either too expensive, too bloated, or
-                didn&apos;t support the platforms I actually used. None of them
-                felt like they were built for indie builders.
+                Todas las herramientas que probé eran demasiado caras, demasiado
+                complicadas, o no soportaban las plataformas que realmente
+                usaba. Ninguna se sentía hecha para creadores independientes.
               </p>
               <p
                 style={{
@@ -2476,8 +2483,9 @@ export default function RootPage() {
                   margin: 0,
                 }}
               >
-                So I built Posthive focused on the platforms that matter to
-                creators. Schedule once, post everywhere.
+                Así que construí Posthive enfocado en las plataformas que
+                importan a los creadores. Programa una vez, publica en todos
+                lados.
               </p>
               <p
                 style={{
@@ -2488,7 +2496,7 @@ export default function RootPage() {
                   fontWeight: 500,
                 }}
               >
-                if it saves you time too, that&apos;s the whole point.
+                si a ti también te ahorra tiempo, ese es el punto.
               </p>
             </div>
             <a
@@ -2531,7 +2539,7 @@ export default function RootPage() {
             style={{ maxWidth: 1120, margin: "0 auto", padding: "104px 40px" }}
           >
             <div style={{ textAlign: "center", marginBottom: 60 }}>
-              <span className="section-label">PRICING</span>
+              <span className="section-label">PRECIOS</span>
               <h2
                 style={{
                   fontSize: 44,
@@ -2541,11 +2549,11 @@ export default function RootPage() {
                   color: "#f2f2f2",
                 }}
               >
-                Simple, transparent pricing
+                Precios simples y transparentes
               </h2>
               <p style={{ fontSize: 17, color: "#8a8a8a", margin: "0 0 20px" }}>
-                Start free. Upgrade when you&apos;re ready. No hidden fees, no
-                per-channel tax.
+                Empieza gratis. Mejora tu plan cuando quieras. Sin costos
+                ocultos, sin cobro extra por canal.
               </p>
               {/* Currency toggle */}
               <div
@@ -2609,7 +2617,7 @@ export default function RootPage() {
                     color: "#666",
                   }}
                 >
-                  7 channels on Buffer:{" "}
+                  7 canales en Buffer:{" "}
                   <span style={{ color: "#ef4444", fontWeight: 600 }}>
                     $42/mo
                   </span>
@@ -2633,7 +2641,7 @@ export default function RootPage() {
                     color: "#555",
                   }}
                 >
-                  Same channels.
+                  Los mismos canales.
                 </span>
               </div>
             </div>
@@ -2669,7 +2677,7 @@ export default function RootPage() {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      MOST POPULAR
+                      MÁS POPULAR
                     </div>
                   )}
                   <div>
@@ -2717,7 +2725,7 @@ export default function RootPage() {
                     href={ctaHref}
                     className={plan.popular ? "ph-plan-btn-pro" : "ph-plan-btn"}
                   >
-                    {user ? "Go to scheduler" : "Get started"}
+                    {user ? "Ir al programador" : "Comenzar"}
                   </Link>
                   <div
                     style={{
@@ -2771,8 +2779,8 @@ export default function RootPage() {
                 color: "#555",
               }}
             >
-              * The 100/mo cap and no-link restriction are X API limitations,
-              not Posthive limitations.
+              * El límite de 100/mes y la restricción de enlaces son
+              limitaciones de la API de X, no de Posthive.
             </p>
           </div>
         </section>
@@ -2800,10 +2808,10 @@ export default function RootPage() {
                 lineHeight: 1.08,
               }}
             >
-              Stop switching tabs.
+              Deja de cambiar de pestaña.
               <br />
               <span style={{ color: "#8b8b8b" }}>
-                Start posting consistently.
+                Empieza a publicar de forma consistente.
               </span>
             </h2>
             <p
@@ -2814,8 +2822,8 @@ export default function RootPage() {
                 margin: "0 0 38px",
               }}
             >
-              One composer for every platform. Schedule your first post in under
-              two minutes.
+              Un solo editor para todas las plataformas. Programa tu primera
+              publicación en menos de dos minutos.
             </p>
             <div
               style={{
@@ -2837,21 +2845,21 @@ export default function RootPage() {
                 className="ph-btn-secondary"
                 style={{ fontSize: 16, padding: "15px 28px" }}
               >
-                View docs
+                Ver documentación
               </Link>
             </div>
             <p
               className="mono"
               style={{ fontSize: 12, color: "#444", marginTop: 20 }}
             >
-              14-day free trial ·{" "}
+              14 días de prueba gratis ·{" "}
               <a
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener"
                 style={{ color: "#444", textDecoration: "none" }}
               >
-                open source
+                código abierto
               </a>
             </p>
           </div>
@@ -2887,7 +2895,7 @@ export default function RootPage() {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
           <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
         </svg>
-        Join Discord
+        Únete a Discord
       </a>
     </>
   );
@@ -2895,14 +2903,14 @@ export default function RootPage() {
 
 function BulkCsvMockup() {
   const ROWS = [
-    { date: "Aug 1 · 09:00", text: "Good morning 🌅", accounts: "all" },
-    { date: "Aug 2 · 14:30", text: "Check the blog post", accounts: "bluesky" },
+    { date: "1 ago · 09:00", text: "Buenos días 🌅", accounts: "all" },
+    { date: "2 ago · 14:30", text: "Revisa el blog", accounts: "bluesky" },
     {
-      date: "Aug 3 · 18:00",
-      text: "Skip Instagram today",
+      date: "3 ago · 18:00",
+      text: "Sin Instagram hoy",
       accounts: "!instagram",
     },
-    { date: "Aug 4 · 10:00", text: "Two images 🖼️", accounts: "threads" },
+    { date: "4 ago · 10:00", text: "Dos imágenes 🖼️", accounts: "threads" },
   ];
 
   const [visibleRows, setVisibleRows] = useState(0);
@@ -2961,7 +2969,7 @@ function BulkCsvMockup() {
           letterSpacing: ".06em",
         }}
       >
-        CSV PREVIEW
+        VISTA PREVIA DEL CSV
       </div>
 
       {ROWS.map((row, i) => (
@@ -3044,7 +3052,7 @@ function BulkCsvMockup() {
             transition: "color .4s ease",
           }}
         >
-          {isDone ? "✓ 4 posts scheduled!" : "4 valid · 0 errors"}
+          {isDone ? "✓ ¡4 publicaciones programadas!" : "4 válidas · 0 errores"}
         </span>
         <span
           style={{
@@ -3063,10 +3071,10 @@ function BulkCsvMockup() {
           }}
         >
           {isDone
-            ? "✓ Scheduled!"
+            ? "✓ ¡Programado!"
             : isScheduling
-              ? "Scheduling…"
-              : "Schedule 4 posts"}
+              ? "Programando…"
+              : "Programar 4 publicaciones"}
         </span>
       </div>
     </div>
@@ -3078,19 +3086,19 @@ function PerPlatformMockup() {
     {
       domain: "bsky.app",
       label: "Bluesky",
-      text: "Long-form thoughts on async content workflows and why scheduling beats publishing live...",
+      text: "Reflexiones extensas sobre flujos de contenido asíncronos y por qué programar es mejor que publicar en vivo...",
       iconUrl: undefined as string | undefined,
     },
     {
       domain: "threads.net",
       label: "Threads",
-      text: "Hot take: scheduled posts perform better than live ones. Here's why 👇",
+      text: "Opinión picante: los posts programados rinden mejor que los publicados en vivo. Te explico por qué 👇",
       iconUrl: undefined as string | undefined,
     },
     {
       domain: "linkedin.com",
       label: "LinkedIn",
-      text: "3 lessons learned from automating our content pipeline with Posthive 🚀",
+      text: "3 lecciones aprendidas al automatizar nuestro flujo de contenido con Posthive 🚀",
       iconUrl: undefined as string | undefined,
     },
   ];
@@ -3187,7 +3195,7 @@ function PerPlatformMockup() {
                   transition: "all .35s ease",
                 }}
               >
-                {active ? "OVERRIDE ACTIVE" : "global copy"}
+                {active ? "PERSONALIZACIÓN ACTIVA" : "texto general"}
               </span>
             </div>
             <div
@@ -3227,14 +3235,14 @@ function PerPlatformMockup() {
         className="mono"
         style={{ textAlign: "center", fontSize: 11, color: "#555" }}
       >
-        + 2 more accounts using global copy
+        + 2 cuentas más usando el texto general
       </div>
     </div>
   );
 }
 
 function FirstCommentMockup() {
-  const COMMENT = "#buildinpublic #saas #indiedev #productivity #scheduling";
+  const COMMENT = "#buildinpublic #saas #indiedev #productividad #programacion";
   const [phase, setPhase] = useState<
     "post" | "delay" | "typing" | "done" | "reset"
   >("post");
@@ -3309,8 +3317,8 @@ function FirstCommentMockup() {
               color: "#ededed",
             }}
           >
-            yourhandle{" "}
-            <span style={{ fontWeight: 400, color: "#666" }}>· just now</span>
+            tuusuario{" "}
+            <span style={{ fontWeight: 400, color: "#666" }}>· recién</span>
             {isDone && (
               <span
                 style={{
@@ -3325,13 +3333,13 @@ function FirstCommentMockup() {
                   verticalAlign: "middle",
                 }}
               >
-                ✓ posted
+                ✓ publicado
               </span>
             )}
           </div>
           <div style={{ fontSize: 13, color: "#bbb", lineHeight: 1.6 }}>
-            Shipping features faster than ever with Posthive. The async workflow
-            is a game-changer.
+            Lanzando funcionalidades más rápido que nunca con Posthive. El flujo
+            asíncrono lo cambia todo.
           </div>
           <div style={{ marginTop: 10, display: "flex", gap: 16 }}>
             {[
@@ -3397,10 +3405,10 @@ function FirstCommentMockup() {
               gap: 8,
             }}
           >
-            FIRST COMMENT · AUTO-POSTED
+            PRIMER COMENTARIO · AUTOMÁTICO
             {isDone && (
               <span style={{ color: "#4ade80", fontWeight: 400, fontSize: 10 }}>
-                ⚡ fired instantly
+                ⚡ publicado al instante
               </span>
             )}
           </div>
@@ -3512,7 +3520,7 @@ function InstagramMediaMockup() {
             letterSpacing: ".08em",
           }}
         >
-          POST TYPE
+          TIPO DE PUBLICACIÓN
         </div>
         <div style={{ display: "flex", gap: 8 }}>
           {TABS.map((t) => {
@@ -3615,7 +3623,7 @@ function InstagramMediaMockup() {
               />
             </svg>
             <span className="mono" style={{ fontSize: 11, color: "#555" }}>
-              Carousel / single image
+              Carrusel / imagen única
             </span>
           </div>
         )}
@@ -3670,7 +3678,7 @@ function InstagramMediaMockup() {
                   />
                 </div>
                 <span className="mono" style={{ fontSize: 10, color: "#555" }}>
-                  Uploading… {uploadPct}%
+                  Subiendo… {uploadPct}%
                 </span>
               </div>
             ) : (
@@ -3704,7 +3712,7 @@ function InstagramMediaMockup() {
                   className="mono"
                   style={{ fontSize: 11, color: "#4ade80" }}
                 >
-                  Upload complete
+                  Subida completa
                 </span>
               </div>
             )}
@@ -3755,7 +3763,7 @@ function InstagramMediaMockup() {
                 transition: "color .4s",
               }}
             >
-              9:16 · 15s max
+              9:16 · máx. 15s
             </span>
           </div>
         )}
@@ -3826,7 +3834,7 @@ function InstagramMediaMockup() {
 
 function ComposeTypingMockup() {
   const TEXT =
-    "Just shipped a new feature 🚀 Thread-safe scheduling across all your favorite platforms. No more copy-paste marathons.";
+    "Acabamos de lanzar una nueva funcionalidad 🚀 Programación segura en todas tus plataformas favoritas. Se acabaron las maratones de copiar y pegar.";
   const MAX = 300;
   const PLATFORMS = [
     {
@@ -3993,7 +4001,7 @@ function ComposeTypingMockup() {
             color: displayed.length > MAX * 0.9 ? "#e1306c" : "#888",
           }}
         >
-          {displayed.length} / {MAX} chars
+          {displayed.length} / {MAX} caracteres
         </span>
         <div
           style={{
@@ -4013,7 +4021,7 @@ function ComposeTypingMockup() {
               "background .35s ease, color .35s ease, box-shadow .35s ease",
           }}
         >
-          {isScheduled ? "✓ Scheduled!" : "Schedule"}
+          {isScheduled ? "✓ ¡Programado!" : "Programar"}
         </div>
       </div>
     </div>
@@ -4051,7 +4059,7 @@ function DragCalendarMockup() {
 
   const gridH = ROWS * (CELL_H + GAP) - GAP;
 
-  const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  const days = ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"];
   const dots: Record<number, string> = {
     5: "#5b63d3",
     8: "#e1306c",
@@ -4113,9 +4121,9 @@ function DragCalendarMockup() {
         }}
       >
         <span style={{ fontSize: 13, fontWeight: 600, color: "#ededed" }}>
-          June 2026
+          Junio 2026
         </span>
-        <span style={{ fontSize: 11, color: "#555" }}>Month</span>
+        <span style={{ fontSize: 11, color: "#555" }}>Mes</span>
       </div>
 
       {/* Day headers — percentage columns, fills full width */}
@@ -4278,7 +4286,7 @@ function DragCalendarMockup() {
           animation: "ph-toast 3.8s ease-in-out infinite",
         }}
       >
-        <span>✓</span> Post rescheduled to Jun 19 — saved instantly
+        <span>✓</span> Publicación reprogramada al 19 jun — guardado al instante
       </div>
     </div>
   );

@@ -6,21 +6,21 @@ import { useState, useEffect, useRef } from "react";
 import { PlatformIcon } from "./PlatformIcon";
 
 export const PLATFORMS_NAV = [
-  { platform: "bluesky",   label: "Bluesky",   desc: "300 chars, AT Protocol" },
-  { platform: "threads",   label: "Threads",   desc: "500 chars, Meta OAuth" },
-  { platform: "instagram", label: "Instagram", desc: "Posts, Reels & Stories" },
-  { platform: "linkedin",  label: "LinkedIn",  desc: "3,000 chars, professional" },
-  { platform: "mastodon",  label: "Mastodon",  desc: "500 chars, federated" },
-  { platform: "pixelfed",  label: "Pixelfed",  desc: "2,001 chars, photo-first, fediverse" },
-  { platform: "youtube",   label: "YouTube",   desc: "Shorts & video, Google OAuth" },
-  { platform: "facebook",  label: "Facebook Pages", desc: "Pages, Graph API" },
-  { platform: "pinterest", label: "Pinterest",      desc: "Pins, image required" },
-  { platform: "twitter",   label: "X (Twitter)",    desc: "100 tweets/mo, Pro & Team" },
-  { platform: "telegram",  label: "Telegram",       desc: "4,096 chars, Bot API" },
-  { platform: "nostr",     label: "Nostr",          desc: "Keypair, decentralized" },
-  { platform: "discord",   label: "Discord",        desc: "2,000 chars, Bot + webhook" },
-  { platform: "tumblr",    label: "Tumblr",         desc: "4,096 chars, OAuth 1.0a" },
-  { platform: "lemmy",     label: "Lemmy",          desc: "Federated · username + password" },
+  { platform: "bluesky",   label: "Bluesky",   desc: "300 caracteres, AT Protocol" },
+  { platform: "threads",   label: "Threads",   desc: "500 caracteres, Meta OAuth" },
+  { platform: "instagram", label: "Instagram", desc: "Posts, Reels e Historias" },
+  { platform: "linkedin",  label: "LinkedIn",  desc: "3.000 caracteres, profesional" },
+  { platform: "mastodon",  label: "Mastodon",  desc: "500 caracteres, federado" },
+  { platform: "pixelfed",  label: "Pixelfed",  desc: "2.001 caracteres, enfocado en fotos, fediverso" },
+  { platform: "youtube",   label: "YouTube",   desc: "Shorts y video, Google OAuth" },
+  { platform: "facebook",  label: "Facebook Pages", desc: "Páginas, Graph API" },
+  { platform: "pinterest", label: "Pinterest",      desc: "Pins, imagen requerida" },
+  { platform: "twitter",   label: "X (Twitter)",    desc: "100 tweets/mes, Pro y Team" },
+  { platform: "telegram",  label: "Telegram",       desc: "4.096 caracteres, Bot API" },
+  { platform: "nostr",     label: "Nostr",          desc: "Keypair, descentralizado" },
+  { platform: "discord",   label: "Discord",        desc: "2.000 caracteres, Bot + webhook" },
+  { platform: "tumblr",    label: "Tumblr",         desc: "4.096 caracteres, OAuth 1.0a" },
+  { platform: "lemmy",     label: "Lemmy",          desc: "Federado · usuario + contraseña" },
   { platform: "tiktok",   label: "TikTok",         desc: "Videos · Content Posting API" },
 ];
 
@@ -32,14 +32,14 @@ const SparklesNavIcon = () => (
 );
 
 export const FEATURES_NAV = [
-  { icon: <SunIcon />,          bg: "rgba(91,99,211,.18)",  color: "#9ba2ee", title: "Multi-platform posting",  desc: "One composer, seven platforms",     slug: "multi-platform-posting" },
-  { icon: <InstagramIcon />,    bg: "rgba(225,100,100,.18)",color: "#e86b6b", title: "Reels & Stories",         desc: "Full Instagram media support",      slug: "instagram-reels-scheduler" },
-  { icon: <CalendarIcon />,     bg: "rgba(80,180,120,.18)", color: "#5cb88a", title: "Drag-to-reschedule",      desc: "Visual calendar view",              slug: "drag-to-reschedule" },
-  { icon: <CommentIcon />,      bg: "rgba(220,160,60,.18)", color: "#d4a83c", title: "First comment",           desc: "Auto-reply on publish",             slug: "first-comment" },
-  { icon: <SlidersIcon />,      bg: "rgba(140,100,220,.18)",color: "#a07ee0", title: "Per-platform overrides",  desc: "Custom text per network",           slug: "per-platform-overrides" },
-  { icon: <CsvNavIcon />,       bg: "rgba(80,180,120,.18)", color: "#5cb88a", title: "Bulk CSV scheduling",     desc: "Schedule hundreds from a file",     slug: "bulk-csv-scheduling" },
-  { icon: <CodeIcon />,         bg: "rgba(60,180,200,.18)", color: "#3db8c8", title: "Self-hostable",           desc: "AGPL-3.0 open source",              slug: "self-hostable" },
-  { icon: <SparklesNavIcon />,  bg: "rgba(167,139,250,.18)",color: "#a78bfa", title: "AI caption assist",       desc: "Rewrite in one click",              slug: "ai-caption-assist" },
+  { icon: <SunIcon />,          bg: "rgba(91,99,211,.18)",  color: "#9ba2ee", title: "Publicación multiplataforma",  desc: "Un editor, siete plataformas",     slug: "multi-platform-posting" },
+  { icon: <InstagramIcon />,    bg: "rgba(225,100,100,.18)",color: "#e86b6b", title: "Reels e Historias",         desc: "Soporte completo de medios de Instagram",      slug: "instagram-reels-scheduler" },
+  { icon: <CalendarIcon />,     bg: "rgba(80,180,120,.18)", color: "#5cb88a", title: "Arrastrar para reprogramar",      desc: "Vista de calendario visual",              slug: "drag-to-reschedule" },
+  { icon: <CommentIcon />,      bg: "rgba(220,160,60,.18)", color: "#d4a83c", title: "Primer comentario",           desc: "Respuesta automática al publicar",             slug: "first-comment" },
+  { icon: <SlidersIcon />,      bg: "rgba(140,100,220,.18)",color: "#a07ee0", title: "Personalización por plataforma",  desc: "Texto personalizado por red",           slug: "per-platform-overrides" },
+  { icon: <CsvNavIcon />,       bg: "rgba(80,180,120,.18)", color: "#5cb88a", title: "Programación masiva por CSV",     desc: "Programa cientos desde un archivo",     slug: "bulk-csv-scheduling" },
+  { icon: <CodeIcon />,         bg: "rgba(60,180,200,.18)", color: "#3db8c8", title: "Autoalojable",           desc: "Código abierto AGPL-3.0",              slug: "self-hostable" },
+  { icon: <SparklesNavIcon />,  bg: "rgba(167,139,250,.18)",color: "#a78bfa", title: "Asistente de IA",       desc: "Reescribe con un clic",              slug: "ai-caption-assist" },
 ];
 
 interface NavBarProps {
@@ -93,7 +93,7 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
     <>
     {mobileOpen && (
       <div onClick={(e) => { if (e.target === e.currentTarget) setMobileOpen(false); }} style={{ position: "fixed", top: 64, left: 0, right: 0, bottom: 0, background: "#111", borderBottom: "1px solid rgba(255,255,255,.08)", padding: "20px 24px 28px", display: "flex", flexDirection: "column", gap: 4, overflowY: "auto", zIndex: 99, WebkitOverflowScrolling: "touch" as any }}>
-        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8 }}>Features</p>
+        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8 }}>Funcionalidades</p>
         {FEATURES_NAV.map(f => (
           <a key={f.title} href={`/features/${f.slug}`} onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 4px", textDecoration: "none" }}>
             <div style={{ width: 28, height: 28, borderRadius: 7, background: f.bg, color: f.color, display: "grid", placeItems: "center" }}>{f.icon}</div>
@@ -101,7 +101,7 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
           </a>
         ))}
         <div style={{ borderTop: "1px solid rgba(255,255,255,.06)", margin: "12px 0" }} />
-        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8 }}>Platforms</p>
+        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8 }}>Plataformas</p>
         {PLATFORMS_NAV.map(p => (
           <a key={p.platform} href={`/platforms/${p.platform}`} onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 4px", textDecoration: "none" }}>
             <div style={{ width: 28, height: 28, borderRadius: 7, background: "rgba(255,255,255,.06)", display: "grid", placeItems: "center" }}>
@@ -111,13 +111,13 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
           </a>
         ))}
         <div style={{ borderTop: "1px solid rgba(255,255,255,.06)", margin: "12px 0" }} />
-        {([["/pricing", "Pricing"], ["/agent", "Agents"], ["/blog", "Blog"], ["/docs", "Docs"], ["/for-developers", "API"]] as [string, string][]).map(([href, label]) => (
+        {([["/pricing", "Precios"], ["/agent", "Agentes"], ["/blog", "Blog"], ["/docs", "Docs"], ["/for-developers", "API"]] as [string, string][]).map(([href, label]) => (
           <a key={label} href={href} onClick={() => setMobileOpen(false)} style={{ padding: "9px 4px", fontSize: 14, fontWeight: 500, color: "#888", textDecoration: "none" }}>{label}</a>
         ))}
         {!user && (
           <>
             <div style={{ borderTop: "1px solid rgba(255,255,255,.06)", margin: "12px 0" }} />
-            <Link href="/login" onClick={() => setMobileOpen(false)} style={{ textAlign: "center", padding: "10px 0", borderRadius: 8, border: "1px solid rgba(255,255,255,.12)", color: "#ededed", fontSize: 14, fontWeight: 500, textDecoration: "none" }}>Sign in</Link>
+            <Link href="/login" onClick={() => setMobileOpen(false)} style={{ textAlign: "center", padding: "10px 0", borderRadius: 8, border: "1px solid rgba(255,255,255,.12)", color: "#ededed", fontSize: 14, fontWeight: 500, textDecoration: "none" }}>Iniciar sesión</Link>
           </>
         )}
       </div>
@@ -143,9 +143,9 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
         <div className="ph-desktop-links" style={{ display: "flex", alignItems: "center", gap: 2 }}>
         {/* Features dropdown */}
         <div style={{ position: "relative" }} onMouseEnter={openFeat} onMouseLeave={closeFeat}>
-          <button style={btnStyle}>Features {chevron(featOpen)}</button>
+          <button style={btnStyle}>Funcionalidades {chevron(featOpen)}</button>
           <div onMouseEnter={openFeat} onMouseLeave={closeFeat} style={dropStyle(featOpen)}>
-            <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8, paddingLeft: 6 }}>FEATURES</p>
+            <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8, paddingLeft: 6 }}>FUNCIONALIDADES</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
               {FEATURES_NAV.map((f) => (
                 <a key={f.title} href={`/features/${f.slug}`} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 9, textDecoration: "none", transition: "background 100ms" }}
@@ -164,9 +164,9 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
 
         {/* Platforms dropdown */}
         <div style={{ position: "relative" }} onMouseEnter={openPlat} onMouseLeave={closePlat}>
-          <button style={btnStyle}>Platforms {chevron(platOpen)}</button>
+          <button style={btnStyle}>Plataformas {chevron(platOpen)}</button>
           <div onMouseEnter={openPlat} onMouseLeave={closePlat} style={{ ...dropStyle(platOpen), width: 640 }}>
-            <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8, paddingLeft: 6 }}>SUPPORTED PLATFORMS</p>
+            <p style={{ fontSize: 10.5, fontWeight: 700, color: "#555", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 8, paddingLeft: 6 }}>PLATAFORMAS SOPORTADAS</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
               {PLATFORMS_NAV.map((p) => (
                 <a key={p.platform} href={`/platforms/${p.platform}`} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 9, textDecoration: "none", transition: "background 100ms" }}
@@ -185,8 +185,8 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
           </div>
         </div>
 
-        <Link href="/pricing" style={{ ...btnStyle, textDecoration: "none" }}>Pricing</Link>
-        <Link href="/agent" style={{ ...btnStyle, textDecoration: "none" }}>Agents</Link>
+        <Link href="/pricing" style={{ ...btnStyle, textDecoration: "none" }}>Precios</Link>
+        <Link href="/agent" style={{ ...btnStyle, textDecoration: "none" }}>Agentes</Link>
         <Link href="/blog" style={{ ...btnStyle, textDecoration: "none" }}>Blog</Link>
         <Link href="/docs" style={{ ...btnStyle, textDecoration: "none" }}>Docs</Link>
         <Link href="/for-developers" style={{ ...btnStyle, textDecoration: "none" }}>API</Link>
@@ -196,7 +196,7 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
             <span style={{ width: 96, height: 34, borderRadius: 8, background: "#1a1a1a", display: "inline-block" }} className="ph-cta-skeleton" />
           ) : (
             <>
-              {!user && <Link href="/login" style={{ fontSize: 14, color: "#888", padding: "9px 12px", textDecoration: "none" }}>Sign in</Link>}
+              {!user && <Link href="/login" style={{ fontSize: 14, color: "#888", padding: "9px 12px", textDecoration: "none" }}>Iniciar sesión</Link>}
               <Link href={ctaHref} style={{
                 fontSize: 14, fontWeight: 600, padding: "9px 18px", borderRadius: 8,
                 background: "#5b63d3", color: "#fff",
@@ -222,7 +222,7 @@ export function NavBar({ user, ctaHref, navCtaLabel, loading }: NavBarProps) {
           </Link>
         )}
 
-        <button onClick={() => setMobileOpen(o => !o)} style={{ display: "none", background: "none", border: "none", cursor: "pointer", padding: 8, color: "#ededed" }} className="ph-hamburger" aria-label="Menu">
+        <button onClick={() => setMobileOpen(o => !o)} style={{ display: "none", background: "none", border: "none", cursor: "pointer", padding: 8, color: "#ededed" }} className="ph-hamburger" aria-label="Menú">
           {mobileOpen
             ? <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
             : <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>

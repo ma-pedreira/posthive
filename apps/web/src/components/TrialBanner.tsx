@@ -25,9 +25,9 @@ export function TrialBanner() {
     return (
       <div className="mx-3 mb-2 px-3 py-2.5 rounded-xl text-xs"
         style={{ backgroundColor: "#1f0a0a", border: "1px solid #7f1d1d" }}>
-        <p className="font-semibold mb-1" style={{ color: "#f87171" }}>Subscription cancelled</p>
+        <p className="font-semibold mb-1" style={{ color: "#f87171" }}>Suscripción cancelada</p>
         <Link href="/billing" className="font-semibold underline" style={{ color: "#f87171" }}>
-          Resubscribe
+          Reactivar suscripción
         </Link>
       </div>
     );
@@ -37,12 +37,12 @@ export function TrialBanner() {
     return (
       <div className="mx-3 mb-2 px-3 py-2.5 rounded-xl text-xs"
         style={{ backgroundColor: "#1f0a0a", border: "1px solid #7f1d1d" }}>
-        <p className="font-semibold mb-1" style={{ color: "#f87171" }}>Trial expired</p>
-        <p className="mb-1.5" style={{ color: "#888" }}>Upgrade to keep posting.</p>
+        <p className="font-semibold mb-1" style={{ color: "#f87171" }}>Prueba gratuita finalizada</p>
+        <p className="mb-1.5" style={{ color: "#888" }}>Mejora tu plan para seguir publicando.</p>
         <Link href="/billing"
           className="inline-flex items-center gap-1 font-semibold px-2.5 py-1 rounded-lg hover:bg-gray-100 transition-colors"
           style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-          Upgrade now
+          Mejorar plan ahora
         </Link>
       </div>
     );
@@ -58,10 +58,10 @@ export function TrialBanner() {
         }}>
         <div className="flex items-center justify-between mb-1">
           <p className="font-semibold" style={{ color: urgent ? "#fbbf24" : "#ededed" }}>
-            {status.trialDaysLeft === 0 ? "Trial ends today" : `${status.trialDaysLeft} days left`}
+            {status.trialDaysLeft === 0 ? "La prueba termina hoy" : `Quedan ${status.trialDaysLeft} días`}
           </p>
           <Link href="/billing" className="font-semibold hover:opacity-80" style={{ color: "#5b63d3" }}>
-            Upgrade
+            Mejorar plan
           </Link>
         </div>
         <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>

@@ -82,10 +82,10 @@ function Avatar({ visitorId, name }: { visitorId: string; name?: string }) {
 
 function timeSince(iso: string): string {
   const secs = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-  if (secs < 60) return `${secs}s ago`;
-  if (secs < 3600) return `${Math.floor(secs / 60)}m ago`;
-  if (secs < 86400) return `${Math.floor(secs / 3600)}h ago`;
-  return `${Math.floor(secs / 86400)}d ago`;
+  if (secs < 60) return `hace ${secs}s`;
+  if (secs < 3600) return `hace ${Math.floor(secs / 60)}m`;
+  if (secs < 86400) return `hace ${Math.floor(secs / 3600)}h`;
+  return `hace ${Math.floor(secs / 86400)}d`;
 }
 
 function formatDuration(secs: number | null): string {
@@ -96,16 +96,16 @@ function formatDuration(secs: number | null): string {
 
 function buildStory(s: SessionRow): string {
   const pages = s.pages as string[];
-  const ref = s.referrer ? ` via ${new URL(s.referrer).hostname.replace("www.", "")}` : "";
+  const ref = s.referrer ? ` vía ${new URL(s.referrer).hostname.replace("www.", "")}` : "";
   let action = pages.length === 1
-    ? `visited ${pages[0]}`
-    : `browsed ${pages.slice(0, 4).map(p => p === "/" ? "home" : p.replace(/^\//, "")).join(" → ")}`;
+    ? `visitó ${pages[0]}`
+    : `navegó ${pages.slice(0, 4).map(p => p === "/" ? "inicio" : p.replace(/^\//, "")).join(" → ")}`;
   let outcome = s.converted
-    ? "started a trial"
+    ? "inició una prueba"
     : pages.includes("/billing")
-    ? "left at billing without converting"
-    : "left without reaching billing";
-  return `Arrived${ref} · ${action} · ${outcome}`;
+    ? "se fue en facturación sin convertir"
+    : "se fue sin llegar a facturación";
+  return `Llegó${ref} · ${action} · ${outcome}`;
 }
 
 const ADMIN_PIN_KEY = "ph_admin_unlocked";
@@ -130,7 +130,7 @@ function FeedbackThread({ f, onReplyAdded }: { f: FeedbackRow; onReplyAdded: (id
   }
 
   const typeColor = f.type === "bug" ? N.red : f.type === "feature" ? N.green : N.blue;
-  const typeLabel = f.type === "bug" ? "🐛 Bug" : f.type === "feature" ? "✨ Feature" : "💬 General";
+  const typeLabel = f.type === "bug" ? "🐛 Error" : f.type === "feature" ? "✨ Sugerencia" : "💬 General";
 
   return (
     <div style={{ borderBottom: `1px solid ${N.border}`, padding: "10px 0" }}>
@@ -140,14 +140,14 @@ function FeedbackThread({ f, onReplyAdded }: { f: FeedbackRow; onReplyAdded: (id
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" as const, marginBottom: 3 }}>
             <span style={{ fontSize: 11, fontWeight: 600, padding: "1px 7px", borderRadius: 3, background: `${typeColor}18`, color: typeColor, border: `1px solid ${typeColor}40` }}>{typeLabel}</span>
-            <span style={{ fontSize: 12, color: N.muted }}>{f.user?.name ?? "Anonymous"}{f.user?.email && ` · ${f.user.email}`}</span>
+            <span style={{ fontSize: 12, color: N.muted }}>{f.user?.name ?? "Anónimo"}{f.user?.email && ` · ${f.user.email}`}</span>
             {f.url && <span style={{ fontSize: 11, fontFamily: "monospace", background: N.s2, border: `1px solid ${N.border}`, borderRadius: 3, padding: "1px 6px", color: N.muted }}>{f.url}</span>}
           </div>
           <p style={{ fontSize: 13, color: N.text, margin: 0, lineHeight: 1.5, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{f.message}</p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <span style={{ fontSize: 12, color: N.muted }}>{timeSince(f.createdAt)}</span>
-          <span style={{ fontSize: 12, color: N.muted }}>{f.replies.length} msg{f.replies.length !== 1 ? "s" : ""}</span>
+          <span style={{ fontSize: 12, color: N.muted }}>{f.replies.length} mensaje{f.replies.length !== 1 ? "s" : ""}</span>
           <span style={{ fontSize: 11, color: N.muted }}>{expanded ? "▲" : "▼"}</span>
         </div>
       </div>
@@ -166,7 +166,7 @@ function FeedbackThread({ f, onReplyAdded }: { f: FeedbackRow; onReplyAdded: (id
                 border: `1px solid ${r.sender === "admin" ? "#14532d" : N.border}`,
               }}>
                 <p style={{ fontSize: 12, color: r.sender === "admin" ? "#4ade80" : N.sec, margin: "0 0 2px", fontWeight: 600 }}>
-                  {r.sender === "admin" ? "You (admin)" : f.user?.name ?? "User"}
+                  {r.sender === "admin" ? "Tú (admin)" : f.user?.name ?? "Usuario"}
                 </p>
                 <p style={{ fontSize: 13, color: N.text, margin: 0, whiteSpace: "pre-wrap" }}>{r.message}</p>
                 <p style={{ fontSize: 11, color: N.muted, margin: "3px 0 0", textAlign: "right" }}>{timeSince(r.createdAt)}</p>
@@ -179,7 +179,7 @@ function FeedbackThread({ f, onReplyAdded }: { f: FeedbackRow; onReplyAdded: (id
               value={draft}
               onChange={e => setDraft(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-              placeholder="Reply…"
+              placeholder="Responder…"
               style={{ flex: 1, fontSize: 12, padding: "6px 10px", borderRadius: 8, background: N.s2, border: `1px solid ${N.border}`, color: N.text, outline: "none" }}
             />
             <button
@@ -187,7 +187,7 @@ function FeedbackThread({ f, onReplyAdded }: { f: FeedbackRow; onReplyAdded: (id
               disabled={loading || !draft.trim()}
               style={{ fontSize: 12, fontWeight: 600, padding: "6px 14px", borderRadius: 8, background: "#fff", color: "#0a0a0a", border: "none", cursor: "pointer", opacity: (!draft.trim() || loading) ? 0.4 : 1 }}
             >
-              {loading ? "…" : "Send"}
+              {loading ? "…" : "Enviar"}
             </button>
           </div>
         </div>
@@ -204,7 +204,7 @@ function FeedbackPanel({ feedbacks: initial }: { feedbacks: FeedbackRow[] }) {
   }
 
   if (feedbacks.length === 0) {
-    return <div style={{ textAlign: "center", padding: "64px 0", color: N.muted, fontSize: 14 }}>No feedback yet.</div>;
+    return <div style={{ textAlign: "center", padding: "64px 0", color: N.muted, fontSize: 14 }}>Todavía no hay comentarios.</div>;
   }
 
   return (
@@ -254,8 +254,8 @@ export default function AdminPage() {
       <div style={{ width: 320, display: "flex", flexDirection: "column", gap: 24 }}>
         <div>
           <div style={{ fontSize: 28, marginBottom: 4 }}>🔒</div>
-          <h1 style={{ fontSize: 20, fontWeight: 600, margin: "0 0 4px", color: N.text }}>Admin access</h1>
-          <p style={{ fontSize: 13, color: N.sec, margin: 0 }}>Enter your PIN to view visitor intelligence.</p>
+          <h1 style={{ fontSize: 20, fontWeight: 600, margin: "0 0 4px", color: N.text }}>Acceso de administrador</h1>
+          <p style={{ fontSize: 13, color: N.sec, margin: 0 }}>Ingresa tu PIN para ver la inteligencia de visitantes.</p>
         </div>
         <form onSubmit={handlePin} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <input
@@ -268,11 +268,11 @@ export default function AdminPage() {
               boxSizing: "border-box", animation: pinError ? "shake .3s ease" : "none",
             }}
           />
-          {pinError && <p style={{ fontSize: 12, color: N.red, margin: 0 }}>Incorrect PIN</p>}
+          {pinError && <p style={{ fontSize: 12, color: N.red, margin: 0 }}>PIN incorrecto</p>}
           <button type="submit" style={{
             background: N.text, color: N.bg, border: "none", borderRadius: 6,
             padding: "9px 0", fontSize: 13, fontWeight: 600, cursor: "pointer",
-          }}>Continue</button>
+          }}>Continuar</button>
         </form>
       </div>
     </div>
@@ -287,7 +287,7 @@ export default function AdminPage() {
 
   if (error) return (
     <div style={{ ...base, display: "flex", alignItems: "center", justifyContent: "center", color: N.red, fontSize: 13 }}>
-      {error.includes("403") ? "Access denied." : error}
+      {error.includes("403") ? "Acceso denegado." : error}
     </div>
   );
 
@@ -323,17 +323,17 @@ export default function AdminPage() {
       {/* LEFT — title, properties, funnel */}
       <div className="vi-left">
         <h1 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 24px", color: N.text, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-          Visitor Intelligence
+          Inteligencia de visitantes
         </h1>
 
         {/* Properties */}
         <div style={{ display: "flex", flexDirection: "column", gap: 0, marginBottom: 28 }}>
           {[
-            { label: "Period",      value: "Last 30 days" },
-            { label: "Total users", value: String(stats.totalUsers) },
-            { label: "New today",   value: String(stats.newUsersToday) },
-            { label: "Sessions",    value: String(funnel.totalSessions) },
-            { label: "Conversion",  value: convRate > 0 ? `${convRate}%` : "—" },
+            { label: "Período",      value: "Últimos 30 días" },
+            { label: "Usuarios totales", value: String(stats.totalUsers) },
+            { label: "Nuevos hoy",   value: String(stats.newUsersToday) },
+            { label: "Sesiones",    value: String(funnel.totalSessions) },
+            { label: "Conversión",  value: convRate > 0 ? `${convRate}%` : "—" },
           ].map(p => (
             <div key={p.label} className="n-row" style={{
               display: "flex", alignItems: "center", borderRadius: 4,
@@ -349,14 +349,14 @@ export default function AdminPage() {
 
         {/* Funnel */}
         <p style={{ fontSize: 11, fontWeight: 600, color: N.muted, letterSpacing: ".05em", textTransform: "uppercase", margin: "0 0 12px" }}>
-          Conversion funnel
+          Embudo de conversión
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {[
-            { label: "Visited site",    value: funnel.totalSessions,  color: N.blue },
-            { label: "Reached billing", value: funnel.billingViews,   color: N.purple },
-            { label: "Clicked a plan",  value: funnel.checkoutClicks, color: N.amber },
-            { label: "Started trial",   value: funnel.trialsStarted,  color: N.green },
+            { label: "Visitó el sitio",    value: funnel.totalSessions,  color: N.blue },
+            { label: "Llegó a facturación", value: funnel.billingViews,   color: N.purple },
+            { label: "Hizo clic en un plan",  value: funnel.checkoutClicks, color: N.amber },
+            { label: "Inició prueba",   value: funnel.trialsStarted,  color: N.green },
           ].map(f => {
             const pct = funnel.totalSessions > 0 ? Math.round((f.value / funnel.totalSessions) * 100) : 0;
             return (
@@ -382,7 +382,7 @@ export default function AdminPage() {
           {(["sessions", "events", "feedback"] as const).map(t => (
             <button key={t} className={`n-tab${tab === t ? " active" : ""}`}
               onClick={() => { setTab(t); setPage(0); }}>
-              {t === "sessions" ? `Sessions (${sessions.length})` : t === "events" ? `Events (${events.length})` : `Feedback (${feedbacks.length})`}
+              {t === "sessions" ? `Sesiones (${sessions.length})` : t === "events" ? `Eventos (${events.length})` : `Comentarios (${feedbacks.length})`}
             </button>
           ))}
         </div>
@@ -394,13 +394,13 @@ export default function AdminPage() {
           {/* Column headers */}
           <div style={{ display: "grid", gridTemplateColumns: "28px 1fr auto", gap: 12, alignItems: "center", padding: "6px 8px", margin: "0 -8px 2px" }}>
             <div />
-            <span style={{ fontSize: 11, fontWeight: 600, color: N.muted, letterSpacing: ".04em", textTransform: "uppercase" }}>Session</span>
-            <span style={{ fontSize: 11, fontWeight: 600, color: N.muted, letterSpacing: ".04em", textTransform: "uppercase" }}>Time</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: N.muted, letterSpacing: ".04em", textTransform: "uppercase" }}>Sesión</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: N.muted, letterSpacing: ".04em", textTransform: "uppercase" }}>Hora</span>
           </div>
 
           {sessions.length === 0 && (
             <div style={{ textAlign: "center", padding: "64px 0", color: N.muted, fontSize: 14 }}>
-              No sessions yet.
+              Todavía no hay sesiones.
             </div>
           )}
 
@@ -408,7 +408,7 @@ export default function AdminPage() {
             const dur = formatDuration(s.duration);
             const hitBilling = (s.pages as string[]).includes("/billing");
             const statusColor = s.converted ? N.green : hitBilling ? N.amber : "transparent";
-            const statusLabel = s.converted ? "Trial" : hitBilling ? "Billing" : null;
+            const statusLabel = s.converted ? "Prueba" : hitBilling ? "Facturación" : null;
 
             return (
               <div key={s.id} className="n-row" style={{
@@ -423,7 +423,7 @@ export default function AdminPage() {
                   {/* Name row */}
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: N.text }}>
-                      {s.user?.name ?? `Visitor #${s.visitorId.slice(-6)}`}
+                      {s.user?.name ?? `Visitante #${s.visitorId.slice(-6)}`}
                     </span>
                     {s.user?.email && (
                       <span style={{ fontSize: 12, color: N.muted }}>{s.user.email}</span>
@@ -439,7 +439,7 @@ export default function AdminPage() {
                       <span style={{
                         fontSize: 11, fontWeight: 500, padding: "1px 6px", borderRadius: 3,
                         background: `${N.blue}22`, color: N.blue, border: `1px solid ${N.blue}44`,
-                      }}>Trialing</span>
+                      }}>En prueba</span>
                     )}
                   </div>
 
@@ -489,7 +489,7 @@ export default function AdminPage() {
           {totalPages > 1 && (
             <div className="vi-pg" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 24, paddingTop: 16, borderTop: `1px solid ${N.border}` }}>
               <span style={{ fontSize: 12, color: N.muted }}>
-                {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, sessions.length)} of {sessions.length}
+                {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, sessions.length)} de {sessions.length}
               </span>
               <div style={{ display: "flex", gap: 4 }}>
                 <button className="n-pg" onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}
@@ -497,7 +497,7 @@ export default function AdminPage() {
                     fontSize: 12, padding: "5px 12px", borderRadius: 4, border: `1px solid ${N.border}`,
                     background: "transparent", color: page === 0 ? N.muted : N.sec, cursor: page === 0 ? "not-allowed" : "pointer",
                     opacity: page === 0 ? 0.4 : 1, fontFamily: "inherit",
-                  }}>← Prev</button>
+                  }}>← Anterior</button>
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button key={i} className="n-pg" onClick={() => setPage(i)}
                     style={{
@@ -514,7 +514,7 @@ export default function AdminPage() {
                     background: "transparent", color: page === totalPages - 1 ? N.muted : N.sec,
                     cursor: page === totalPages - 1 ? "not-allowed" : "pointer",
                     opacity: page === totalPages - 1 ? 0.4 : 1, fontFamily: "inherit",
-                  }}>Next →</button>
+                  }}>Siguiente →</button>
               </div>
             </div>
           )}
@@ -526,7 +526,7 @@ export default function AdminPage() {
         <div>
           {events.length === 0 && (
             <div style={{ textAlign: "center", padding: "64px 0", color: N.muted, fontSize: 14 }}>
-              No events yet.
+              Todavía no hay eventos.
             </div>
           )}
           {events.map(e => (

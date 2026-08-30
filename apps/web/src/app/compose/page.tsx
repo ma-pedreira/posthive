@@ -9,6 +9,7 @@ import { trackEvent } from "../../lib/track";
 import { DateTimePicker } from "../../components/DateTimePicker";
 import { PlatformIcon } from "../../components/PlatformIcon";
 import { BulkScheduleModal } from "../../components/BulkScheduleModal";
+import { RepeatScheduleModal } from "../../components/RepeatScheduleModal";
 import {
   PlatformPreview,
   PLATFORM_COLOR, PLATFORM_LIMIT, MAX_IMAGES, countGraphemes,
@@ -39,6 +40,8 @@ export default function ComposePage() {
   const [commentText, setCommentText] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [scheduledFor, setScheduledFor] = useState(defaultScheduledFor);
+  const [extraSchedules, setExtraSchedules] = useState<string[]>([]);
+  const [showRepeatModal, setShowRepeatModal] = useState(false);
   const [mediaItems, setMediaItems] = useState<UploadedImage[]>([]);
   const [altTexts, setAltTexts] = useState<string[]>([]);
   const [igMediaType, setIgMediaType] = useState<"post" | "reel" | "story">("post");
@@ -408,8 +411,10 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
       if (p.over) return `Your caption is too long for ${p.platform} (${p.effectiveCount}/${p.limit} characters).`;
     }
 
-    // Scheduled time must be in the future
-    if (new Date(scheduledFor) <= new Date()) return "Scheduled time must be in the future.";
+    // Scheduled time(s) must be in the future
+    if ([scheduledFor, ...extraSchedules].some((d) => new Date(d) <= new Date())) {
+      return "All scheduled times must be in the future.";
+    }
 
     return null;
   }
@@ -469,6 +474,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
 
   function resetForm() {
     setText(""); setCommentText(""); setScheduledFor(defaultScheduledFor());
+    setExtraSchedules([]);
     setIgMediaType("post");
     setYoutubeTitle(""); setYoutubeDescription(""); setYoutubeType("short");
     setYoutubeVideoMode("upload"); setYoutubeVideoUrl("");
@@ -524,6 +530,9 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
     const validationError = validateBeforeSubmit();
     if (validationError) { toastWarning(validationError); return; }
     setSubmitting(true);
+    const allDates = [scheduledFor, ...extraSchedules];
+    let succeeded = 0;
+    let lastError: string | null = null;
     try {
       const cleanOverrides = Object.fromEntries(
         Object.entries(perAccountOverrides)
@@ -532,34 +541,53 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
       );
       const mediaUrls = mediaItems.map(m => m.url);
       const hasInstagram = selectedAccounts.some((a) => a.platform === "instagram");
-      await apiFetch("/jobs", {
-        method: "POST",
-        body: JSON.stringify({
-          scheduledFor: new Date(scheduledFor).toISOString(),
-          content: {
-            text,
-            mediaUrls,
-            ...(altTexts.some(Boolean) ? { altTexts } : {}),
-            ...(hasInstagram && igMediaType !== "post" ? { mediaType: igMediaType } : {}),
-            ...(youtubeSelected ? { youtubeType, youtubeVideoMode } : {}),
-            ...(youtubeSelected && youtubeVideoMode === "url" && youtubeVideoUrl.trim() ? { youtubeVideoUrl: youtubeVideoUrl.trim() } : {}),
-            ...(youtubeSelected && youtubeThumbnailUrl ? { youtubeThumbnailUrl } : {}),
-            ...(pixelfedSelected ? { pixelfedSensitive, pixelfedVisibility } : {}),
-            ...(Object.keys(cleanOverrides).length > 0 ? { perAccount: cleanOverrides } : {}),
-          },
-          commentText: commentText.trim() || undefined,
-          accountIds: selectedIds,
-          dryRun,
-        }),
+      const buildBody = (date: string) => JSON.stringify({
+        scheduledFor: new Date(date).toISOString(),
+        content: {
+          text,
+          mediaUrls,
+          ...(altTexts.some(Boolean) ? { altTexts } : {}),
+          ...(hasInstagram && igMediaType !== "post" ? { mediaType: igMediaType } : {}),
+          ...(youtubeSelected ? { youtubeType, youtubeVideoMode } : {}),
+          ...(youtubeSelected && youtubeVideoMode === "url" && youtubeVideoUrl.trim() ? { youtubeVideoUrl: youtubeVideoUrl.trim() } : {}),
+          ...(youtubeSelected && youtubeThumbnailUrl ? { youtubeThumbnailUrl } : {}),
+          ...(pixelfedSelected ? { pixelfedSensitive, pixelfedVisibility } : {}),
+          ...(Object.keys(cleanOverrides).length > 0 ? { perAccount: cleanOverrides } : {}),
+        },
+        commentText: commentText.trim() || undefined,
+        accountIds: selectedIds,
+        dryRun,
       });
-      if (!dryRun) trackEvent("post_scheduled", { platforms: selectedAccounts.map(a => a.platform) });
-      toastSuccess(dryRun ? "Dry run scheduled no real post will be made." : "Post scheduled successfully!");
-      if (!dryRun && !localStorage.getItem("posthive_first_post_done")) {
+
+      for (const date of allDates) {
+        try {
+          await apiFetch("/jobs", { method: "POST", body: buildBody(date) });
+          succeeded++;
+        } catch (err) {
+          lastError = err instanceof Error ? err.message : typeof err === "string" ? err : JSON.stringify(err);
+        }
+      }
+
+      if (!dryRun && succeeded > 0) trackEvent("post_scheduled", { platforms: selectedAccounts.map(a => a.platform), count: succeeded });
+
+      if (succeeded === allDates.length) {
+        toastSuccess(
+          dryRun ? "Dry run programado no se hará ninguna publicación real."
+          : allDates.length > 1 ? `${succeeded} publicaciones programadas correctamente!`
+          : "¡Publicación programada correctamente!"
+        );
+      } else if (succeeded > 0) {
+        toastWarning(`${succeeded} de ${allDates.length} publicaciones se programaron. Alguna falló: ${lastError ?? ""}`);
+      } else {
+        throw new Error(lastError ?? "No se pudo programar la publicación.");
+      }
+
+      if (succeeded > 0 && !dryRun && !localStorage.getItem("posthive_first_post_done")) {
         localStorage.setItem("posthive_first_post_done", "1");
         confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 }, zIndex: 9999 });
         setTimeout(() => confetti({ particleCount: 80, spread: 120, origin: { y: 0.55 }, zIndex: 9999 }), 300);
       }
-      resetForm();
+      if (succeeded > 0) resetForm();
     } catch (err) {
       const msg = err instanceof Error ? err.message : typeof err === "string" ? err : JSON.stringify(err);
       toastError(msg.replace(/^Error: API POST \/jobs → \d+: /, "").replace(/^\{"error":"/, "").replace(/"\}$/, ""));
@@ -1330,6 +1358,19 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         {/* Schedule datetime */}
         <DateTimePicker value={scheduledFor} onChange={setScheduledFor} />
 
+        {/* Repeat / multi-schedule trigger */}
+        <button
+          type="button"
+          onClick={() => setShowRepeatModal(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors hover:opacity-80"
+          style={extraSchedules.length > 0
+            ? { backgroundColor: "#1f1f2e", color: "#818cf8", border: "1px solid #3730a3" }
+            : { backgroundColor: "#111111", border: "1px solid #2a2a2a", color: "#ededed" }}
+          title="Publicar el mismo contenido en varias fechas y horas"
+        >
+          {extraSchedules.length > 0 ? `Repetir (${extraSchedules.length + 1}x)` : "Repetir"}
+        </button>
+
         {/* Spacer — pushes buttons to the right on desktop */}
         <div className="flex-1 hidden md:block" />
 
@@ -1372,7 +1413,10 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             className="flex-1 md:flex-none px-6 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition-colors hover:bg-gray-100"
             style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}
           >
-            {submitting ? "Scheduling…" : dryRun ? "Schedule Dry Run" : "Schedule Post"}
+            {submitting ? "Programando…"
+              : dryRun ? "Programar Dry Run"
+              : extraSchedules.length > 0 ? `Programar ${extraSchedules.length + 1} publicaciones`
+              : "Programar publicación"}
           </button>
         </div>
       </div>
@@ -1385,6 +1429,14 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           setShowBulk(false);
           toastSuccess(`${count} post${count !== 1 ? "s" : ""} scheduled!`);
         }}
+      />
+    )}
+    {showRepeatModal && (
+      <RepeatScheduleModal
+        baseScheduledFor={scheduledFor}
+        initialExtra={extraSchedules}
+        onClose={() => setShowRepeatModal(false)}
+        onApply={(extra) => { setExtraSchedules(extra); setShowRepeatModal(false); }}
       />
     )}
     {showReorder && (() => {

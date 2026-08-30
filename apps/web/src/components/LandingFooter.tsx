@@ -54,8 +54,8 @@ export function LandingFooter() {
               margin: "0 0 24px",
             }}
           >
-            The social media scheduler built for creators and teams. Write once,
-            publish everywhere.
+            El programador de redes sociales hecho para creadores y equipos.
+            Escribe una vez, publica en todos lados.
           </p>
           <div style={{ display: "flex", gap: 10 }}>
             {[
@@ -167,7 +167,7 @@ export function LandingFooter() {
                 textTransform: "uppercase",
               }}
             >
-              Features
+              Funcionalidades
             </span>
             {FEATURES_NAV.map((f) => (
               <Link
@@ -207,11 +207,11 @@ export function LandingFooter() {
                 textTransform: "uppercase",
               }}
             >
-              Product
+              Producto
             </span>
             {(
               [
-                ["/pricing", "Pricing"],
+                ["/pricing", "Precios"],
                 ["/blog", "Blog"],
                 ["/docs", "Docs"],
                 ["https://github.com/AstaBlackClove/posthive", "GitHub"],
@@ -250,13 +250,13 @@ export function LandingFooter() {
                 textTransform: "uppercase",
               }}
             >
-              Company
+              Empresa
             </span>
             {(
               [
-                ["mailto:guna@posthive.co", "Contact me"],
-                ["/privacy", "Privacy policy"],
-                ["/terms", "Terms of service"],
+                ["mailto:guna@posthive.co", "Contáctame"],
+                ["/privacy", "Política de privacidad"],
+                ["/terms", "Términos de servicio"],
               ] as [string, string][]
             ).map(([href, label]) => (
               <a
@@ -291,10 +291,10 @@ export function LandingFooter() {
           }}
         >
           <span className="mono" style={{ fontSize: 12.5, color: "#999" }}>
-            © 2026 Posthive. All rights reserved.
+            © 2026 Posthive. Todos los derechos reservados.
           </span>
           <span className="mono" style={{ fontSize: 12.5, color: "#999" }}>
-            Open-source · AGPL-3.0 · Built by an indie builder.
+            Código abierto · AGPL-3.0 · Hecho por un creador independiente.
           </span>
           <a href="https://kittylaunch.com/p/posthive?utm_source=badge" target="_blank" rel="noopener">
             <img src="https://kittylaunch.com/api/public/badges/launch_badge.svg?style=pill&theme=dark" width="160" alt="Posthive — Verified by KittyLaunch" />
