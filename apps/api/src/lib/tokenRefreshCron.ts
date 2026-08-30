@@ -44,11 +44,16 @@ async function run() {
               console.log(`[token-refresh] refreshed ${account.platform} account ${account.displayName}`);
             }
           } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
             console.error(`[token-refresh] failed for ${account.platform} account ${account.id}:`, err);
-            Sentry.captureException(err, {
-              tags: { component: "token-refresh", platform: account.platform },
-              extra: { accountId: account.id },
-            });
+            // invalid_grant = user revoked access in Google — expected, not a bug
+            const isRevoked = msg.includes("invalid_grant") || msg.includes("reconnect");
+            if (!isRevoked) {
+              Sentry.captureException(err, {
+                tags: { component: "token-refresh", platform: account.platform },
+                extra: { accountId: account.id },
+              });
+            }
           }
         })
       );
