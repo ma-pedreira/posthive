@@ -9,8 +9,8 @@ interface Props {
   dropdownDirection?: "up" | "down";
 }
 
-const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const DAYS = ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"];
+const MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const ITEM_H = 32;
 
 function pad(n: number) { return String(n).padStart(2, "0"); }
@@ -86,9 +86,8 @@ function ScrollColumn({
   );
 }
 
-const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1));
+const HOURS = Array.from({ length: 24 }, (_, i) => pad(i));
 const MINUTES = Array.from({ length: 12 }, (_, i) => pad(i * 5));
-const AMPM = ["AM", "PM"];
 
 export function DateTimePicker({ value, onChange, dropdownDirection = "up" }: Props) {
   const ref = useRef<HTMLDivElement>(null);
@@ -138,18 +137,16 @@ export function DateTimePicker({ value, onChange, dropdownDirection = "up" }: Pr
     onChange(toLocal(next));
   }
 
-  const h12 = selected.getHours() % 12 || 12;
   const minIndex = Math.round(selected.getMinutes() / 5);
-  const ampmIndex = selected.getHours() >= 12 ? 1 : 0;
 
   const label = (() => {
     const today = new Date();
     const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
     const isToday = selected.toDateString() === today.toDateString();
     const isTomorrow = selected.toDateString() === tomorrow.toDateString();
-    const dateStr = isToday ? "Today" : isTomorrow ? "Tomorrow"
+    const dateStr = isToday ? "Hoy" : isTomorrow ? "Mañana"
       : selected.toLocaleDateString([], { month: "short", day: "numeric" });
-    const timeStr = selected.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const timeStr = `${pad(selected.getHours())}:${pad(selected.getMinutes())}`;
     return `${dateStr} · ${timeStr}`;
   })();
 
@@ -207,15 +204,10 @@ export function DateTimePicker({ value, onChange, dropdownDirection = "up" }: Pr
       <div style={{ borderTop: "1px solid #2a2a2a", borderBottom: "1px solid #2a2a2a", padding: "8px 12px" }}>
         <div className="flex gap-2">
           <ScrollColumn
-            label="Hour"
+            label="Hora"
             items={HOURS}
-            selectedIndex={h12 - 1}
-            onSelect={(i) => {
-              const newH12 = i + 1;
-              const isPm = selected.getHours() >= 12;
-              const h24 = isPm ? (newH12 === 12 ? 12 : newH12 + 12) : (newH12 === 12 ? 0 : newH12);
-              setTime(h24, selected.getMinutes());
-            }}
+            selectedIndex={selected.getHours()}
+            onSelect={(i) => setTime(i, selected.getMinutes())}
           />
           <ScrollColumn
             label="Min"
@@ -223,28 +215,15 @@ export function DateTimePicker({ value, onChange, dropdownDirection = "up" }: Pr
             selectedIndex={minIndex}
             onSelect={(i) => setTime(selected.getHours(), i * 5)}
           />
-          <ScrollColumn
-            label="Period"
-            items={AMPM}
-            selectedIndex={ampmIndex}
-            onSelect={(i) => {
-              const h = selected.getHours();
-              const isPm = i === 1;
-              let h24 = h;
-              if (isPm && h < 12) h24 = h + 12;
-              if (!isPm && h >= 12) h24 = h - 12;
-              setTime(h24, selected.getMinutes());
-            }}
-          />
         </div>
       </div>
 
       {/* Quick shortcuts */}
       <div className="px-3 py-3 flex gap-1.5 flex-wrap">
         {[
-          { label: "In 1h", fn: () => { const d = new Date(); d.setHours(d.getHours() + 1, 0, 0, 0); onChange(toLocal(d)); } },
-          { label: "Tomorrow 9am", fn: () => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(9, 0, 0, 0); onChange(toLocal(d)); } },
-          { label: "Next Mon", fn: () => { const d = new Date(); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); d.setHours(9, 0, 0, 0); onChange(toLocal(d)); } },
+          { label: "En 1h", fn: () => { const d = new Date(); d.setHours(d.getHours() + 1, 0, 0, 0); onChange(toLocal(d)); } },
+          { label: "Mañana 9am", fn: () => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(9, 0, 0, 0); onChange(toLocal(d)); } },
+          { label: "Próximo lunes", fn: () => { const d = new Date(); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); d.setHours(9, 0, 0, 0); onChange(toLocal(d)); } },
         ].map(({ label, fn }) => (
           <button key={label} type="button"
             onClick={() => { fn(); setOpen(false); }}

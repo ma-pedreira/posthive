@@ -189,7 +189,7 @@ function ConnectedAccountRow({ account, onDisconnect, disconnecting, postsThisMo
                   disabled={refreshing}
                   className="transition-opacity hover:opacity-80 disabled:opacity-40"
                   style={{ color: "#888888" }}>
-                  {refreshing ? "Refreshing…" : "Refresh photo"}
+                  {refreshing ? "Refreshing…" : "Actualizar foto"}
                 </button>
               </>
             )}
@@ -199,7 +199,7 @@ function ConnectedAccountRow({ account, onDisconnect, disconnecting, postsThisMo
           <button
             onClick={refreshProfile}
             disabled={refreshing}
-            title="Refresh profile name and photo"
+            title="Actualizar nombre y foto del perfil"
             className="text-sm font-medium transition-colors disabled:opacity-50 px-2.5 py-1.5 rounded-lg hover:opacity-80"
             style={{ color: MUTED }}>
             {refreshing ? "…" : "↻"}
@@ -208,7 +208,7 @@ function ConnectedAccountRow({ account, onDisconnect, disconnecting, postsThisMo
         <button
           onClick={() => onDisconnect(account.id, account.displayName, account.platform)}
           disabled={disconnecting === account.id || isAdmin === false}
-          title={isAdmin === false ? "Only workspace admins can disconnect accounts" : undefined}
+          title={isAdmin === false ? "Solo los administradores del espacio de trabajo pueden desconectar cuentas" : undefined}
           className="text-xs font-medium transition-colors disabled:opacity-50 px-2 py-1 rounded-lg hover:text-red-400"
           style={{ color: MUTED }}>
           {disconnecting === account.id ? "…" : "Disconnect"}
@@ -218,7 +218,7 @@ function ConnectedAccountRow({ account, onDisconnect, disconnecting, postsThisMo
         <div className="flex items-center justify-between gap-2 px-3 py-2"
           style={{ backgroundColor: status === "expired" ? "#1f0a0a" : "#1c1209", borderTop: `1px solid ${status === "expired" ? "#7f1d1d" : "#78560a"}` }}>
           <p className="text-xs" style={{ color: status === "expired" ? "#f87171" : "#fbbf24" }}>
-            {status === "expired" ? "Token expired — posts will fail" : "Token expires soon — reconnect to avoid interruption"}
+            {status === "expired" ? "Token expirado — las publicaciones fallarán" : "El token expira pronto — reconecta para evitar interrupciones"}
           </p>
           <a href={reconnectUrl}
             className="text-xs font-semibold px-2.5 py-1 rounded-lg flex-shrink-0 transition-opacity hover:opacity-80"
@@ -272,8 +272,8 @@ function BlueskyDialog({ onClose, onConnected }: { onClose: () => void; onConnec
               <PlatformIcon platform="bluesky" size={18} />
             </div>
             <div>
-              <p className="font-semibold text-sm" style={{ color: TEXT }}>Connect Bluesky</p>
-              <p className="text-xs" style={{ color: MUTED }}>App password · no OAuth needed</p>
+              <p className="font-semibold text-sm" style={{ color: TEXT }}>Conectar Bluesky</p>
+              <p className="text-xs" style={{ color: MUTED }}>Contraseña de app · sin OAuth</p>
             </div>
           </div>
           <button onClick={onClose} className="rounded-lg p-1.5 transition-colors hover:bg-white/5"
@@ -286,14 +286,14 @@ function BlueskyDialog({ onClose, onConnected }: { onClose: () => void; onConnec
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <input
-            placeholder="Handle — e.g. you.bsky.social"
+            placeholder="Handle — ej. tu.bsky.social"
             value={handle} onChange={(e) => setHandle(e.target.value)}
             required autoFocus
             className={inputCls} style={inputStyle} />
           <div>
             <input
               type="password"
-              placeholder="App password"
+              placeholder="Contraseña de aplicación"
               value={appPassword} onChange={(e) => setAppPassword(e.target.value)}
               required
               className={inputCls} style={inputStyle} />
@@ -312,12 +312,12 @@ function BlueskyDialog({ onClose, onConnected }: { onClose: () => void; onConnec
             <button type="button" onClick={onClose}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
               style={{ backgroundColor: "#1a1a1a", color: MUTED, border: `1px solid ${BORDER}` }}>
-              Cancel
+              Cancelar
             </button>
             <button type="submit" disabled={connecting}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 hover:bg-gray-100"
               style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-              {connecting ? "Connecting…" : "Connect"}
+              {connecting ? "Conectando…" : "Conectar"}
             </button>
           </div>
         </form>
@@ -363,8 +363,8 @@ function TelegramDialog({ onClose, onConnected }: { onClose: () => void; onConne
               <PlatformIcon platform="telegram" size={18} />
             </div>
             <div>
-              <p className="font-semibold text-sm" style={{ color: TEXT }}>Connect Telegram Channel</p>
-              <p className="text-xs" style={{ color: MUTED }}>Bot token · no OAuth needed</p>
+              <p className="font-semibold text-sm" style={{ color: TEXT }}>Conectar canal de Telegram</p>
+              <p className="text-xs" style={{ color: MUTED }}>Token de bot · sin OAuth</p>
             </div>
           </div>
           <button onClick={onClose} className="rounded-lg p-1.5 transition-colors hover:bg-white/5"
@@ -378,7 +378,7 @@ function TelegramDialog({ onClose, onConnected }: { onClose: () => void; onConne
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <input
-              placeholder="Bot token — e.g. 123456789:ABC-DEF..."
+              placeholder="Token del bot — ej. 123456789:ABC-DEF..."
               value={botToken} onChange={(e) => setBotToken(e.target.value)}
               required autoFocus
               className={inputCls} style={inputStyle} />
@@ -407,12 +407,12 @@ function TelegramDialog({ onClose, onConnected }: { onClose: () => void; onConne
             <button type="button" onClick={onClose}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
               style={{ backgroundColor: "#1a1a1a", color: MUTED, border: `1px solid ${BORDER}` }}>
-              Cancel
+              Cancelar
             </button>
             <button type="submit" disabled={connecting}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 hover:bg-gray-100"
               style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-              {connecting ? "Connecting…" : "Connect"}
+              {connecting ? "Conectando…" : "Conectar"}
             </button>
           </div>
         </form>
@@ -460,8 +460,8 @@ function LemmyDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
               <PlatformIcon platform="lemmy" size={18} />
             </div>
             <div>
-              <p className="font-semibold text-sm" style={{ color: TEXT }}>Connect Lemmy</p>
-              <p className="text-xs" style={{ color: MUTED }}>Username + password · any instance</p>
+              <p className="font-semibold text-sm" style={{ color: TEXT }}>Conectar Lemmy</p>
+              <p className="text-xs" style={{ color: MUTED }}>Usuario + contraseña · cualquier instancia</p>
             </div>
           </div>
           <button onClick={onClose} className="rounded-lg p-1.5 transition-colors hover:bg-white/5" style={{ color: MUTED }}>
@@ -473,16 +473,16 @@ function LemmyDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Instance URL</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>URL de la instancia</label>
             <input
               placeholder="https://lemmy.world"
               value={instanceUrl} onChange={(e) => setInstanceUrl(e.target.value)}
               required autoFocus
               className={inputCls} style={inputStyle} />
-            <p className="text-xs mt-1.5" style={{ color: "#555" }}>Any Lemmy instance - lemmy.world, lemmy.ml, beehaw.org, etc.</p>
+            <p className="text-xs mt-1.5" style={{ color: "#555" }}>Cualquier instancia de Lemmy - lemmy.world, lemmy.ml, beehaw.org, etc.</p>
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Username</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Usuario</label>
             <input
               placeholder="your_username"
               value={username} onChange={(e) => setUsername(e.target.value)}
@@ -490,7 +490,7 @@ function LemmyDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
               className={inputCls} style={inputStyle} />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Password</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Contraseña</label>
             <input
               type="password"
               placeholder="your password"
@@ -499,7 +499,7 @@ function LemmyDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
               className={inputCls} style={inputStyle} />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Community to post to</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Comunidad donde publicar</label>
             <input
               placeholder="selfhosted@lemmy.world"
               value={community} onChange={(e) => setCommunity(e.target.value)}
@@ -518,12 +518,12 @@ function LemmyDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
             <button type="button" onClick={onClose}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
               style={{ backgroundColor: "#1a1a1a", color: MUTED, border: `1px solid ${BORDER}` }}>
-              Cancel
+              Cancelar
             </button>
             <button type="submit" disabled={connecting}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 hover:bg-gray-100"
               style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-              {connecting ? "Connecting…" : "Connect"}
+              {connecting ? "Conectando…" : "Conectar"}
             </button>
           </div>
         </form>
@@ -550,8 +550,8 @@ function PixelfedDialog({ onClose }: { onClose: () => void }) {
               <PlatformIcon platform="pixelfed" size={18} />
             </div>
             <div>
-              <p className="font-semibold text-sm" style={{ color: TEXT }}>Connect Pixelfed</p>
-              <p className="text-xs" style={{ color: MUTED }}>Any instance supported</p>
+              <p className="font-semibold text-sm" style={{ color: TEXT }}>Conectar Pixelfed</p>
+              <p className="text-xs" style={{ color: MUTED }}>Cualquier instancia soportada</p>
             </div>
           </div>
           <button onClick={onClose} className="text-lg" style={{ color: MUTED }}>✕</button>
@@ -559,7 +559,7 @@ function PixelfedDialog({ onClose }: { onClose: () => void }) {
 
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Your Pixelfed instance</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Tu instancia de Pixelfed</label>
             <input
               value={instance}
               onChange={e => setInstance(e.target.value)}
@@ -606,8 +606,8 @@ function MastodonDialog({ onClose }: { onClose: () => void }) {
               <PlatformIcon platform="mastodon" size={18} />
             </div>
             <div>
-              <p className="font-semibold text-sm" style={{ color: TEXT }}>Connect Mastodon</p>
-              <p className="text-xs" style={{ color: MUTED }}>Any instance supported</p>
+              <p className="font-semibold text-sm" style={{ color: TEXT }}>Conectar Mastodon</p>
+              <p className="text-xs" style={{ color: MUTED }}>Cualquier instancia soportada</p>
             </div>
           </div>
           <button onClick={onClose} className="rounded-lg p-1.5 transition-colors hover:bg-white/5" style={{ color: MUTED }}>
@@ -619,7 +619,7 @@ function MastodonDialog({ onClose }: { onClose: () => void }) {
 
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Your Mastodon instance</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "#aaa" }}>Tu instancia de Mastodon</label>
             <input
               value={instance}
               onChange={e => setInstance(e.target.value)}
@@ -638,7 +638,7 @@ function MastodonDialog({ onClose }: { onClose: () => void }) {
             <button type="button" onClick={onClose}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
               style={{ backgroundColor: "#1a1a1a", color: MUTED, border: `1px solid ${BORDER}` }}>
-              Cancel
+              Cancelar
             </button>
             <button onClick={connect} disabled={!instance.trim()}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 hover:bg-gray-100"
@@ -693,8 +693,8 @@ function NostrDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
               <PlatformIcon platform="nostr" size={18} />
             </div>
             <div>
-              <p className="font-semibold text-sm" style={{ color: TEXT }}>Connect Nostr</p>
-              <p className="text-xs" style={{ color: MUTED }}>Keypair · no OAuth, no approval</p>
+              <p className="font-semibold text-sm" style={{ color: TEXT }}>Conectar Nostr</p>
+              <p className="text-xs" style={{ color: MUTED }}>Keypair · sin OAuth, sin aprobación</p>
             </div>
           </div>
           <button onClick={onClose} className="rounded-lg p-1.5 transition-colors hover:bg-white/5" style={{ color: MUTED }}>
@@ -722,7 +722,7 @@ function NostrDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
             <div className="rounded-xl p-3 space-y-1" style={{ backgroundColor: "#0a1a0a", border: "1px solid #14532d" }}>
               <p className="text-xs font-semibold" style={{ color: "#4ade80" }}>Keypair generated — save your nsec!</p>
               <p className="text-[11px] font-mono break-all" style={{ color: "#888" }}>npub: {generated.npubBech32}</p>
-              <p className="text-xs mt-1" style={{ color: "#555" }}>Copy your nsec above and store it somewhere safe before connecting.</p>
+              <p className="text-xs mt-1" style={{ color: "#555" }}>Copia tu nsec de arriba y guárdalo en un lugar seguro antes de conectar.</p>
             </div>
           )}
 
@@ -735,19 +735,19 @@ function NostrDialog({ onClose, onConnected }: { onClose: () => void; onConnecte
           <button type="button" onClick={handleGenerate} disabled={generating}
             className="w-full py-2 rounded-xl text-xs font-semibold transition-colors disabled:opacity-50"
             style={{ backgroundColor: "#1a1a1a", color: "#aaa", border: `1px solid ${BORDER}` }}>
-            {generating ? "Generating…" : "Generate a new keypair for me"}
+            {generating ? "Generating…" : "Generar un nuevo par de claves por mí"}
           </button>
 
           <div className="flex gap-2 pt-1">
             <button type="button" onClick={onClose}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
               style={{ backgroundColor: "#1a1a1a", color: MUTED, border: `1px solid ${BORDER}` }}>
-              Cancel
+              Cancelar
             </button>
             <button type="submit" disabled={connecting || !nsec.trim()}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 hover:bg-gray-100"
               style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-              {connecting ? "Connecting…" : "Connect"}
+              {connecting ? "Conectando…" : "Conectar"}
             </button>
           </div>
         </form>
@@ -851,7 +851,7 @@ export default function AccountsPage() {
     setDiscordGuildName(guildName);
     apiFetch<{ channels: { id: string; name: string }[] }>(`/auth/discord/channels?guild_id=${guildId}`)
       .then(data => setDiscordChannels(data.channels))
-      .catch(() => toastError("Failed to load Discord channels"));
+      .catch(() => toastError("No se pudieron cargar los canales de Discord"));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -880,7 +880,7 @@ export default function AccountsPage() {
       await apiFetch("/auth/threads/manual", { method: "POST", body: JSON.stringify({ accessToken: threadsToken.trim() }) });
       setThreadsToken(""); setShowManualToken(false);
       await fetchAccounts();
-      success("Threads account connected!");
+      success("¡Cuenta de Threads conectada!");
     } catch (err) { setThreadsError(String(err)); toastError(String(err)); }
     finally { setConnectingThreads(false); }
   }
@@ -901,7 +901,7 @@ export default function AccountsPage() {
     try {
       await apiFetch(`/accounts/${id}`, { method: "DELETE" });
       await fetchAccounts();
-      success(`${disconnectTarget?.platform === "nostr" ? displayName : "@" + displayName} disconnected.`);
+      success(`${disconnectTarget?.platform === "nostr" ? displayName : "@" + displayName} desconectada.`);
     } catch (err) { toastError(String(err)); }
     finally { setDisconnecting(null); }
   }
@@ -909,7 +909,7 @@ export default function AccountsPage() {
   // Bluesky connected via dialog
   function onBlueskyConnected() {
     fetchAccounts();
-    success("Bluesky account connected!");
+    success("¡Cuenta de Bluesky conectada!");
   }
 
   const blueskyAccounts = accounts.filter((a) => a.platform === "bluesky");
@@ -935,11 +935,11 @@ export default function AccountsPage() {
   const atLimit = planStatus !== null && !isCancelled && accounts.length >= planStatus.maxAccounts;
   const connectDisabled = !isAdmin || isCancelled || atLimit;
   const limitMsg = !isAdmin
-    ? "Only workspace admins can connect accounts."
+    ? "Solo los administradores del espacio de trabajo pueden conectar cuentas."
     : isCancelled
-    ? "Your subscription is cancelled. Resubscribe to connect new accounts."
+    ? "Tu suscripción está cancelada. Reactívala para conectar nuevas cuentas."
     : atLimit
-    ? `You've reached your ${planStatus!.maxAccounts}-account limit. Disconnect an account or upgrade your plan.`
+    ? `Alcanzaste tu límite de ${planStatus!.maxAccounts} cuentas. Desconecta una cuenta o mejora tu plan.`
     : null;
 
   return (
@@ -956,14 +956,14 @@ export default function AccountsPage() {
       <div className="flex items-center justify-between pl-16 pr-4 md:px-8 flex-shrink-0"
         style={{ height: 65, borderBottom: `1px solid ${BORDER}`, backgroundColor: SURFACE }}>
         <div className="min-w-0">
-          <h1 className="text-lg font-bold" style={{ color: TEXT }}>Accounts</h1>
-          <p className="text-xs mt-0.5 truncate hidden sm:block" style={{ color: MUTED }}>Connect the social accounts you want to post to.</p>
+          <h1 className="text-lg font-bold" style={{ color: TEXT }}>Cuentas</h1>
+          <p className="text-xs mt-0.5 truncate hidden sm:block" style={{ color: MUTED }}>Conecta las cuentas sociales en las que quieras publicar.</p>
         </div>
         <span className="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
           style={accounts.length > 0
             ? { backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }
             : { backgroundColor: "#1a1a1a", color: MUTED, border: `1px solid ${BORDER}` }}>
-          {accounts.length} connected
+          {accounts.length} conectadas
         </span>
       </div>
 
@@ -979,8 +979,8 @@ export default function AccountsPage() {
                 d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
             </svg>
             <span style={{ color: "#f87171" }}>
-              Subscription cancelled — connecting new accounts is disabled.{" "}
-              <a href="/billing" className="underline font-semibold hover:opacity-80">Resubscribe</a> to continue.
+              Suscripción cancelada — conectar nuevas cuentas está deshabilitado.{" "}
+              <a href="/billing" className="underline font-semibold hover:opacity-80">Reactiva tu suscripción</a> para continuar.
             </span>
           </div>
         )}
@@ -994,8 +994,8 @@ export default function AccountsPage() {
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <span style={{ color: "#fbbf24" }}>
-                Account limit reached ({accounts.length}/{planStatus!.maxAccounts}). Disconnect one or{" "}
-                <a href="/billing" className="underline font-semibold hover:opacity-80">upgrade your plan</a>.
+                Límite de cuentas alcanzado ({accounts.length}/{planStatus!.maxAccounts}). Desconecta una o{" "}
+                <a href="/billing" className="underline font-semibold hover:opacity-80">mejora tu plan</a>.
               </span>
             </div>
           </div>
@@ -1008,7 +1008,7 @@ export default function AccountsPage() {
           </svg>
           <input
             type="text"
-            placeholder="Filter platforms…"
+            placeholder="Filtrar plataformas…"
             value={platformSearch}
             onChange={(e) => setPlatformSearch(e.target.value)}
             className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border focus:outline-none focus:ring-2 transition"
@@ -1053,7 +1053,7 @@ export default function AccountsPage() {
                 <p className="text-xs" style={{ color: MUTED }}>App password · no OAuth needed</p>
               </div>
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Live</span>
+                style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Activo</span>
             </div>
 
             <div className="p-5 space-y-3">
@@ -1071,7 +1071,7 @@ export default function AccountsPage() {
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                 <PlatformIcon platform="bluesky" size={16} />
-                {blueskyAccounts.length > 0 ? "Add another Bluesky account" : "Connect Bluesky"}
+                {blueskyAccounts.length > 0 ? "Agregar otra cuenta de Bluesky" : "Conectar Bluesky"}
               </button>
             </div>
           </div>
@@ -1086,8 +1086,6 @@ export default function AccountsPage() {
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>Threads</p>
                 <p className="text-xs" style={{ color: MUTED }}>Meta OAuth 2.0</p>
               </div>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ backgroundColor: "#1c1008", color: "#fb923c", border: "1px solid #7c2d12" }}>⚠ Unavailable</span>
             </div>
 
             <div className="p-5 space-y-3">
@@ -1098,15 +1096,21 @@ export default function AccountsPage() {
                   ))}
                 </div>
               )}
-              <button disabled
-                className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
-                style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-                <PlatformIcon platform="threads" size={16} />
-                Connect with Threads
-              </button>
-              <p className="text-xs font-medium" style={{ color: "#fb923c" }}>
-                ⚠ Cannot connect — awaiting Meta App Review. New connections are blocked until approved.
-              </p>
+              {connectDisabled ? (
+                <button disabled title={limitMsg ?? undefined}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
+                  style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
+                  <PlatformIcon platform="threads" size={16} />
+                  Conectar con Threads
+                </button>
+              ) : (
+                <a href={THREADS_AUTH_URL}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
+                  style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
+                  <PlatformIcon platform="threads" size={16} />
+                  Conectar con Threads
+                </a>
+              )}
             </div>
           </div>
 
@@ -1118,10 +1122,8 @@ export default function AccountsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>Instagram</p>
-                <p className="text-xs" style={{ color: MUTED }}>Instagram Login · images required</p>
+                <p className="text-xs" style={{ color: MUTED }}>Instagram Login · imagen requerida</p>
               </div>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ backgroundColor: "#1c1008", color: "#fb923c", border: "1px solid #7c2d12" }}>⚠ Unavailable</span>
             </div>
             <div className="p-5 space-y-3">
               {!loading && instagramAccounts.length > 0 && (
@@ -1131,15 +1133,21 @@ export default function AccountsPage() {
                   ))}
                 </div>
               )}
-              <button disabled
-                className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
-                style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-                <PlatformIcon platform="instagram" size={16} />
-                Connect Instagram
-              </button>
-              <p className="text-xs font-medium" style={{ color: "#fb923c" }}>
-                ⚠ Cannot connect — awaiting Meta App Review. New connections are blocked until approved.
-              </p>
+              {connectDisabled ? (
+                <button disabled title={limitMsg ?? undefined}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
+                  style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
+                  <PlatformIcon platform="instagram" size={16} />
+                  Conectar Instagram
+                </button>
+              ) : (
+                <a href={INSTAGRAM_AUTH_URL}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
+                  style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
+                  <PlatformIcon platform="instagram" size={16} />
+                  Conectar Instagram
+                </a>
+              )}
             </div>
           </div>
 
@@ -1154,7 +1162,7 @@ export default function AccountsPage() {
                 <p className="text-xs" style={{ color: MUTED }}>LinkedIn OAuth 2.0</p>
               </div>
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Live</span>
+                style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Activo</span>
             </div>
             <div className="p-5 space-y-3">
               {!loading && linkedinAccounts.length > 0 && (
@@ -1169,14 +1177,14 @@ export default function AccountsPage() {
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="linkedin" size={16} />
-                  {linkedinAccounts.length > 0 ? "Add another LinkedIn account" : "Connect LinkedIn"}
+                  {linkedinAccounts.length > 0 ? "Agregar otra cuenta de LinkedIn" : "Conectar LinkedIn"}
                 </button>
               ) : (
                 <a href={LINKEDIN_AUTH_URL}
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="linkedin" size={16} />
-                  {linkedinAccounts.length > 0 ? "Add another LinkedIn account" : "Connect LinkedIn"}
+                  {linkedinAccounts.length > 0 ? "Agregar otra cuenta de LinkedIn" : "Conectar LinkedIn"}
                 </a>
               )}
               <p className="text-xs">
@@ -1193,7 +1201,7 @@ export default function AccountsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>YouTube</p>
-                <p className="text-xs" style={{ color: MUTED }}>Google OAuth 2.0 · Videos & Shorts</p>
+                <p className="text-xs" style={{ color: MUTED }}>Google OAuth 2.0 · Videos y Shorts</p>
               </div>
             </div>
             <div className="p-5 space-y-3">
@@ -1209,14 +1217,14 @@ export default function AccountsPage() {
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="youtube" size={16} />
-                  {youtubeAccounts.length > 0 ? "Add another YouTube channel" : "Connect YouTube"}
+                  {youtubeAccounts.length > 0 ? "Agregar otro canal de YouTube" : "Conectar YouTube"}
                 </button>
               ) : (
                 <a href={YOUTUBE_AUTH_URL}
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="youtube" size={16} />
-                  {youtubeAccounts.length > 0 ? "Add another YouTube channel" : "Connect YouTube"}
+                  {youtubeAccounts.length > 0 ? "Agregar otro canal de YouTube" : "Conectar YouTube"}
                 </a>
               )}
             </div>
@@ -1230,10 +1238,8 @@ export default function AccountsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>Facebook Pages</p>
-                <p className="text-xs" style={{ color: MUTED }}>Post to Facebook Pages you manage</p>
+                <p className="text-xs" style={{ color: MUTED }}>Publica en las Páginas de Facebook que administras</p>
               </div>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ backgroundColor: "#1c1008", color: "#fb923c", border: "1px solid #7c2d12" }}>⚠ Unavailable</span>
             </div>
             <div className="p-5 space-y-3">
               {!loading && facebookAccounts.length > 0 && (
@@ -1243,15 +1249,21 @@ export default function AccountsPage() {
                   ))}
                 </div>
               )}
-              <button disabled
-                className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
-                style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-                <PlatformIcon platform="facebook" size={16} />
-                Connect Facebook Page
-              </button>
-              <p className="text-xs font-medium" style={{ color: "#fb923c" }}>
-                ⚠ Cannot connect — awaiting Meta App Review. New connections are blocked until approved.
-              </p>
+              {connectDisabled ? (
+                <button disabled title={limitMsg ?? undefined}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
+                  style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
+                  <PlatformIcon platform="facebook" size={16} />
+                  Conectar Página de Facebook
+                </button>
+              ) : (
+                <a href={FACEBOOK_AUTH_URL}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
+                  style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
+                  <PlatformIcon platform="facebook" size={16} />
+                  Conectar Página de Facebook
+                </a>
+              )}
             </div>
           </div>
 
@@ -1262,7 +1274,7 @@ export default function AccountsPage() {
                 <PlatformIcon platform="mastodon" size={20} />
                 <div>
                   <p className="font-semibold text-sm" style={{ color: TEXT }}>Mastodon</p>
-                  <p className="text-xs" style={{ color: MUTED }}>Free & open source, any instance</p>
+                  <p className="text-xs" style={{ color: MUTED }}>Gratis y de código abierto, cualquier instancia</p>
                 </div>
               </div>
 
@@ -1281,7 +1293,7 @@ export default function AccountsPage() {
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors disabled:opacity-40 hover:bg-gray-100"
                 style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                 <PlatformIcon platform="mastodon" size={16} />
-                {mastodonAccounts.length > 0 ? "Add another Mastodon account" : "Connect Mastodon"}
+                {mastodonAccounts.length > 0 ? "Agregar otra cuenta de Mastodon" : "Conectar Mastodon"}
               </button>
 
               <p className="text-xs">
@@ -1297,7 +1309,7 @@ export default function AccountsPage() {
                 <PlatformIcon platform="pixelfed" size={20} />
                 <div>
                   <p className="font-semibold text-sm" style={{ color: TEXT }}>Pixelfed</p>
-                  <p className="text-xs" style={{ color: MUTED }}>Federated photo sharing · ActivityPub</p>
+                  <p className="text-xs" style={{ color: MUTED }}>Fotos federadas · ActivityPub</p>
                 </div>
               </div>
 
@@ -1316,7 +1328,7 @@ export default function AccountsPage() {
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors disabled:opacity-40 hover:bg-gray-100"
                 style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                 <PlatformIcon platform="pixelfed" size={16} />
-                {pixelfedAccounts.length > 0 ? "Add another Pixelfed account" : "Connect Pixelfed"}
+                {pixelfedAccounts.length > 0 ? "Agregar otra cuenta de Pixelfed" : "Conectar Pixelfed"}
               </button>
 
               <p className="text-xs" style={{ color: MUTED }}>
@@ -1333,7 +1345,7 @@ export default function AccountsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>Pinterest</p>
-                <p className="text-xs" style={{ color: MUTED }}>OAuth 2.0 · image required</p>
+                <p className="text-xs" style={{ color: MUTED }}>OAuth 2.0 · imagen requerida</p>
               </div>
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
                 style={{ backgroundColor: "#1c1008", color: "#fb923c", border: "1px solid #7c2d12" }}>⚠ Unavailable</span>
@@ -1369,10 +1381,10 @@ export default function AccountsPage() {
                   </div>
                   <div className="flex-1">
                     <p className="font-semibold text-sm" style={{ color: TEXT }}>Telegram</p>
-                    <p className="text-xs" style={{ color: MUTED }}>Bot API · channel broadcasting</p>
+                    <p className="text-xs" style={{ color: MUTED }}>Bot API · difusión a canales</p>
                   </div>
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Live</span>
+                    style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Activo</span>
                 </div>
                 <div className="p-5 space-y-3">
                   {!loading && telegramAccounts.length > 0 && (
@@ -1387,7 +1399,7 @@ export default function AccountsPage() {
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="telegram" size={16} />
-                      {telegramAccounts.length > 0 ? "Add another channel" : "Connect Telegram Channel"}
+                      {telegramAccounts.length > 0 ? "Agregar otro canal" : "Conectar canal de Telegram"}
                     </button>
                   ) : (
                     <button
@@ -1395,7 +1407,7 @@ export default function AccountsPage() {
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="telegram" size={16} />
-                      {telegramAccounts.length > 0 ? "Add another channel" : "Connect Telegram Channel"}
+                      {telegramAccounts.length > 0 ? "Agregar otro canal" : "Conectar canal de Telegram"}
                     </button>
                   )}
                   <p className="text-xs" style={{ color: MUTED }}>
@@ -1417,10 +1429,10 @@ export default function AccountsPage() {
                   </div>
                   <div className="flex-1">
                     <p className="font-semibold text-sm" style={{ color: TEXT }}>Nostr</p>
-                    <p className="text-xs" style={{ color: MUTED }}>Keypair · decentralized · no approval</p>
+                    <p className="text-xs" style={{ color: MUTED }}>Keypair · descentralizado · sin aprobación</p>
                   </div>
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Live</span>
+                    style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Activo</span>
                 </div>
                 <div className="p-5 space-y-3">
                   {!loading && nostrAccounts.length > 0 && (
@@ -1436,7 +1448,7 @@ export default function AccountsPage() {
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="nostr" size={16} />
-                      {nostrAccounts.length > 0 ? "Add another Nostr key" : "Connect Nostr"}
+                      {nostrAccounts.length > 0 ? "Agregar otra clave de Nostr" : "Conectar Nostr"}
                     </button>
                   ) : (
                     <button
@@ -1444,7 +1456,7 @@ export default function AccountsPage() {
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="nostr" size={16} />
-                      {nostrAccounts.length > 0 ? "Add another Nostr key" : "Connect Nostr"}
+                      {nostrAccounts.length > 0 ? "Agregar otra clave de Nostr" : "Conectar Nostr"}
                     </button>
                   )}
                   <p className="text-xs" style={{ color: MUTED }}>
@@ -1463,14 +1475,14 @@ export default function AccountsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>X (Twitter)</p>
-                <p className="text-xs" style={{ color: MUTED }}>OAuth 1.0a · up to 4 images</p>
+                <p className="text-xs" style={{ color: MUTED }}>OAuth 1.0a · hasta 4 imágenes</p>
               </div>
               {!allowTwitter ? (
                 <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
                   style={{ backgroundColor: "#1c1209", color: "#fbbf24", border: "1px solid #78560a" }}>Pro</span>
               ) : (
                 <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                  style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Live</span>
+                  style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Activo</span>
               )}
             </div>
             <div className="p-5 space-y-3">
@@ -1485,11 +1497,11 @@ export default function AccountsPage() {
                 <div>
                   <div className="w-full py-2.5 text-sm font-semibold rounded-xl text-center opacity-50 cursor-not-allowed"
                     style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-                    Connect X (Twitter)
+                    Conectar X (Twitter)
                   </div>
                   <p className="text-xs mt-2 text-center" style={{ color: MUTED }}>
-                    X/Twitter posting is available on{" "}
-                    <a href="/billing" className="underline hover:opacity-80" style={{ color: "#fbbf24" }}>Pro and Team plans</a>.
+                    Publicar en X/Twitter está disponible en los{" "}
+                    <a href="/billing" className="underline hover:opacity-80" style={{ color: "#fbbf24" }}>planes Pro y Team</a>.
                   </p>
                 </div>
               ) : connectDisabled ? (
@@ -1497,14 +1509,14 @@ export default function AccountsPage() {
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="twitter" size={16} />
-                  {twitterAccounts.length > 0 ? "Add another X account" : "Connect X (Twitter)"}
+                  {twitterAccounts.length > 0 ? "Agregar otra cuenta de X" : "Conectar X (Twitter)"}
                 </button>
               ) : (
                 <a href={TWITTER_AUTH_URL}
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="twitter" size={16} />
-                  {twitterAccounts.length > 0 ? "Add another X account" : "Connect X (Twitter)"}
+                  {twitterAccounts.length > 0 ? "Agregar otra cuenta de X" : "Conectar X (Twitter)"}
                 </a>
               )}
               {allowTwitter && planStatus && planStatus.maxTwitterPostsPerMonth && planStatus.maxTwitterPostsPerMonth > 0 ? (() => {
@@ -1516,13 +1528,13 @@ export default function AccountsPage() {
                 return (
                   <div>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs" style={{ color: MUTED }}>X quota this month</span>
-                      <span className="text-xs font-semibold" style={{ color }}>{remaining} / {max} remaining</span>
+                      <span className="text-xs" style={{ color: MUTED }}>Cuota de X este mes</span>
+                      <span className="text-xs font-semibold" style={{ color }}>{remaining} / {max} restantes</span>
                     </div>
                     <div style={{ height: 4, borderRadius: 999, background: "#1e1e1e" }}>
                       <div style={{ height: 4, borderRadius: 999, background: color, width: `${pct}%`, transition: "width .3s" }} />
                     </div>
-                    <p className="text-xs mt-1" style={{ color: MUTED }}>Resets on the 1st of each month</p>
+                    <p className="text-xs mt-1" style={{ color: MUTED }}>Se reinicia el día 1 de cada mes</p>
                   </div>
                 );
               })() : (
@@ -1544,10 +1556,10 @@ export default function AccountsPage() {
                   </div>
                   <div className="flex-1">
                     <p className="font-semibold text-sm" style={{ color: TEXT }}>Discord</p>
-                    <p className="text-xs" style={{ color: MUTED }}>OAuth + Bot · server channels</p>
+                    <p className="text-xs" style={{ color: MUTED }}>OAuth + Bot · canales de servidor</p>
                   </div>
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Live</span>
+                    style={{ backgroundColor: "#052e16", color: "#4ade80", border: "1px solid #14532d" }}>Activo</span>
                 </div>
                 <div className="p-5 space-y-3">
                   {!loading && discordAccounts.length > 0 && (
@@ -1562,14 +1574,14 @@ export default function AccountsPage() {
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="discord" size={16} />
-                      {discordAccounts.length > 0 ? "Add another channel" : "Connect Discord"}
+                      {discordAccounts.length > 0 ? "Agregar otro canal" : "Conectar Discord"}
                     </button>
                   ) : (
                     <a href={DISCORD_AUTH_URL}
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="discord" size={16} />
-                      {discordAccounts.length > 0 ? "Add another channel" : "Connect Discord"}
+                      {discordAccounts.length > 0 ? "Agregar otro canal" : "Conectar Discord"}
                     </a>
                   )}
                   <p className="text-xs" style={{ color: MUTED }}>
@@ -1591,7 +1603,7 @@ export default function AccountsPage() {
                   </div>
                   <div className="flex-1">
                     <p className="font-semibold text-sm" style={{ color: TEXT }}>Tumblr</p>
-                    <p className="text-xs" style={{ color: MUTED }}>Blog posts · text and images</p>
+                    <p className="text-xs" style={{ color: MUTED }}>Posts de blog · texto e imágenes</p>
                   </div>
                 </div>
                 <div className="p-5 space-y-3">
@@ -1607,14 +1619,14 @@ export default function AccountsPage() {
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="tumblr" size={16} />
-                      {tumblrAccounts.length > 0 ? "Add another blog" : "Connect Tumblr"}
+                      {tumblrAccounts.length > 0 ? "Agregar otro blog" : "Conectar Tumblr"}
                     </button>
                   ) : (
                     <a href={TUMBLR_AUTH_URL}
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                       style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                       <PlatformIcon platform="tumblr" size={16} />
-                      {tumblrAccounts.length > 0 ? "Add another blog" : "Connect Tumblr"}
+                      {tumblrAccounts.length > 0 ? "Agregar otro blog" : "Conectar Tumblr"}
                     </a>
                   )}
                   <p className="text-xs" style={{ color: MUTED }}>
@@ -1636,7 +1648,7 @@ export default function AccountsPage() {
                   </div>
                   <div className="flex-1">
                     <p className="font-semibold text-sm" style={{ color: TEXT }}>Lemmy</p>
-                    <p className="text-xs" style={{ color: MUTED }}>Federated · any instance · community posts</p>
+                    <p className="text-xs" style={{ color: MUTED }}>Federado · cualquier instancia · posts de comunidad</p>
                   </div>
                 </div>
                 <div className="p-5 space-y-3">
@@ -1654,7 +1666,7 @@ export default function AccountsPage() {
                     className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
                     style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                     <PlatformIcon platform="lemmy" size={16} />
-                    {lemmyAccounts.length > 0 ? "Add another community" : "Connect Lemmy"}
+                    {lemmyAccounts.length > 0 ? "Agregar otra comunidad" : "Conectar Lemmy"}
                   </button>
                   <p className="text-xs" style={{ color: MUTED }}>
                     Post title from first line · body from remaining text · image support
@@ -1672,7 +1684,7 @@ export default function AccountsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>Google Business Profile</p>
-                <p className="text-xs" style={{ color: MUTED }}>Google OAuth 2.0 · post updates to your listing</p>
+                <p className="text-xs" style={{ color: MUTED }}>Google OAuth 2.0 · publica actualizaciones en tu ficha</p>
               </div>
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
                 style={{ backgroundColor: "#1c1008", color: "#fb923c", border: "1px solid #7c2d12" }}>⚠ Unavailable</span>
@@ -1698,7 +1710,7 @@ export default function AccountsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: TEXT }}>TikTok</p>
-                <p className="text-xs" style={{ color: MUTED }}>Content Posting API · videos only</p>
+                <p className="text-xs" style={{ color: MUTED }}>Content Posting API · solo videos</p>
               </div>
               {TIKTOK_REVIEW_PENDING && (
                 <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1"
@@ -1716,18 +1728,18 @@ export default function AccountsPage() {
                 </div>
               )}
               {(!!limitMsg || TIKTOK_REVIEW_PENDING) ? (
-                <button disabled title={TIKTOK_REVIEW_PENDING ? "Available once TikTok app review is approved" : (limitMsg ?? undefined)}
+                <button disabled title={TIKTOK_REVIEW_PENDING ? "Disponible una vez aprobada la revisión de la app de TikTok" : (limitMsg ?? undefined)}
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl opacity-40 cursor-not-allowed"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="tiktok" size={16} />
-                  {tiktokAccounts.length > 0 ? "Add another TikTok account" : "Connect TikTok"}
+                  {tiktokAccounts.length > 0 ? "Agregar otra cuenta de TikTok" : "Conectar TikTok"}
                 </button>
               ) : (
                 <a href={TIKTOK_AUTH_URL}
                   className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
                   style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
                   <PlatformIcon platform="tiktok" size={16} />
-                  {tiktokAccounts.length > 0 ? "Add another TikTok account" : "Connect TikTok"}
+                  {tiktokAccounts.length > 0 ? "Agregar otra cuenta de TikTok" : "Conectar TikTok"}
                 </a>
               )}
               {TIKTOK_REVIEW_PENDING && (
@@ -1741,11 +1753,11 @@ export default function AccountsPage() {
         </div>}
       </div>
 
-      {showTelegramDialog && <TelegramDialog onClose={() => setShowTelegramDialog(false)} onConnected={() => { fetchAccounts(); success("Telegram channel connected!"); }} />}
+      {showTelegramDialog && <TelegramDialog onClose={() => setShowTelegramDialog(false)} onConnected={() => { fetchAccounts(); success("¡Canal de Telegram conectado!"); }} />}
       {showPixelfedDialog && <PixelfedDialog onClose={() => setShowPixelfedDialog(false)} />}
       {showMastodonDialog && <MastodonDialog onClose={() => setShowMastodonDialog(false)} />}
-      {showNostrDialog && <NostrDialog onClose={() => setShowNostrDialog(false)} onConnected={() => { fetchAccounts(); success("Nostr account connected!"); }} />}
-      {showLemmyDialog && <LemmyDialog onClose={() => setShowLemmyDialog(false)} onConnected={() => { fetchAccounts(); success("Lemmy community connected!"); }} />}
+      {showNostrDialog && <NostrDialog onClose={() => setShowNostrDialog(false)} onConnected={() => { fetchAccounts(); success("¡Cuenta de Nostr conectada!"); }} />}
+      {showLemmyDialog && <LemmyDialog onClose={() => setShowLemmyDialog(false)} onConnected={() => { fetchAccounts(); success("¡Comunidad de Lemmy conectada!"); }} />}
 
       {/* Discord channel picker — shown after OAuth redirect */}
       {discordGuildId && discordChannels.length > 0 && (
@@ -1755,10 +1767,10 @@ export default function AccountsPage() {
           <div className="w-full max-w-sm rounded-2xl p-6" style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a" }}>
             <div className="flex items-center gap-2 mb-4">
               <PlatformIcon platform="discord" size={20} />
-              <h2 className="text-base font-bold" style={{ color: "#ededed" }}>Pick a channel</h2>
+              <h2 className="text-base font-bold" style={{ color: "#ededed" }}>Elige un canal</h2>
             </div>
             <p className="text-sm mb-4" style={{ color: "#888" }}>
-              Bot added to <span style={{ color: "#ededed" }}>{discordGuildName}</span>. Choose which channel to post to.
+              Bot agregado a <span style={{ color: "#ededed" }}>{discordGuildName}</span>. Elige en qué canal publicar.
             </p>
             <form onSubmit={connectDiscordChannel} className="space-y-4">
               <select
@@ -1767,7 +1779,7 @@ export default function AccountsPage() {
                 required
                 className="w-full px-3 py-2.5 rounded-xl text-sm"
                 style={{ backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a", color: "#ededed" }}>
-                <option value="">Select a channel…</option>
+                <option value="">Selecciona un canal…</option>
                 {discordChannels.map(c => (
                   <option key={c.id} value={c.id}>#{c.name}</option>
                 ))}
@@ -1776,7 +1788,7 @@ export default function AccountsPage() {
                 <button type="submit" disabled={!discordChannelId || discordConnecting}
                   className="w-full py-2.5 text-sm font-semibold rounded-xl disabled:opacity-50"
                   style={{ backgroundColor: "#5865F2", color: "#fff" }}>
-                  {discordConnecting ? "Connecting…" : "Connect"}
+                  {discordConnecting ? "Conectando…" : "Conectar"}
                 </button>
               </div>
             </form>
@@ -1790,25 +1802,25 @@ export default function AccountsPage() {
           style={{ backgroundColor: "rgba(0,0,0,0.7)" }}
           onClick={e => { if (e.target === e.currentTarget) setDisconnectTarget(null); }}>
           <div className="w-full max-w-sm rounded-2xl p-6" style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a" }}>
-            <h2 className="text-base font-bold mb-1" style={{ color: "#ededed" }}>Disconnect account?</h2>
+            <h2 className="text-base font-bold mb-1" style={{ color: "#ededed" }}>¿Desconectar cuenta?</h2>
             <p className="text-sm mb-5" style={{ color: "#888" }}>
               <span style={{ color: "#ededed" }}>
                 {disconnectTarget.platform === "nostr"
                   ? disconnectTarget.displayName
                   : `@${disconnectTarget.displayName}`}
-              </span>{" "}will be removed.
-              Already-scheduled posts won&apos;t be affected.
+              </span>{" "}será eliminada.
+              Las publicaciones ya programadas no se verán afectadas.
             </p>
             <div className="flex gap-3">
               <button onClick={() => setDisconnectTarget(null)}
                 className="flex-1 text-sm font-semibold py-2 rounded-xl"
                 style={{ backgroundColor: "#1a1a1a", color: "#ededed", border: "1px solid #2a2a2a" }}>
-                Cancel
+                Cancelar
               </button>
               <button onClick={confirmDisconnect}
                 className="flex-1 text-sm font-semibold py-2 rounded-xl transition-opacity hover:opacity-80"
                 style={{ backgroundColor: "#7f1d1d", color: "#fca5a5" }}>
-                Disconnect
+                Desconectar
               </button>
             </div>
           </div>

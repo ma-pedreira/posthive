@@ -48,7 +48,7 @@ export default function McpConnectPage() {
       });
       window.location.href = res.redirect;
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+      setError(e instanceof Error ? e.message : "Algo salió mal. Intenta de nuevo.");
       setApproving(false);
     }
   }
@@ -74,7 +74,7 @@ export default function McpConnectPage() {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#0a0a0a", padding: 24 }}>
         <div style={{ background: "#111", border: "1px solid #2a2a2a", borderRadius: 16, padding: 32, maxWidth: 400, textAlign: "center" }}>
-          <p style={{ color: "#ef4444", fontSize: 14 }}>Invalid authorization request — missing required parameters.</p>
+          <p style={{ color: "#ef4444", fontSize: 14 }}>Solicitud de autorización inválida — faltan parámetros requeridos.</p>
         </div>
       </div>
     );
@@ -105,20 +105,20 @@ export default function McpConnectPage() {
 
         {/* Title */}
         <h1 style={{ fontSize: 20, fontWeight: 700, color: "#ededed", textAlign: "center", margin: "0 0 8px" }}>
-          Authorize MCP access
+          Autorizar acceso MCP
         </h1>
         <p style={{ fontSize: 14, color: "#666", textAlign: "center", margin: "0 0 28px", lineHeight: 1.6 }}>
-          <strong style={{ color: "#9ba2ee" }}>{clientId}</strong> wants to access your Posthive workspace as <strong style={{ color: "#ededed" }}>{user.email}</strong>
+          <strong style={{ color: "#9ba2ee" }}>{clientId}</strong> quiere acceder a tu espacio de trabajo de Posthive como <strong style={{ color: "#ededed" }}>{user.email}</strong>
         </p>
 
         {/* Permissions */}
         <div style={{ background: "#0d0d0d", border: "1px solid #1e1e1e", borderRadius: 12, padding: "16px 20px", marginBottom: 24 }}>
-          <p style={{ fontSize: 11, fontWeight: 600, color: "#555", letterSpacing: ".06em", margin: "0 0 12px", fontFamily: "monospace" }}>THIS CONNECTOR CAN</p>
+          <p style={{ fontSize: 11, fontWeight: 600, color: "#555", letterSpacing: ".06em", margin: "0 0 12px", fontFamily: "monospace" }}>ESTE CONECTOR PUEDE</p>
           {[
-            "List your connected social accounts",
-            "Create posts as drafts (require your approval)",
-            "View and manage your scheduled queue",
-            "Schedule posts when you explicitly allow it",
+            "Listar tus cuentas sociales conectadas",
+            "Crear publicaciones como borradores (requieren tu aprobación)",
+            "Ver y gestionar tu cola programada",
+            "Programar publicaciones cuando lo permitas explícitamente",
           ].map(item => (
             <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ marginTop: 1, flexShrink: 0 }}>
@@ -133,7 +133,7 @@ export default function McpConnectPage() {
               <circle cx="8" cy="8" r="7" stroke="#ef4444" strokeWidth="1.2"/>
               <path d="M5 8h6" stroke="#ef4444" strokeWidth="1.3" strokeLinecap="round"/>
             </svg>
-            <span style={{ fontSize: 13, color: "#777", lineHeight: 1.5 }}>Cannot publish anything without your review</span>
+            <span style={{ fontSize: 13, color: "#777", lineHeight: 1.5 }}>No puede publicar nada sin tu revisión</span>
           </div>
         </div>
 
@@ -150,7 +150,7 @@ export default function McpConnectPage() {
             disabled={approving}
             style={{ flex: 1, padding: "11px 0", borderRadius: 10, border: "1px solid #2a2a2a", background: "transparent", color: "#888", fontSize: 14, fontWeight: 500, cursor: "pointer" }}
           >
-            Deny
+            Rechazar
           </button>
           <button
             onClick={handleAllow}
@@ -158,12 +158,12 @@ export default function McpConnectPage() {
             style={{ flex: 2, padding: "11px 0", borderRadius: 10, border: "none", background: "#5b63d3", color: "#fff", fontSize: 14, fontWeight: 600, cursor: approving ? "not-allowed" : "pointer", opacity: approving ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
           >
             {approving && <div style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,.3)", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />}
-            {approving ? "Authorizing…" : "Allow access"}
+            {approving ? "Autorizando…" : "Permitir acceso"}
           </button>
         </div>
 
         <p style={{ fontSize: 12, color: "#444", textAlign: "center", margin: "16px 0 0", lineHeight: 1.6 }}>
-          You can revoke this access anytime from <strong style={{ color: "#666" }}>Settings → API Keys</strong>
+          Puedes revocar este acceso en cualquier momento desde <strong style={{ color: "#666" }}>Configuración → Claves de API</strong>
         </p>
       </div>
     </div>

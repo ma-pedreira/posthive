@@ -9,6 +9,7 @@ import { trackEvent } from "../../lib/track";
 import { DateTimePicker } from "../../components/DateTimePicker";
 import { PlatformIcon } from "../../components/PlatformIcon";
 import { BulkScheduleModal } from "../../components/BulkScheduleModal";
+import { RepeatScheduleModal } from "../../components/RepeatScheduleModal";
 import {
   PlatformPreview,
   PLATFORM_COLOR, PLATFORM_LIMIT, MAX_IMAGES, countGraphemes,
@@ -40,6 +41,8 @@ export default function ComposePage() {
   const [commentText, setCommentText] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [scheduledFor, setScheduledFor] = useState(defaultScheduledFor);
+  const [extraSchedules, setExtraSchedules] = useState<string[]>([]);
+  const [showRepeatModal, setShowRepeatModal] = useState(false);
   const [mediaItems, setMediaItems] = useState<UploadedImage[]>([]);
   const [altTexts, setAltTexts] = useState<string[]>([]);
   const [igMediaType, setIgMediaType] = useState<"post" | "reel" | "story">("post");
@@ -209,12 +212,12 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
 
       // Story: only 1 image allowed
       if (igMediaType === "story") {
-        if (!isImg && !isVid) { setUploadError("Instagram Stories require an image or video."); continue; }
+        if (!isImg && !isVid) { setUploadError("Las Historias de Instagram requieren una imagen o video."); continue; }
       }
 
       // Reel: single video only — replaces existing
       if (igMediaType === "reel") {
-        if (!isVid) { setUploadError("Instagram Reels only support a single video."); continue; }
+        if (!isVid) { setUploadError("Los Reels de Instagram solo admiten un único video."); continue; }
         const previewUrl = URL.createObjectURL(file);
         const formData = new FormData();
         formData.append("file", file);
@@ -229,12 +232,12 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             });
             setAltTexts([]);
           }
-        } catch { setUploadError("Upload failed is the API running?"); URL.revokeObjectURL(previewUrl); }
+        } catch { setUploadError("Error al subir el archivo — ¿está la API corriendo?"); URL.revokeObjectURL(previewUrl); }
         continue;
       }
 
       // Post mode: mixed image + video carousel, up to 10 items
-      if (mediaItems.length >= maxImagesPerPost) { setUploadError(`Maximum ${maxImagesPerPost} images per post on your plan. Upgrade to Pro for up to 10.`); continue; }
+      if (mediaItems.length >= maxImagesPerPost) { setUploadError(`Máximo ${maxImagesPerPost} imágenes por publicación en tu plan. Mejora a Pro para hasta 10.`); continue; }
       const previewUrl = URL.createObjectURL(file);
       const formData = new FormData();
       formData.append("file", file);
@@ -253,7 +256,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           if (!isVid) setAltTexts(a => [...a, ""]);
           return [...prev, { url, previewUrl, name: file.name || "image", isVideo: isVid }];
         });
-      } catch { setUploadError("Upload failed is the API running?"); URL.revokeObjectURL(previewUrl); }
+      } catch { setUploadError("Error al subir el archivo — ¿está la API corriendo?"); URL.revokeObjectURL(previewUrl); }
     }
 
     setUploading(false);
@@ -286,7 +289,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           return [...prev.filter(m => !m.isVideo), { url, previewUrl, name: file.name, isVideo: true }];
         });
       }
-    } catch { setUploadError("Upload failed — is the API running?"); URL.revokeObjectURL(previewUrl); }
+    } catch { setUploadError("Error al subir el archivo — ¿está la API corriendo?"); URL.revokeObjectURL(previewUrl); }
     setUploading(false);
     if (ytVideoInputRef.current) ytVideoInputRef.current.value = "";
   }
@@ -307,7 +310,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         });
         setAltTexts([]);
       }
-    } catch { setUploadError("Upload failed — is the API running?"); URL.revokeObjectURL(previewUrl); }
+    } catch { setUploadError("Error al subir el archivo — ¿está la API corriendo?"); URL.revokeObjectURL(previewUrl); }
     setUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
@@ -319,7 +322,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
     formData.append("file", file);
     try {
       const res = await fetch(`${API_BASE}/upload`, { method: "POST", body: formData, credentials: "include" });
-      if (!res.ok) { const b = await res.json() as { error: string }; setUploadError(b.error ?? "Thumbnail upload failed"); URL.revokeObjectURL(previewUrl); }
+      if (!res.ok) { const b = await res.json() as { error: string }; setUploadError(b.error ?? "Error al subir la miniatura"); URL.revokeObjectURL(previewUrl); }
       else {
         const { url } = await res.json() as { url: string };
         if (youtubeThumbnailUrl) deleteFromStorage(youtubeThumbnailUrl);
@@ -327,7 +330,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         setYoutubeThumbnailUrl(url);
         setYoutubeThumbnailPreview(previewUrl);
       }
-    } catch { setUploadError("Upload failed — is the API running?"); URL.revokeObjectURL(previewUrl); }
+    } catch { setUploadError("Error al subir el archivo — ¿está la API corriendo?"); URL.revokeObjectURL(previewUrl); }
     setThumbnailUploading(false);
   }
 
@@ -366,51 +369,53 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
   }
 
   function validateBeforeSubmit(): string | null {
-    if (selectedIds.length === 0) return "Select at least one account to post to.";
+    if (selectedIds.length === 0) return "Selecciona al menos una cuenta para publicar.";
 
     const hasInstagram = selectedAccounts.some((a) => a.platform === "instagram");
     const hasThreads   = selectedAccounts.some((a) => a.platform === "threads");
     const hasBluesky   = selectedAccounts.some((a) => a.platform === "bluesky");
 
     // Text required for everything except Instagram Story and YouTube-only (uses its own Title field)
-    if (!text.trim() && !onlyInstagramStory && !noPostTextNeeded) return "Write something before scheduling.";
+    if (!text.trim() && !onlyInstagramStory && !noPostTextNeeded) return "Escribe algo antes de programar.";
 
     // Instagram-specific
     if (hasInstagram) {
       const hasVideo = mediaItems.some(m => m.isVideo);
       const hasImage = mediaItems.some(m => !m.isVideo);
       if (igMediaType === "story" && mediaItems.length === 0)
-        return "Instagram Story requires an image or video.";
+        return "La Historia de Instagram requiere una imagen o video.";
       if (igMediaType === "reel" && !hasVideo)
-        return "Instagram Reel requires a video.";
+        return "El Reel de Instagram requiere un video.";
       if (igMediaType === "post" && mediaItems.length === 0)
-        return "Instagram Post requires at least one image or video.";
+        return "La publicación de Instagram requiere al menos una imagen o video.";
     }
 
     // Bluesky "" text required (images optional)
-    if (hasBluesky && !text.trim()) return "Bluesky requires a caption.";
+    if (hasBluesky && !text.trim()) return "Bluesky requiere un texto.";
 
     // Threads "" text required, video supported (single video only)
-    if (hasThreads && !text.trim()) return "Threads requires a caption.";
+    if (hasThreads && !text.trim()) return "Threads requiere un texto.";
 
     // YouTube — title required, video required (either uploaded or external URL)
     if (youtubeSelected) {
-      if (!youtubeTitle.trim()) return "YouTube requires a title.";
+      if (!youtubeTitle.trim()) return "YouTube requiere un título.";
       if (youtubeVideoMode === "url") {
-        if (!youtubeVideoUrl.trim()) return "YouTube requires a video URL.";
-        try { new URL(youtubeVideoUrl); } catch { return "Please enter a valid video URL (must start with https://)."; }
+        if (!youtubeVideoUrl.trim()) return "YouTube requiere una URL de video.";
+        try { new URL(youtubeVideoUrl); } catch { return "Ingresa una URL de video válida (debe empezar con https://)."; }
       } else {
-        if (!video) return "YouTube requires a video attached.";
+        if (!video) return "YouTube requiere un video adjunto.";
       }
     }
 
     // Character limits
     for (const p of platformLimits) {
-      if (p.over) return `Your caption is too long for ${p.platform} (${p.effectiveCount}/${p.limit} characters).`;
+      if (p.over) return `Tu texto es demasiado largo para ${p.platform} (${p.effectiveCount}/${p.limit} caracteres).`;
     }
 
-    // Scheduled time must be in the future
-    if (new Date(scheduledFor) <= new Date()) return "Scheduled time must be in the future.";
+    // Scheduled time(s) must be in the future
+    if ([scheduledFor, ...extraSchedules].some((d) => new Date(d) <= new Date())) {
+      return "Todas las fechas programadas deben ser en el futuro.";
+    }
 
     return null;
   }
@@ -419,7 +424,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
     const name = saveTemplateName.trim();
     if (!name) return;
     if (templates.some(t => t.name.toLowerCase() === name.toLowerCase())) {
-      toastError(`A template named "${name}" already exists.`);
+      toastError(`Ya existe una plantilla llamada "${name}".`);
       return;
     }
     setSavingTemplate(true);
@@ -434,9 +439,9 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         }),
       });
       setTemplates(prev => [res.template, ...prev]);
-      toastSuccess("Template saved!");
+      toastSuccess("¡Plantilla guardada!");
     } catch {
-      toastError("Failed to save template.");
+      toastError("No se pudo guardar la plantilla.");
     } finally {
       setSavingTemplate(false);
     }
@@ -452,7 +457,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
     if (content.pinterestTitle !== undefined) setPinterestTitle(content.pinterestTitle);
     if (content.pinterestDescription !== undefined) setPinterestDescription(content.pinterestDescription);
     setShowTemplates(false);
-    toastSuccess(`Template "${tpl.name}" loaded.`);
+    toastSuccess(`Plantilla "${tpl.name}" cargada.`);
   }
 
   async function deleteTemplate() {
@@ -462,15 +467,16 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
     try {
       await apiFetch(`/templates/${id}`, { method: "DELETE" });
       setTemplates(prev => prev.filter(t => t.id !== id));
-      toastSuccess(`Template "${name}" deleted.`);
+      toastSuccess(`Plantilla "${name}" eliminada.`);
     } catch {
-      toastError("Failed to delete template.");
+      toastError("No se pudo eliminar la plantilla.");
     }
   }
 
   function resetForm() {
     setText(""); setCommentText(""); setScheduledFor(defaultScheduledFor());
     if (textareaRef.current) textareaRef.current.style.height = "160px";
+    setExtraSchedules([]);
     setIgMediaType("post");
     setYoutubeTitle(""); setYoutubeDescription(""); setYoutubeType("short");
     setYoutubeVideoMode("upload"); setYoutubeVideoUrl("");
@@ -513,7 +519,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           dryRun: false,
         }),
       });
-      toastSuccess("Draft saved - find it in Posts → Drafts.");
+      toastSuccess("Borrador guardado — lo encuentras en Publicaciones → Borradores.");
       resetForm();
     } catch (err) {
       const msg = err instanceof Error ? err.message : typeof err === "string" ? err : JSON.stringify(err);
@@ -526,6 +532,9 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
     const validationError = validateBeforeSubmit();
     if (validationError) { toastWarning(validationError); return; }
     setSubmitting(true);
+    const allDates = [scheduledFor, ...extraSchedules];
+    let succeeded = 0;
+    let lastError: string | null = null;
     try {
       const cleanOverrides = Object.fromEntries(
         Object.entries(perAccountOverrides)
@@ -534,34 +543,53 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
       );
       const mediaUrls = mediaItems.map(m => m.url);
       const hasInstagram = selectedAccounts.some((a) => a.platform === "instagram");
-      await apiFetch("/jobs", {
-        method: "POST",
-        body: JSON.stringify({
-          scheduledFor: new Date(scheduledFor).toISOString(),
-          content: {
-            text,
-            mediaUrls,
-            ...(altTexts.some(Boolean) ? { altTexts } : {}),
-            ...(hasInstagram && igMediaType !== "post" ? { mediaType: igMediaType } : {}),
-            ...(youtubeSelected ? { youtubeType, youtubeVideoMode } : {}),
-            ...(youtubeSelected && youtubeVideoMode === "url" && youtubeVideoUrl.trim() ? { youtubeVideoUrl: youtubeVideoUrl.trim() } : {}),
-            ...(youtubeSelected && youtubeThumbnailUrl ? { youtubeThumbnailUrl } : {}),
-            ...(pixelfedSelected ? { pixelfedSensitive, pixelfedVisibility } : {}),
-            ...(Object.keys(cleanOverrides).length > 0 ? { perAccount: cleanOverrides } : {}),
-          },
-          commentText: commentText.trim() || undefined,
-          accountIds: selectedIds,
-          dryRun,
-        }),
+      const buildBody = (date: string) => JSON.stringify({
+        scheduledFor: new Date(date).toISOString(),
+        content: {
+          text,
+          mediaUrls,
+          ...(altTexts.some(Boolean) ? { altTexts } : {}),
+          ...(hasInstagram && igMediaType !== "post" ? { mediaType: igMediaType } : {}),
+          ...(youtubeSelected ? { youtubeType, youtubeVideoMode } : {}),
+          ...(youtubeSelected && youtubeVideoMode === "url" && youtubeVideoUrl.trim() ? { youtubeVideoUrl: youtubeVideoUrl.trim() } : {}),
+          ...(youtubeSelected && youtubeThumbnailUrl ? { youtubeThumbnailUrl } : {}),
+          ...(pixelfedSelected ? { pixelfedSensitive, pixelfedVisibility } : {}),
+          ...(Object.keys(cleanOverrides).length > 0 ? { perAccount: cleanOverrides } : {}),
+        },
+        commentText: commentText.trim() || undefined,
+        accountIds: selectedIds,
+        dryRun,
       });
-      if (!dryRun) trackEvent("post_scheduled", { platforms: selectedAccounts.map(a => a.platform) });
-      toastSuccess(dryRun ? "Dry run scheduled no real post will be made." : "Post scheduled successfully!");
-      if (!dryRun && !localStorage.getItem("posthive_first_post_done")) {
+
+      for (const date of allDates) {
+        try {
+          await apiFetch("/jobs", { method: "POST", body: buildBody(date) });
+          succeeded++;
+        } catch (err) {
+          lastError = err instanceof Error ? err.message : typeof err === "string" ? err : JSON.stringify(err);
+        }
+      }
+
+      if (!dryRun && succeeded > 0) trackEvent("post_scheduled", { platforms: selectedAccounts.map(a => a.platform), count: succeeded });
+
+      if (succeeded === allDates.length) {
+        toastSuccess(
+          dryRun ? "Dry run programado no se hará ninguna publicación real."
+          : allDates.length > 1 ? `${succeeded} publicaciones programadas correctamente!`
+          : "¡Publicación programada correctamente!"
+        );
+      } else if (succeeded > 0) {
+        toastWarning(`${succeeded} de ${allDates.length} publicaciones se programaron. Alguna falló: ${lastError ?? ""}`);
+      } else {
+        throw new Error(lastError ?? "No se pudo programar la publicación.");
+      }
+
+      if (succeeded > 0 && !dryRun && !localStorage.getItem("posthive_first_post_done")) {
         localStorage.setItem("posthive_first_post_done", "1");
         confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 }, zIndex: 9999 });
         setTimeout(() => confetti({ particleCount: 80, spread: 120, origin: { y: 0.55 }, zIndex: 9999 }), 300);
       }
-      resetForm();
+      if (succeeded > 0) resetForm();
     } catch (err) {
       const msg = err instanceof Error ? err.message : typeof err === "string" ? err : JSON.stringify(err);
       toastError(msg.replace(/^Error: API POST \/jobs → \d+: /, "").replace(/^\{"error":"/, "").replace(/"\}$/, ""));
@@ -640,9 +668,9 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
     el.onloadedmetadata = () => {
       const { videoWidth: w, videoHeight: h, duration } = el;
       const issues: string[] = [];
-      if (w && h && h <= w) issues.push("isn't vertical (9:16) it'll likely upload as a regular video, not a Short");
-      else if (w && h && duration && duration > 60) issues.push(`is ${Math.round(duration)}s Shorts reliably need ≤60s`);
-      setYoutubeShortsWarning(issues.length ? `This video ${issues[0]}.` : null);
+      if (w && h && h <= w) issues.push("no es vertical (9:16), probablemente se suba como video normal, no como Short");
+      else if (w && h && duration && duration > 60) issues.push(`dura ${Math.round(duration)}s — los Shorts necesitan ≤60s para funcionar bien`);
+      setYoutubeShortsWarning(issues.length ? `Este video ${issues[0]}.` : null);
     };
     return () => { el.onloadedmetadata = null; };
   }, [video, youtubeSelected, youtubeType]);
@@ -680,7 +708,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
 
   const previewContent = selectedAccounts.length === 0 ? (
     <div className="rounded-2xl border-2 border-dashed p-10 text-center" style={{ borderColor: "#2a2a2a" }}>
-      <p className="text-sm" style={{ color: "#888888" }}>Select an account above to see a preview</p>
+      <p className="text-sm" style={{ color: "#888888" }}>Selecciona una cuenta arriba para ver la vista previa</p>
     </div>
   ) : (
     selectedAccounts.map((a) => {
@@ -707,8 +735,8 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
           <div className="w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl" style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a" }}>
             <div className="px-5 py-4" style={{ borderBottom: "1px solid #2a2a2a" }}>
-              <h3 className="text-sm font-bold" style={{ color: "#ededed" }}>Save as template</h3>
-              <p className="text-xs mt-0.5" style={{ color: "#888" }}>Give this template a name to reuse it later.</p>
+              <h3 className="text-sm font-bold" style={{ color: "#ededed" }}>Guardar como plantilla</h3>
+              <p className="text-xs mt-0.5" style={{ color: "#888" }}>Ponle un nombre a esta plantilla para reutilizarla después.</p>
             </div>
             <div className="px-5 py-4">
               <input
@@ -716,7 +744,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                 value={saveTemplateName}
                 onChange={e => setSaveTemplateName(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter") saveTemplate(); if (e.key === "Escape") setSaveTemplateDialog(false); }}
-                placeholder="e.g. Weekly update, Product launch…"
+                placeholder="ej. Actualización semanal, Lanzamiento de producto…"
                 className="w-full rounded-xl border px-3 py-2.5 text-sm focus:outline-none"
                 style={{ backgroundColor: "#0d0d0d", borderColor: "#2a2a2a", color: "#ededed" }}
               />
@@ -724,10 +752,10 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             <div className="flex items-center justify-end gap-2 px-5 pb-4">
               <button type="button" onClick={() => setSaveTemplateDialog(false)}
                 className="px-4 py-2 rounded-xl text-sm font-medium hover:opacity-70 transition-opacity"
-                style={{ color: "#888" }}>Cancel</button>
+                style={{ color: "#888" }}>Cancelar</button>
               <button type="button" onClick={saveTemplate} disabled={!saveTemplateName.trim()}
                 className="px-4 py-2 rounded-xl text-sm font-semibold transition-colors hover:bg-gray-100 disabled:opacity-40"
-                style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>Save</button>
+                style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>Guardar</button>
             </div>
           </div>
         </div>
@@ -738,20 +766,20 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
           <div className="w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl" style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a" }}>
             <div className="px-5 py-4" style={{ borderBottom: "1px solid #2a2a2a" }}>
-              <h3 className="text-sm font-bold" style={{ color: "#ededed" }}>Delete template</h3>
+              <h3 className="text-sm font-bold" style={{ color: "#ededed" }}>Eliminar plantilla</h3>
             </div>
             <div className="px-5 py-4">
               <p className="text-sm" style={{ color: "#888" }}>
-                Delete <span className="font-semibold" style={{ color: "#ededed" }}>&ldquo;{deleteTemplateTarget.name}&rdquo;</span>? This cannot be undone.
+                ¿Eliminar <span className="font-semibold" style={{ color: "#ededed" }}>&ldquo;{deleteTemplateTarget.name}&rdquo;</span>? Esta acción no se puede deshacer.
               </p>
             </div>
             <div className="flex items-center justify-end gap-2 px-5 pb-4">
               <button type="button" onClick={() => setDeleteTemplateTarget(null)}
                 className="px-4 py-2 rounded-xl text-sm font-medium hover:opacity-70 transition-opacity"
-                style={{ color: "#888" }}>Cancel</button>
+                style={{ color: "#888" }}>Cancelar</button>
               <button type="button" onClick={deleteTemplate}
                 className="px-4 py-2 rounded-xl text-sm font-semibold transition-colors hover:opacity-90"
-                style={{ backgroundColor: "#ef4444", color: "#fff" }}>Delete</button>
+                style={{ backgroundColor: "#ef4444", color: "#fff" }}>Eliminar</button>
             </div>
           </div>
         </div>
@@ -760,12 +788,12 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
       {/* Top bar */}
       <div className="flex items-center justify-between pl-16 pr-4 md:px-8" style={{ height: 65, borderBottom: "1px solid #2a2a2a", backgroundColor: "#0a0a0a" }}>
         <div>
-          <h1 className="text-lg font-bold text-gray-900">New Post</h1>
-          <p className="text-xs text-gray-400 mt-0.5 hidden sm:block">Write once · schedule across platforms</p>
+          <h1 className="text-lg font-bold text-gray-900">Nueva publicación</h1>
+          <p className="text-xs text-gray-400 mt-0.5 hidden sm:block">Escribe una vez · programa en varias plataformas</p>
         </div>
         {!loadingAccounts && accounts.length === 0 && (
           <a href="/accounts" className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg font-medium flex-shrink-0">
-            ⚠️ Connect an account first
+            ⚠️ Conecta una cuenta primero
           </a>
         )}
       </div>
@@ -779,12 +807,12 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           {/* Platform selector */}
           <div className="px-6 pt-4 pb-3" style={{ borderBottom: "1px solid #2a2a2a" }}>
             <div className="flex items-center justify-between mb-2.5">
-              <p className="text-xs font-semibold uppercase tracking-widest">Post to</p>
+              <p className="text-xs font-semibold uppercase tracking-widest">Publicar en</p>
               {loadingAccounts && <div className="h-3 w-24 rounded animate-pulse" style={{ backgroundColor: "#1a1a1a" }} />}
               {!loadingAccounts && accounts.length > 1 && (
                 <div className="flex items-center gap-3">
                   <span className="text-xs">
-                    {selectedIds.length}/{accounts.length} selected
+                    {selectedIds.length}/{accounts.length} seleccionadas
                   </span>
                   <button type="button"
                     onClick={() => {
@@ -793,12 +821,12 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                     }}
                     className="text-xs font-semibold transition-colors hover:opacity-80"
                     style={{ color: "#5b63d3" }}>
-                    {selectedIds.length === accounts.length ? "Deselect all" : "Select all"}
+                    {selectedIds.length === accounts.length ? "Deseleccionar todas" : "Seleccionar todas"}
                   </button>
                   <button type="button" onClick={() => setShowReorder(true)}
                     className="text-xs font-semibold transition-colors hover:opacity-80"
                     style={{ color: "#888" }}>
-                    ⇅ Reorder
+                    ⇅ Reordenar
                   </button>
                 </div>
               )}
@@ -814,7 +842,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-                Connect an account to post
+                Conecta una cuenta para publicar
               </a>
             ) : (
               /* Scrollable when many accounts */
@@ -894,10 +922,10 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           <div className="px-6 py-5" style={{ display: (loadingAccounts || noPostTextNeeded) ? "none" : undefined }}>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold uppercase tracking-wide">Post</span>
+                <span className="text-xs font-semibold uppercase tracking-wide">Publicación</span>
                 {selectedAccounts.filter(a => a.platform !== "youtube" && a.platform !== "pinterest").length > 1 && (
                   <button type="button" onClick={() => {
-                    if (!allowOverrides) { toastWarning("Per-platform customization is a Pro feature. Upgrade to unlock."); return; }
+                    if (!allowOverrides) { toastWarning("La personalización por plataforma es una función Pro. Mejora tu plan para desbloquearla."); return; }
                     setShowCustomize(true);
                   }}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
@@ -909,7 +937,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                    Customize per platform
+                    Personalizar por plataforma
                     {!allowOverrides && (
                       <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><rect x="2" y="5" width="8" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M4 5V3.5a2 2 0 014 0V5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     )}
@@ -927,21 +955,21 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
-                      Templates
+                      Plantillas
                     </button>
                     <button type="button" onClick={() => { setSaveTemplateName(""); setSaveTemplateDialog(true); }} disabled={savingTemplate || !text.trim()}
                       className="text-[11px] font-medium transition-opacity hover:opacity-80 disabled:opacity-30"
                       style={{ color: "#5b63d3" }}>
-                      {savingTemplate ? "Saving…" : "+ Save"}
+                      {savingTemplate ? "Guardando…" : "+ Guardar"}
                     </button>
                     {showTemplates && (
                       <div className="absolute top-6 right-0 z-30 w-56 rounded-xl overflow-hidden shadow-xl"
                         style={{ backgroundColor: "#161616", border: "1px solid #2a2a2a" }}>
                         <div className="px-3 py-2 border-b" style={{ borderColor: "#2a2a2a" }}>
-                          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#555" }}>Templates</span>
+                          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#555" }}>Plantillas</span>
                         </div>
                         {templates.length === 0 ? (
-                          <p className="px-3 py-4 text-xs text-center" style={{ color: "#555" }}>No templates yet. Write something and click + Save.</p>
+                          <p className="px-3 py-4 text-xs text-center" style={{ color: "#555" }}>Todavía no hay plantillas. Escribe algo y haz clic en + Guardar.</p>
                         ) : (
                           <ul className="max-h-64 overflow-y-auto">
                             {templates.map(tpl => (
@@ -967,18 +995,18 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                     <Info size={13} style={{ color: "#999", opacity: 0.7 }} className="cursor-default" />
                     <div className="absolute right-0 top-5 z-20 w-48 rounded-lg px-3 py-2 text-[11px] leading-relaxed pointer-events-none opacity-0 group-hover/iginfo:opacity-100 transition-opacity"
                       style={{ backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a", color: "#aaa" }}>
-                      <span style={{ color: "#E1306C", fontWeight: 600 }}>Instagram</span> format only.
+                      <span style={{ color: "#E1306C", fontWeight: 600 }}>Instagram</span> — solo este formato.
                       <ul className="mt-1 space-y-0.5 list-none">
-                        <li>· Post - image or carousel</li>
-                        <li>· Reel - single video</li>
-                        <li>· Story - single image</li>
+                        <li>· Post - imagen o carrusel</li>
+                        <li>· Reel - un solo video</li>
+                        <li>· Story - una sola imagen</li>
                       </ul>
                     </div>
                   </div>
                   {(["post", "reel", "story"] as const).map((t) => (
                     <button key={t} type="button" onClick={() => {
                       if ((t === "reel" || t === "story") && !allowReels) {
-                        toastWarning("Instagram Reels & Stories are a Pro feature. Upgrade to unlock.");
+                        toastWarning("Los Reels e Historias de Instagram son una función Pro. Mejora tu plan para desbloquearlos.");
                         return;
                       }
                       setIgMediaType(t);
@@ -1019,7 +1047,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                 value={text}
                 onChange={(e) => { setText(e.target.value); e.target.style.height = "auto"; e.target.style.height = e.target.value ? `${e.target.scrollHeight}px` : "160px"; }}
                 ref={(el) => { (textareaRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = el; if (el) { el.style.height = el.value ? `${el.scrollHeight}px` : "160px"; } }}
-                placeholder="What do you want to share?"
+                placeholder="¿Qué quieres compartir?"
                 required={!noPostTextNeeded}
                 className="w-full resize-none rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 transition"
                 style={overAnyLimit
@@ -1032,7 +1060,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             {!onlyInstagramStory && !noPostTextNeeded && <div className="flex items-center gap-3 mt-1.5">
               {overAnyLimit && (
                 <p className="text-xs text-red-500 flex-1">
-                  {Math.abs(mostRestrictiveLimit - graphemeCount)} chars over limit
+                  {Math.abs(mostRestrictiveLimit - graphemeCount)} caracteres sobre el límite
                 </p>
               )}
               {/* AI caption button */}
@@ -1043,12 +1071,12 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                   {aiLoading ? (
                     <>
                       <svg className="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
-                      Generating…
+                      Generando…
                     </>
                   ) : (
                     <>
                       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036a2.63 2.63 0 0 0 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258a2.63 2.63 0 0 0-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.63 2.63 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.63 2.63 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5Z"/></svg>
-                      AI
+                      IA
                     </>
                   )}
                 </button>
@@ -1056,13 +1084,13 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                   <div className="absolute bottom-full right-0 mb-1 rounded-xl overflow-hidden z-50 min-w-[180px]"
                     style={{ backgroundColor: "#111", border: "1px solid #2a2a2a", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
                     {[
-                      { action: "fix_grammar",       label: "Fix Grammar",         color: "#a78bfa", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg> },
-                      { action: "concise",            label: "Make it Concise",     color: "#60a5fa", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 9l7-7 7 7M5 15l7 7 7-7"/></svg> },
-                      { action: "expand",             label: "Expand",              color: "#34d399", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg> },
-                      { action: "rephrase",           label: "Rephrase",            color: "#fb923c", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg> },
-                      { action: "improve_structure",  label: "Improve Structure",   color: "#f472b6", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 6h16M4 10h10M4 14h12M4 18h8"/></svg> },
-                      { action: "simplify",           label: "Simplify Language",   color: "#38bdf8", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg> },
-                      { action: "polish",             label: "Polish my Caption",   color: "#fbbf24", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zM4.5 14L5.5 17 8.5 18l-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg> },
+                      { action: "fix_grammar",       label: "Corregir gramática",  color: "#a78bfa", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg> },
+                      { action: "concise",            label: "Hacerlo más conciso", color: "#60a5fa", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 9l7-7 7 7M5 15l7 7 7-7"/></svg> },
+                      { action: "expand",             label: "Expandir",            color: "#34d399", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg> },
+                      { action: "rephrase",           label: "Reformular",          color: "#fb923c", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg> },
+                      { action: "improve_structure",  label: "Mejorar estructura",  color: "#f472b6", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 6h16M4 10h10M4 14h12M4 18h8"/></svg> },
+                      { action: "simplify",           label: "Simplificar lenguaje", color: "#38bdf8", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg> },
+                      { action: "polish",             label: "Pulir mi texto",      color: "#fbbf24", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zM4.5 14L5.5 17 8.5 18l-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg> },
                     ].map(({ action, label, color, icon }) => (
                       <button key={action} type="button" onClick={() => runAiAction(action)}
                         className="w-full text-left px-3 py-2 text-xs transition-colors hover:bg-white/5 flex items-center gap-2.5"
@@ -1161,7 +1189,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         {/* Right "" per-platform previews — desktop only, fixed 480px. Mobile uses the drawer instead */}
         <div className="hidden md:flex md:w-[480px] flex-shrink-0 flex-col md:overflow-y-auto" style={{ backgroundColor: "#0a0a0a" }}>
           <div className="px-5 pt-5 pb-3">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Preview</p>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Vista previa</p>
           </div>
           <div className="px-5 pb-5 space-y-4 flex-1">
             {previewContent}
@@ -1182,7 +1210,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
               <div className="w-9 h-1 rounded-full" style={{ backgroundColor: "#2a2a2a" }} />
             </div>
             <div className="flex items-center justify-between px-5 pt-1 pb-3 flex-shrink-0" style={{ borderBottom: "1px solid #2a2a2a" }}>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Preview</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Vista previa</p>
               <button type="button" onClick={() => setPreviewOpen(false)} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-white/5" style={{ color: "#666" }}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
               </button>
@@ -1200,7 +1228,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           onClick={e => { if (e.target === e.currentTarget) setShowCustomize(false); }}>
           <div data-customize-scroll className="w-full max-w-lg rounded-2xl p-6" style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a", maxHeight: "80vh", overflowY: "auto" }}>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-bold" style={{ color: "#ededed" }}>Customize per platform</h2>
+              <h2 className="text-sm font-bold" style={{ color: "#ededed" }}>Personalizar por plataforma</h2>
               <button type="button" onClick={() => setShowCustomize(false)} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-white/5" style={{ color: "#666" }}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
               </button>
@@ -1220,9 +1248,9 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                       <PlatformIcon platform={a.platform} size={14} />
                       <span className="text-xs font-medium flex-1" style={{ color: hasOverride ? color : "#999" }}>{a.displayName}</span>
                       {hasOverride ? (
-                        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "20", color }}>Custom ✓</span>
+                        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "20", color }}>Personalizado ✓</span>
                       ) : (
-                        <span className="text-[10px]" style={{ color: "#555" }}>✎ Customize</span>
+                        <span className="text-[10px]" style={{ color: "#555" }}>✎ Personalizar</span>
                       )}
                     </button>
                     {hasOverride && (() => {
@@ -1230,28 +1258,28 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                       return (
                         <div className="px-3 pb-3 space-y-2">
                           {isIgStory ? (
-                            <p className="text-[10px] py-1" style={{ color: "#555" }}>Instagram Stories don't support captions or comments.</p>
+                            <p className="text-[10px] py-1" style={{ color: "#555" }}>Las Historias de Instagram no admiten textos ni comentarios.</p>
                           ) : (
                             <>
                               <div>
                                 <div className="flex items-center justify-between mb-1">
-                                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#555" }}>Caption</span>
+                                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#555" }}>Texto</span>
                                   <span className="text-[10px]" style={{ color: overrideCount > limit ? "#ef4444" : "#444" }}>{overrideCount}/{limit}</span>
                                 </div>
                                 <textarea value={override?.text ?? ""}
                                   onChange={e => { setOverrideField(a.id, "text", e.target.value); const sc = e.target.closest("[data-customize-scroll]") as HTMLElement | null; const sv = sc?.scrollTop ?? 0; e.target.style.height = "auto"; e.target.style.height = `${e.target.scrollHeight}px`; if (sc) sc.scrollTop = sv; }}
                                   ref={el => { if (el) { el.style.height = `${el.scrollHeight}px`; } }}
-                                  placeholder={`Custom caption for ${a.displayName}…`}
+                                  placeholder={`Texto personalizado para ${a.displayName}…`}
                                   className="w-full resize-none rounded-lg px-3 py-2 text-xs focus:outline-none"
                                   style={{ minHeight: 100, overflow: "hidden", backgroundColor: "#111111", border: `1px solid ${overrideCount > limit ? "#ef444480" : "#2a2a2a"}`, color: "#ededed" }} />
                               </div>
                               {!NO_COMMENT_PLATFORMS.has(a.platform) && (
                               <div>
-                                <span className="text-[10px] font-semibold uppercase tracking-wide block mb-1">First Comment</span>
+                                <span className="text-[10px] font-semibold uppercase tracking-wide block mb-1">Primer comentario</span>
                                 <textarea value={override?.commentText ?? ""}
                                   onChange={e => { setOverrideField(a.id, "commentText", e.target.value); const sc = e.target.closest("[data-customize-scroll]") as HTMLElement | null; const sv = sc?.scrollTop ?? 0; e.target.style.height = "auto"; e.target.style.height = `${e.target.scrollHeight}px`; if (sc) sc.scrollTop = sv; }}
                                   ref={el => { if (el) { el.style.height = `${el.scrollHeight}px`; } }}
-                                  placeholder={`Custom first comment for ${a.displayName}…`}
+                                  placeholder={`Primer comentario personalizado para ${a.displayName}…`}
                                   className="w-full resize-none rounded-lg px-3 py-2 text-xs focus:outline-none"
                                   style={{ minHeight: 60, overflow: "hidden", backgroundColor: "#111111", border: "1px solid #2a2a2a", color: "#ededed" }} />
                               </div>
@@ -1268,7 +1296,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             <div className="flex justify-end pt-4">
               <button type="button" onClick={() => setShowCustomize(false)}
                 className="px-4 py-2 rounded-xl text-sm font-semibold"
-                style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>Done</button>
+                style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>Listo</button>
             </div>
           </div>
         </div>
@@ -1297,11 +1325,24 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           className="md:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold"
           style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a", color: "#ededed" }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          Preview
+          Vista previa
         </button>
 
         {/* Schedule datetime */}
         <DateTimePicker value={scheduledFor} onChange={setScheduledFor} />
+
+        {/* Repeat / multi-schedule trigger */}
+        <button
+          type="button"
+          onClick={() => setShowRepeatModal(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors hover:opacity-80"
+          style={extraSchedules.length > 0
+            ? { backgroundColor: "#1f1f2e", color: "#818cf8", border: "1px solid #3730a3" }
+            : { backgroundColor: "#111111", border: "1px solid #2a2a2a", color: "#ededed" }}
+          title="Publicar el mismo contenido en varias fechas y horas"
+        >
+          {extraSchedules.length > 0 ? `Repetir (${extraSchedules.length + 1}x)` : "Repetir"}
+        </button>
 
         {/* Spacer — pushes buttons to the right on desktop */}
         <div className="flex-1 hidden md:block" />
@@ -1314,18 +1355,18 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             onClick={() => setShowBulk(true)}
             className="flex-1 md:flex-none px-4 py-2.5 font-semibold rounded-xl text-sm transition-colors hover:opacity-80"
             style={{ backgroundColor: "#1a1a1a", color: "#aaa", border: "1px solid #2a2a2a" }}
-            title="Bulk schedule from CSV"
+            title="Programar en lote desde CSV"
           >
-            Bulk CSV
+            CSV en lote
           </button>
           <button
             type="button"
             onClick={resetForm}
             className="flex-1 md:flex-none px-4 py-2.5 font-semibold rounded-xl text-sm transition-colors hover:opacity-80"
             style={{ backgroundColor: "#1a1a1a", color: "#aaa", border: "1px solid #2a2a2a" }}
-            title="Clear all inputs"
+            title="Borrar todos los campos"
           >
-            Clear
+            Borrar
           </button>
           <button
             type="button"
@@ -1333,9 +1374,9 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             onClick={handleSaveDraft}
             className="flex-1 md:flex-none px-4 py-2.5 font-semibold rounded-xl text-sm transition-colors hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ backgroundColor: "#1a1a1a", color: "#aaa", border: "1px solid #2a2a2a" }}
-            title="Save as draft schedule later from Posts page"
+            title="Guardar como borrador — prográmalo después desde la página de Publicaciones"
           >
-            Save Draft
+            Guardar borrador
           </button>
           <button
             type="submit"
@@ -1345,7 +1386,10 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             className="flex-1 md:flex-none px-6 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition-colors hover:bg-gray-100"
             style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}
           >
-            {submitting ? "Scheduling…" : dryRun ? "Schedule Dry Run" : "Schedule Post"}
+            {submitting ? "Programando…"
+              : dryRun ? "Programar Dry Run"
+              : extraSchedules.length > 0 ? `Programar ${extraSchedules.length + 1} publicaciones`
+              : "Programar publicación"}
           </button>
         </div>
       </div>
@@ -1356,8 +1400,16 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
         onClose={() => setShowBulk(false)}
         onScheduled={(count) => {
           setShowBulk(false);
-          toastSuccess(`${count} post${count !== 1 ? "s" : ""} scheduled!`);
+          toastSuccess(`¡${count} publicación${count !== 1 ? "es" : ""} programada${count !== 1 ? "s" : ""}!`);
         }}
+      />
+    )}
+    {showRepeatModal && (
+      <RepeatScheduleModal
+        baseScheduledFor={scheduledFor}
+        initialExtra={extraSchedules}
+        onClose={() => setShowRepeatModal(false)}
+        onApply={(extra) => { setExtraSchedules(extra); setShowRepeatModal(false); }}
       />
     )}
     {showReorder && (() => {
@@ -1372,8 +1424,8 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid #2a2a2a" }}>
               <div>
-                <p className="font-semibold text-sm" style={{ color: "#ededed" }}>Reorder Accounts</p>
-                <p className="text-xs mt-0.5" style={{ color: "#888" }}>Drag to set the order they appear in compose</p>
+                <p className="font-semibold text-sm" style={{ color: "#ededed" }}>Reordenar cuentas</p>
+                <p className="text-xs mt-0.5" style={{ color: "#888" }}>Arrastra para definir el orden en que aparecen en el compositor</p>
               </div>
               <button onClick={() => setShowReorder(false)} style={{ color: "#888", fontSize: 18, lineHeight: 1 }}>×</button>
             </div>
@@ -1418,12 +1470,12 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
               <button onClick={() => { setAccountOrder([]); localStorage.removeItem("posthive_account_order"); }}
                 className="flex-1 py-2 rounded-xl text-sm font-semibold"
                 style={{ backgroundColor: "#1a1a1a", color: "#888", border: "1px solid #2a2a2a" }}>
-                Reset order
+                Restablecer orden
               </button>
               <button onClick={() => setShowReorder(false)}
                 className="flex-1 py-2 rounded-xl text-sm font-semibold"
                 style={{ backgroundColor: "#ffffff", color: "#0a0a0a" }}>
-                Done
+                Listo
               </button>
             </div>
           </div>

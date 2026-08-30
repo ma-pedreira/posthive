@@ -33,15 +33,15 @@ export interface Job {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string }> = {
-  draft:          { label: "Draft",        dot: "bg-gray-400",   badge: "bg-stone-100 text-stone-500 border-stone-200" },
-  pending:        { label: "Scheduled",    dot: "bg-amber-400",  badge: "bg-amber-50 text-amber-700 border-amber-200" },
-  running:        { label: "Posting…",     dot: "bg-blue-400 animate-pulse", badge: "bg-blue-50 text-blue-700 border-blue-200" },
-  done:           { label: "Published",    dot: "bg-green-400",  badge: "bg-green-50 text-green-700 border-green-200" },
-  failed:         { label: "Failed",       dot: "bg-red-400",    badge: "bg-red-50 text-red-700 border-red-200" },
-  post_done:      { label: "Posted",       dot: "bg-blue-300",   badge: "bg-blue-50 text-blue-600 border-blue-200" },
-  comment_done:   { label: "Done",         dot: "bg-green-400",  badge: "bg-green-50 text-green-700 border-green-200" },
-  post_failed:    { label: "Post failed",  dot: "bg-red-400",    badge: "bg-red-50 text-red-700 border-red-200" },
-  comment_failed: { label: "Reply failed", dot: "bg-orange-400", badge: "bg-orange-50 text-orange-700 border-orange-200" },
+  draft:          { label: "Borrador",        dot: "bg-gray-400",   badge: "bg-stone-100 text-stone-500 border-stone-200" },
+  pending:        { label: "Programado",    dot: "bg-amber-400",  badge: "bg-amber-50 text-amber-700 border-amber-200" },
+  running:        { label: "Publicando…",     dot: "bg-blue-400 animate-pulse", badge: "bg-blue-50 text-blue-700 border-blue-200" },
+  done:           { label: "Publicado",    dot: "bg-green-400",  badge: "bg-green-50 text-green-700 border-green-200" },
+  failed:         { label: "Falló",       dot: "bg-red-400",    badge: "bg-red-50 text-red-700 border-red-200" },
+  post_done:      { label: "Publicado",       dot: "bg-blue-300",   badge: "bg-blue-50 text-blue-600 border-blue-200" },
+  comment_done:   { label: "Listo",         dot: "bg-green-400",  badge: "bg-green-50 text-green-700 border-green-200" },
+  post_failed:    { label: "Falló al publicar",  dot: "bg-red-400",    badge: "bg-red-50 text-red-700 border-red-200" },
+  comment_failed: { label: "Falló el comentario", dot: "bg-orange-400", badge: "bg-orange-50 text-orange-700 border-orange-200" },
 };
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
@@ -84,8 +84,8 @@ function JobCard({ job, onEdit, onDelete, onRetry, onDuplicate }: {
   const hasFailedTargets = job.targets.some((t) => t.status === "post_failed");
 
   function formatScheduled() {
-    if (!scheduled) return "No date set";
-    if (isToday) return `Today at ${scheduled.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+    if (!scheduled) return "Sin fecha";
+    if (isToday) return `Hoy a las ${scheduled.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
     return scheduled.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" }) +
       " · " + scheduled.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   }
@@ -135,7 +135,7 @@ function JobCard({ job, onEdit, onDelete, onRetry, onDuplicate }: {
                 <button
                   onClick={async () => { setRetrying(true); try { await onRetry(); } finally { setRetrying(false); } }}
                   disabled={retrying}
-                  className="job-action-btn" title="Retry failed platforms"
+                  className="job-action-btn" title="Reintentar plataformas fallidas"
                   style={{ color: "#f87171" }}>
                   <svg className={`w-3.5 h-3.5${retrying ? " animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -144,20 +144,20 @@ function JobCard({ job, onEdit, onDelete, onRetry, onDuplicate }: {
                 </button>
               )}
               {canEdit && (
-                <button onClick={onEdit} className="job-action-btn" title="Edit post">
+                <button onClick={onEdit} className="job-action-btn" title="Editar publicación">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                 </button>
               )}
-              <button onClick={onDuplicate} className="job-action-btn" title="Duplicate post">
+              <button onClick={onDuplicate} className="job-action-btn" title="Duplicar publicación">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </button>
-              <button onClick={onDelete} className="job-action-btn job-action-btn--danger" title="Delete post">
+              <button onClick={onDelete} className="job-action-btn job-action-btn--danger" title="Eliminar publicación">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -166,7 +166,7 @@ function JobCard({ job, onEdit, onDelete, onRetry, onDuplicate }: {
             </div>
             {job.dryRun && (
               <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold"
-                style={{ backgroundColor: "#1e1a2e", color: "#a78bfa", border: "1px solid #4c1d95" }}>dry run</span>
+                style={{ backgroundColor: "#1e1a2e", color: "#a78bfa", border: "1px solid #4c1d95" }}>prueba</span>
             )}
           </div>
         </div>
@@ -196,7 +196,7 @@ function JobCard({ job, onEdit, onDelete, onRetry, onDuplicate }: {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              {content.mediaUrls.length} image{content.mediaUrls.length > 1 ? "s" : ""}
+              {content.mediaUrls.length} imagen{content.mediaUrls.length > 1 ? "es" : ""}
             </span>
           </div>
         )}
@@ -239,16 +239,16 @@ function JobCard({ job, onEdit, onDelete, onRetry, onDuplicate }: {
                       <PlatformIcon platform={platform || "unknown"} size={13} />
                       <span className="font-medium" style={{ color: "#666" }}>{t.account?.displayName ?? t.accountId.slice(0, 8)}</span>
                       <StatusBadge status={t.status} />
-                      {t.attempts > 1 && <span style={{ color: "#555" }}>{t.attempts} attempts</span>}
+                      {t.attempts > 1 && <span style={{ color: "#555" }}>{t.attempts} intentos</span>}
                       {t.error && <span className="text-red-500 truncate flex-1">{t.error}</span>}
                       {canFetchAnalytics && !analytic && (
                         <button onClick={fetchAnalytics} className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded-md transition-colors"
                           style={{ color: "#888", border: "1px solid #2a2a2a", backgroundColor: "#111" }}>
-                          Stats
+                          Estadísticas
                         </button>
                       )}
-                      {analytic === "loading" && <span className="ml-auto text-[10px]" style={{ color: "#555" }}>Loading…</span>}
-                      {analytic === "error" && <span className="ml-auto text-[10px] text-red-500">Failed</span>}
+                      {analytic === "loading" && <span className="ml-auto text-[10px]" style={{ color: "#555" }}>Cargando…</span>}
+                      {analytic === "error" && <span className="ml-auto text-[10px] text-red-500">Falló</span>}
                     </div>
                     {analytic && analytic !== "loading" && analytic !== "error" && (
                       <div className="flex items-center gap-3 pl-5 text-[10px]" style={{ color: "#666" }}>
@@ -256,7 +256,7 @@ function JobCard({ job, onEdit, onDelete, onRetry, onDuplicate }: {
                         {analytic.reposts !== undefined && <span>🔁 {analytic.reposts}</span>}
                         {analytic.replies !== undefined && <span>💬 {analytic.replies}</span>}
                         {analytic.views !== undefined && <span>👁 {analytic.views}</span>}
-                        <button onClick={fetchAnalytics} title="Refresh" className="ml-auto" style={{ color: "#444" }}>↻</button>
+                        <button onClick={fetchAnalytics} title="Actualizar" className="ml-auto" style={{ color: "#444" }}>↻</button>
                       </div>
                     )}
                   </div>
@@ -300,7 +300,7 @@ export default function JobsPage() {
         body: JSON.stringify({ scheduledFor: newDate.toISOString() }),
       });
       setJobs((prev) => prev.map((j) => j.id === jobId ? { ...j, scheduledFor: newDate.toISOString() } : j));
-      success("Post rescheduled.");
+      success("Publicación reprogramada.");
     } catch (err) { toastError(String(err)); }
   }
 
@@ -308,14 +308,14 @@ export default function JobsPage() {
     try {
       await apiFetch(`/jobs/${jobId}`, { method: "DELETE" });
       setJobs((prev) => prev.filter((j) => j.id !== jobId));
-      success("Post deleted.");
+      success("Publicación eliminada.");
     } catch (err) { toastError(String(err)); }
   }
 
   async function retryFailed(jobId: string) {
     try {
       await apiFetch(`/jobs/${jobId}/retry-failed`, { method: "POST" });
-      success("Retrying failed platforms…");
+      success("Reintentando plataformas fallidas…");
     } catch (err) { toastError(String(err)); }
   }
 
@@ -398,7 +398,7 @@ export default function JobsPage() {
       }
       const updated = await apiFetch<Job>(`/jobs/${jobId}`);
       setJobs((prev) => prev.map((j) => j.id === jobId ? updated : j));
-      success(isDraft ? "Draft scheduled!" : "Post updated.");
+      success(isDraft ? "¡Borrador programado!" : "Publicación actualizada.");
     } catch (err) { toastError(String(err)); throw err; }
   }
 
@@ -408,14 +408,14 @@ export default function JobsPage() {
     async function connect() {
       try {
         const res = await fetch(`${API_BASE}/auth/session`, { credentials: "include" });
-        if (!res.ok) { setError("Not authenticated"); setLoading(false); return; }
+        if (!res.ok) { setError("No autenticado"); setLoading(false); return; }
         const { token } = await res.json() as { token: string; user: unknown };
         es = new EventSource(`${API_BASE}/jobs/stream?token=${encodeURIComponent(token)}`);
 
         es.onmessage = (e: MessageEvent<string>) => {
           try {
             const data = JSON.parse(e.data) as Job[] | { error: string };
-            if (!Array.isArray(data)) { setError("Not authenticated"); es.close(); return; }
+            if (!Array.isArray(data)) { setError("No autenticado"); es.close(); return; }
             setJobs(data);
             setLastRefresh(new Date());
             setError(null);
@@ -423,9 +423,9 @@ export default function JobsPage() {
           } catch { /* malformed frame — ignore */ }
         };
 
-        es.onerror = () => setError("Connection lost — retrying…");
+        es.onerror = () => setError("Conexión perdida — reintentando…");
       } catch {
-        setError("Connection lost — retrying…");
+        setError("Conexión perdida — reintentando…");
       }
     }
 
@@ -493,7 +493,7 @@ export default function JobsPage() {
           onClose={() => setShowBulk(false)}
           onScheduled={(count) => {
             setShowBulk(false);
-            success(`${count} post${count !== 1 ? "s" : ""} scheduled!`);
+            success(`¡${count} publicación${count !== 1 ? "es" : ""} programada${count !== 1 ? "s" : ""}!`);
             apiFetch<Job[]>("/jobs").then(setJobs).catch(() => {});
           }}
         />
@@ -503,10 +503,10 @@ export default function JobsPage() {
       <div className="flex items-center justify-between pl-16 pr-4 md:px-8 flex-shrink-0"
         style={{ height: 65, borderBottom: "1px solid #2a2a2a", backgroundColor: "#111111" }}>
         <div className="min-w-0">
-          <h1 className="text-lg font-bold" style={{ color: "#ededed" }}>Posts</h1>
+          <h1 className="text-lg font-bold" style={{ color: "#ededed" }}>Publicaciones</h1>
           <p className="text-xs mt-0.5 flex items-center gap-1.5 truncate" style={{ color: "#888888" }}>
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block flex-shrink-0" />
-            {lastRefresh ? `Live · updated ${lastRefresh.toLocaleTimeString()}` : "Connecting…"}
+            {lastRefresh ? `En vivo · actualizado ${lastRefresh.toLocaleTimeString()}` : "Conectando…"}
           </p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -516,7 +516,7 @@ export default function JobsPage() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
             </svg>
-            <span className="hidden sm:inline">Bulk</span>
+            <span className="hidden sm:inline">Masivo</span>
           </button>
           <a href="/compose"
             className="inline-flex items-center gap-1.5 px-3 md:px-4 py-2 text-sm font-semibold rounded-xl transition-colors hover:bg-gray-100"
@@ -524,7 +524,7 @@ export default function JobsPage() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            <span className="hidden sm:inline">New Post</span>
+            <span className="hidden sm:inline">Nueva publicación</span>
           </a>
         </div>
       </div>
@@ -535,8 +535,8 @@ export default function JobsPage() {
 
         <div className="flex gap-0.5 p-1 rounded-xl" style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a" }}>
           {([
-            { id: "list",     icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>, label: "List" },
-            { id: "calendar", icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>, label: "Calendar" },
+            { id: "list",     icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>, label: "Lista" },
+            { id: "calendar", icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>, label: "Calendario" },
           ] as { id: ViewTab; icon: React.ReactNode; label: string }[]).map((t) => (
             <button key={t.id} onClick={() => setViewTab(t.id)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
@@ -553,11 +553,11 @@ export default function JobsPage() {
             <div className="h-4 w-px hidden sm:block" style={{ backgroundColor: "#2a2a2a" }} />
             <div className="flex gap-1.5 flex-wrap">
               {([
-                { id: "all",     label: "All",       dot: null,       activeColor: "#ededed", activeBg: "#2a2a2a" },
-                { id: "draft",   label: "Drafts",    dot: "#6b7280",  activeColor: "#9ca3af", activeBg: "#1a1a1a" },
-                { id: "pending", label: "Scheduled",  dot: "#f59e0b", activeColor: "#fbbf24", activeBg: "#1c1a10" },
-                { id: "done",    label: "Published",  dot: "#22c55e", activeColor: "#4ade80", activeBg: "#0a1f12" },
-                { id: "failed",  label: "Failed",     dot: "#ef4444", activeColor: "#f87171", activeBg: "#1f0a0a" },
+                { id: "all",     label: "Todos",       dot: null,       activeColor: "#ededed", activeBg: "#2a2a2a" },
+                { id: "draft",   label: "Borradores",    dot: "#6b7280",  activeColor: "#9ca3af", activeBg: "#1a1a1a" },
+                { id: "pending", label: "Programados",  dot: "#f59e0b", activeColor: "#fbbf24", activeBg: "#1c1a10" },
+                { id: "done",    label: "Publicados",  dot: "#22c55e", activeColor: "#4ade80", activeBg: "#0a1f12" },
+                { id: "failed",  label: "Fallidos",     dot: "#ef4444", activeColor: "#f87171", activeBg: "#1f0a0a" },
               ] as { id: FilterTab; label: string; dot: string | null; activeColor: string; activeBg: string }[]).map((f) => (
                 <button key={f.id} onClick={() => setFilter(f.id)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
@@ -585,7 +585,7 @@ export default function JobsPage() {
                     ? { backgroundColor: "#1f1f2e", color: "#818cf8", border: "1px solid #3730a340" }
                     : { backgroundColor: "transparent", border: "1px solid #2a2a2a" }}>
                   {p !== "all" && <PlatformIcon platform={p} size={12} />}
-                  {p === "all" ? "All platforms" : p}
+                  {p === "all" ? "Todas las plataformas" : p}
                 </button>
               ))}
             </div>
@@ -603,7 +603,7 @@ export default function JobsPage() {
         {viewTab === "calendar" && (
           <div className="rounded-2xl shadow-sm p-6" style={{ backgroundColor: "#111111", border: "1px solid #2a2a2a" }}>
             {loading
-              ? <div className="text-center py-20 text-sm" style={{ color: "#888888" }}>Loading…</div>
+              ? <div className="text-center py-20 text-sm" style={{ color: "#888888" }}>Cargando…</div>
               : <CalendarView jobs={filteredJobs} onReschedule={reschedule} onEdit={setEditingJob} />
             }
           </div>
@@ -623,11 +623,11 @@ export default function JobsPage() {
               <div className="flex flex-col items-center justify-center py-32 text-center">
                 <p className="text-5xl mb-4">📭</p>
                 <p className="text-gray-500 text-sm font-medium">
-                  {filter === "all" ? "No posts yet" : `No ${filter} posts`}
+                  {filter === "all" ? "Todavía no hay publicaciones" : "No hay publicaciones en esta categoría"}
                 </p>
                 {filter === "all" && (
                   <a href="/" className="mt-3 text-sm text-blue-600 font-semibold hover:underline">
-                    Schedule your first post
+                    Programa tu primera publicación
                   </a>
                 )}
               </div>
@@ -638,7 +638,7 @@ export default function JobsPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <span className="w-2 h-2 rounded-full bg-gray-500" />
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    Drafts · {drafts.length}
+                    Borradores · {drafts.length}
                   </p>
                 </div>
                 <div className="space-y-3">
@@ -658,7 +658,7 @@ export default function JobsPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <span className="w-2 h-2 rounded-full bg-amber-400" />
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    Upcoming · {upcoming.length}
+                    Próximos · {upcoming.length}
                   </p>
                 </div>
                 <div className="space-y-3">
@@ -678,7 +678,7 @@ export default function JobsPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <span className="w-2 h-2 rounded-full bg-gray-300" />
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    Past · {past.length}
+                    Pasados · {past.length}
                   </p>
                 </div>
                 <div className="space-y-3">
