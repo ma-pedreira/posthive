@@ -36,6 +36,7 @@ export default function ComposePage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loadingAccounts, setLoadingAccounts] = useState(true);
   const [text, setText] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [commentText, setCommentText] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [scheduledFor, setScheduledFor] = useState(defaultScheduledFor);
@@ -469,6 +470,7 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
 
   function resetForm() {
     setText(""); setCommentText(""); setScheduledFor(defaultScheduledFor());
+    if (textareaRef.current) textareaRef.current.style.height = "160px";
     setIgMediaType("post");
     setYoutubeTitle(""); setYoutubeDescription(""); setYoutubeType("short");
     setYoutubeVideoMode("upload"); setYoutubeVideoUrl("");
@@ -992,8 +994,8 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             {!onlyInstagramStory && !noPostTextNeeded && (
               <textarea
                 value={text}
-                onChange={(e) => { setText(e.target.value); e.target.style.height = "auto"; e.target.style.height = `${e.target.scrollHeight}px`; }}
-                ref={(el) => { if (el) { el.style.height = `${el.scrollHeight}px`; } }}
+                onChange={(e) => { setText(e.target.value); e.target.style.height = "auto"; e.target.style.height = e.target.value ? `${e.target.scrollHeight}px` : "160px"; }}
+                ref={(el) => { (textareaRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = el; if (el) { el.style.height = el.value ? `${el.scrollHeight}px` : "160px"; } }}
                 placeholder="What do you want to share?"
                 required={!noPostTextNeeded}
                 className="w-full resize-none rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 transition"
