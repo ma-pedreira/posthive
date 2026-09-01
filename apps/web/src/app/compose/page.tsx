@@ -1300,8 +1300,6 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           Preview
         </button>
 
-        <div className="h-5 w-px hidden sm:block" style={{ backgroundColor: "#2a2a2a" }} />
-
         {/* Schedule datetime */}
         <DateTimePicker value={scheduledFor} onChange={setScheduledFor} />
 
