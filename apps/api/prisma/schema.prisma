@@ -125,7 +125,8 @@ model Account {
   credentials  String    // AES-256-GCM encrypted JSON, never plaintext
   avatarUrl    String?
   refreshToken String?
-  expiresAt    DateTime?
+  expiresAt      DateTime?
+  warnedExpiryAt DateTime? // set when expiry warning email was sent (prevents re-sending)
 
   userId       String
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)

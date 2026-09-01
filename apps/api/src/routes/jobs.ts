@@ -420,7 +420,7 @@ export async function jobRoutes(app: FastifyInstance, { storage }: { storage: St
         platformPostId: true,
         status: true,
         accountId: true,
-        account: { select: { platform: true, credentials: true, expiresAt: true, createdAt: true, updatedAt: true, id: true, userId: true, workspaceId: true, displayName: true, avatarUrl: true, refreshToken: true } },
+        account: { select: { platform: true, credentials: true, expiresAt: true, warnedExpiryAt: true, createdAt: true, updatedAt: true, id: true, userId: true, workspaceId: true, displayName: true, avatarUrl: true, refreshToken: true } },
       },
     });
 

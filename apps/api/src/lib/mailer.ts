@@ -53,6 +53,45 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string): Prom
   await resend.emails.send({ from: FROM, to, subject: "Reset your Posthive password", html });
 }
 
+export async function sendAccountExpiryEmail(
+  to: string,
+  platform: string,
+  displayName: string,
+  daysLeft: number,
+): Promise<void> {
+  const platformLabel = platform.charAt(0).toUpperCase() + platform.slice(1);
+  const reconnectUrl = `${process.env.WEB_URL ?? "https://app.posthive.co"}/accounts`;
+  const html = `
+    <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#0a0a0a;color:#ededed;">
+      <h2 style="margin:0 0 8px;font-size:20px;">Your ${platformLabel} connection expires in ${daysLeft} day${daysLeft === 1 ? "" : "s"}</h2>
+      <p style="color:#888;margin:0 0 8px;font-size:14px;">
+        Your <strong style="color:#ededed;">${platformLabel}</strong> account <strong style="color:#ededed;">${displayName}</strong>
+        is connected to Posthive, but its access token expires in <strong style="color:#ededed;">${daysLeft} day${daysLeft === 1 ? "" : "s"}</strong>.
+      </p>
+      <p style="color:#888;margin:0 0 24px;font-size:14px;">
+        ${platformLabel} doesn't support automatic token renewal — you'll need to reconnect it manually before it expires to keep your scheduled posts working.
+      </p>
+      <a href="${reconnectUrl}" style="display:inline-block;background:#ffffff;color:#0a0a0a;font-weight:600;font-size:14px;padding:12px 24px;border-radius:10px;text-decoration:none;">
+        Reconnect ${platformLabel} →
+      </a>
+      <p style="color:#555;font-size:12px;margin:24px 0 0;">
+        Go to Accounts in Posthive, disconnect ${platformLabel}, and reconnect to generate a fresh token.
+      </p>
+    </div>
+  `;
+
+  if (!resend) {
+    console.log(`[mailer] Account expiry warning for ${to}: ${platformLabel} (${displayName}) expires in ${daysLeft}d`);
+    return;
+  }
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: `Action needed: reconnect your ${platformLabel} account before it expires`,
+    html,
+  });
+}
+
 export async function sendWorkspaceInviteEmail(
   to: string,
   inviterName: string,
