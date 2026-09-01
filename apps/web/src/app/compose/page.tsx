@@ -893,7 +893,32 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
           {/* Text editor */}
           <div className="px-6 py-5" style={{ display: (loadingAccounts || noPostTextNeeded) ? "none" : undefined }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wide">Post</span>
+              {/* Post / Customize tabs */}
+              <div className="flex items-center gap-0.5 rounded-lg p-0.5" style={{ backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a" }}>
+                <button type="button" onClick={() => setShowCustomize(false)}
+                  className="px-3 py-1 rounded-md text-xs font-semibold transition-all"
+                  style={!showCustomize
+                    ? { backgroundColor: "#ffffff", color: "#0a0a0a" }
+                    : { backgroundColor: "transparent", color: "#666" }}>
+                  Post
+                </button>
+                {selectedAccounts.filter(a => a.platform !== "youtube" && a.platform !== "pinterest").length > 1 && (
+                  <button type="button" onClick={() => {
+                    if (!allowOverrides) { toastWarning("Per-platform customization is a Pro feature. Upgrade to unlock."); return; }
+                    setShowCustomize(true);
+                  }}
+                    className="px-3 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5"
+                    style={showCustomize
+                      ? { backgroundColor: "#5b63d3", color: "#fff" }
+                      : { backgroundColor: "transparent", color: "#666" }}>
+                  Customize
+                  {!allowOverrides && (
+                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><rect x="2" y="5" width="8" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M4 5V3.5a2 2 0 014 0V5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  )}
+                  {(() => { const c = Object.keys(perAccountOverrides).filter(id => { const acc = selectedAccounts.find(a => a.id === id); return acc && acc.platform !== "youtube" && acc.platform !== "pinterest"; }).length; return c > 0 ? <span className="text-[10px] font-bold px-1 py-0.5 rounded" style={{ backgroundColor: showCustomize ? "#ffffff30" : "#5b63d320", color: showCustomize ? "#fff" : "#5b63d3" }}>{c}</span> : null; })()}
+                  </button>
+                )}
+              </div>
               <div className="flex items-center gap-3">
                 {/* Templates — hidden when only YouTube selected */}
                 {!noPostTextNeeded && (
@@ -1132,49 +1157,6 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
             />
           )}
 
-          {/* Option buttons row */}
-          {!loadingAccounts && (instagramSelected || selectedAccounts.length > 1) && (
-            <div className="px-6 pb-4 pt-3" style={{ borderBottom: "1px solid #2a2a2a" }}>
-              <div className="flex items-center gap-2">
-                {selectedAccounts.filter(a => a.platform !== "youtube" && a.platform !== "pinterest").length > 1 && (() => {
-                  const customizableOverrideCount = Object.keys(perAccountOverrides)
-                    .filter(id => {
-                      const acc = selectedAccounts.find(a => a.id === id);
-                      return acc && acc.platform !== "youtube" && acc.platform !== "pinterest";
-                    }).length;
-                  return (
-                  <button type="button" onClick={() => {
-                    if (!allowOverrides) {
-                      toastWarning("Per-platform customization is a Pro feature. Upgrade to unlock.");
-                      return;
-                    }
-                    setShowCustomize(true);
-                  }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                    style={{
-                      border: `1px solid ${customizableOverrideCount > 0 ? "#5b63d350" : "#2a2a2a"}`,
-                      backgroundColor: customizableOverrideCount > 0 ? "#5b63d310" : "#111111",
-                      color: customizableOverrideCount > 0 ? "#5b63d3" : "#888",
-                    }}>
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    Customize per platform
-                    {!allowOverrides && (
-                      <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><rect x="2" y="5" width="8" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M4 5V3.5a2 2 0 014 0V5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                    )}
-                    {customizableOverrideCount > 0 && (
-                      <span className="text-[10px] font-bold px-1 py-0.5 rounded"
-                        style={{ backgroundColor: "#5b63d320", color: "#5b63d3" }}>
-                        {customizableOverrideCount}
-                      </span>
-                    )}
-                  </button>
-                  );
-                })()}
-              </div>
-            </div>
-          )}
 
         </div>
 
