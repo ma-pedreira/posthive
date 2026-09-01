@@ -911,7 +911,10 @@ const [youtubeShortsWarning, setYoutubeShortsWarning] = useState<string | null>(
                     style={showCustomize
                       ? { backgroundColor: "#5b63d3", color: "#fff" }
                       : { backgroundColor: "transparent", color: "#666" }}>
-                  Customize
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Customize per platform
                   {!allowOverrides && (
                     <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><rect x="2" y="5" width="8" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M4 5V3.5a2 2 0 014 0V5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                   )}
