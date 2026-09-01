@@ -1,27 +1,38 @@
 /**
  * Background cron — proactively refreshes tokens expiring within 7 days.
- * Runs every 12 hours. Covers Threads, Instagram, Facebook, YouTube, TikTok.
- * LinkedIn has no silent refresh — users must reconnect manually.
- * Sends expiry warning emails for LinkedIn accounts expiring within 7 days.
+ * Runs every 12 hours.
+ *
+ * Covered platforms and their token TTLs:
+ *   threads         60 days  (long-lived token refresh)
+ *   instagram       60 days
+ *   facebook        60 days
+ *   youtube         ~1 hour  (Google OAuth refresh)
+ *   tiktok          ~24h     (refresh token ~1 year)
+ *   linkedin        60 days  (refresh token ~1 year)
+ *   pinterest       ~30 days
+ *   googlebusiness  ~1 hour  (Google OAuth refresh)
+ *
+ * Platforms with non-expiring tokens (Bluesky app passwords, bot tokens,
+ * OAuth 1.0a, keypairs) return early from refreshTokenIfNeeded — safe to skip.
  */
 
 import * as Sentry from "@sentry/node";
 import { prisma } from "./prisma.js";
 import { getAdapter } from "../adapters/index.js";
-import { sendAccountExpiryEmail } from "./mailer.js";
 
-const REFRESH_PLATFORMS = new Set(["threads", "instagram", "facebook", "youtube", "tiktok"]);
-const WARN_PLATFORMS = new Set(["linkedin"]); // no refresh token — warn user to reconnect
+const REFRESH_PLATFORMS = new Set([
+  "threads", "instagram", "facebook", "youtube",
+  "tiktok", "linkedin", "pinterest", "googlebusiness",
+]);
 const WINDOW_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const INTERVAL_MS = 12 * 60 * 60 * 1000;    // 12 hours
 const BATCH_SIZE = 50;
-const BATCH_CONCURRENCY = 5; // refresh 5 accounts at a time within each batch
+const BATCH_CONCURRENCY = 5;
 
 async function run() {
   const cutoff = new Date(Date.now() + WINDOW_MS);
-
-  // ── Token refresh (platforms that support silent refresh) ──
   let cursor: string | undefined;
+
   while (true) {
     const batch = await prisma.account.findMany({
       where: {
@@ -62,30 +73,6 @@ async function run() {
     }
 
     if (batch.length < BATCH_SIZE) break;
-  }
-
-  // ── Expiry warnings (platforms with no refresh token) ──
-  const expiringAccounts = await prisma.account.findMany({
-    where: {
-      platform: { in: Array.from(WARN_PLATFORMS) },
-      expiresAt: { gte: new Date(), lte: cutoff },
-      warnedExpiryAt: null, // only warn once
-    },
-    include: { user: { select: { email: true } } },
-  });
-
-  for (const account of expiringAccounts) {
-    try {
-      const daysLeft = account.expiresAt
-        ? Math.ceil((account.expiresAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000))
-        : 0;
-      const userEmail = (account as typeof account & { user: { email: string } }).user.email;
-      await sendAccountExpiryEmail(userEmail, account.platform, account.displayName, daysLeft);
-      await prisma.account.update({ where: { id: account.id }, data: { warnedExpiryAt: new Date() } });
-      console.log(`[token-refresh] sent expiry warning for ${account.platform} account ${account.displayName}`);
-    } catch (err) {
-      console.error(`[token-refresh] failed to send expiry warning for ${account.id}:`, err);
-    }
   }
 }
 
