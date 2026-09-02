@@ -58,7 +58,7 @@ const YT_REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI!;
 const FB_APP_ID = process.env.FACEBOOK_APP_ID!;
 const FB_APP_SECRET = process.env.FACEBOOK_APP_SECRET!;
 const FB_REDIRECT_URI = process.env.FACEBOOK_REDIRECT_URI!;
-const FB_SCOPES = "pages_manage_posts,pages_show_list,pages_read_engagement,pages_manage_engagement,pages_read_user_content";
+const FB_CONFIG_ID = process.env.FACEBOOK_LOGIN_CONFIG_ID;
 
 const X_API_KEY     = process.env.X_API_KEY!;
 const X_API_SECRET  = process.env.X_API_SECRET!;
@@ -1328,9 +1328,10 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     const params = new URLSearchParams({
       client_id: FB_APP_ID,
       redirect_uri: FB_REDIRECT_URI,
-      scope: FB_SCOPES,
       response_type: "code",
+      auth_type: "rerequest",
       state,
+      ...(FB_CONFIG_ID ? { config_id: FB_CONFIG_ID } : { scope: "pages_manage_posts,pages_show_list,pages_read_engagement,pages_manage_engagement,pages_read_user_content,business_management" }),
     });
     return reply.redirect(`https://www.facebook.com/v21.0/dialog/oauth?${params}`);
   });
