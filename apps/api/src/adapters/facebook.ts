@@ -100,7 +100,7 @@ export const facebookAdapter: PlatformAdapter = {
 
   async createPost(
     account: Account,
-    content: { text: string; mediaUrls: string[] }
+    content: { text: string; mediaUrls: string[]; mediaType?: "post" | "reel" | "story" }
   ): Promise<PostResult> {
     const { pageAccessToken, pageId } = getCredentials(account);
 
@@ -111,6 +111,28 @@ export const facebookAdapter: PlatformAdapter = {
     const isVideo = (u: string) => /\.(mp4|mov|quicktime)$/i.test(u);
     const images = resolvedUrls.filter(u => !isVideo(u));
     const video = resolvedUrls.find(isVideo);
+
+    if (content.mediaType === "story") {
+      if (!images.length) throw new Error("Facebook Page Stories require exactly one image");
+      // Stories need a fresh unpublished photo — a photo_id already used in a
+      // published post is rejected by the photo_stories endpoint.
+      const uploadRes = await graphPost(`/${pageId}/photos`, {
+        url: images[0],
+        published: "false",
+        access_token: pageAccessToken,
+      });
+      if (!uploadRes.ok) throw new Error(`Facebook story photo upload failed: ${await uploadRes.text()}`);
+      const { id: photoId } = await uploadRes.json() as { id: string };
+
+      const storyRes = await graphPost(`/${pageId}/photo_stories`, {
+        photo_id: photoId,
+        access_token: pageAccessToken,
+      });
+      if (!storyRes.ok) throw new Error(`Facebook story publish failed: ${await storyRes.text()}`);
+      const { post_id: storyPostId } = await storyRes.json() as { post_id: string };
+
+      return { platformPostId: storyPostId, replyContext: { postId: storyPostId, pageId, pageAccessToken } };
+    }
 
     let postId: string;
 
