@@ -16,10 +16,32 @@ import * as Sentry from "@sentry/node";
 import type { PostJob, PostJobTarget, Account } from "@prisma/client";
 import { getAdapter } from "../adapters/index.js";
 import { prisma } from "../lib/prisma.js";
+import { postJobQueue } from "../lib/queue.js";
 import type { PostResult, CommentResult } from "../adapters/types.js";
 import type { StorageAdapter } from "../lib/storage.js";
 
 const MAX_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 5 * 60 * 1000; // 5 minutes between attempts on network errors
+
+// Node's fetch (undici) wraps transport-level failures in a TypeError with a
+// `.cause` carrying the underlying error code — distinguishes "the network
+// blipped" from "the platform rejected the request" (which won't fix itself).
+const NETWORK_ERROR_CODES = new Set([
+  "ECONNRESET", "ETIMEDOUT", "ENOTFOUND", "EAI_AGAIN", "ECONNREFUSED",
+  "UND_ERR_CONNECT_TIMEOUT", "UND_ERR_HEADERS_TIMEOUT", "UND_ERR_SOCKET",
+]);
+
+function isNetworkError(err: unknown): boolean {
+  if (err instanceof TypeError && /fetch failed/i.test(err.message)) return true;
+  const code = (err as { cause?: { code?: string } } | undefined)?.cause?.code;
+  return typeof code === "string" && NETWORK_ERROR_CODES.has(code);
+}
+
+// Leaves the target's status untouched (still eligible for its current phase)
+// and re-fires the job 5 minutes later for another attempt.
+async function scheduleTargetRetry(postJobId: string): Promise<void> {
+  await postJobQueue.add(`${postJobId}:retry`, { postJobId }, { delay: RETRY_DELAY_MS });
+}
 
 type FullTarget = PostJobTarget & { account: Account };
 type PerAccountOverride = { text?: string; commentText?: string };
@@ -170,6 +192,7 @@ async function runTarget(
       await setTargetStatus(target.id, "post_failed", { error: "Max attempts reached" });
       return;
     }
+    const attemptNumber = target.attempts + 1;
 
     await prisma.postJobTarget.update({
       where: { id: target.id },
@@ -182,6 +205,11 @@ async function runTarget(
         ? target.account
         : await adapter.refreshTokenIfNeeded(target.account);
     } catch (err) {
+      if (isNetworkError(err) && attemptNumber < MAX_ATTEMPTS) {
+        console.warn(`[runner] network error refreshing ${target.account.platform} token (attempt ${attemptNumber}/${MAX_ATTEMPTS}) — retrying in 5min`);
+        await scheduleTargetRetry(target.postJobId);
+        return;
+      }
       await setTargetStatus(target.id, "post_failed", { error: String(err) });
       return;
     }
@@ -193,6 +221,11 @@ async function runTarget(
         : await adapter.createPost(refreshedAccount, content);
     } catch (err) {
       console.error(`[runner] createPost failed for ${target.account.platform} (account ${target.accountId}):`, err);
+      if (isNetworkError(err) && attemptNumber < MAX_ATTEMPTS) {
+        console.warn(`[runner] network error — retrying target ${target.id} in 5min (attempt ${attemptNumber}/${MAX_ATTEMPTS})`);
+        await scheduleTargetRetry(target.postJobId);
+        return;
+      }
       Sentry.captureException(err, {
         tags: { component: "runner", platform: target.account.platform },
         extra: { postJobId: target.postJobId, accountId: target.accountId },

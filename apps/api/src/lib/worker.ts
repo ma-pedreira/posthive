@@ -5,9 +5,12 @@
  *   1. Loads the full PostJob + targets from Prisma
  *   2. Hands it to the existing runJob() state machine
  *
- * BullMQ handles retries automatically (3 attempts, exponential backoff)
- * if runJob() throws. Per-target errors are handled inside runJob() and
- * persisted to PostJobTarget.error — they don't throw up to the worker.
+ * Per-target errors are handled inside runJob() and don't throw up to the
+ * worker. On a network-level failure (not a platform rejection), the target
+ * schedules its own 5-minute-delayed re-fire of this postJobId (up to 3
+ * attempts total) instead of failing immediately — see jobRunner.ts. That
+ * re-fire lands here with the job still in "running" status, which is why
+ * the guard below allows both "pending" and "running" through.
  */
 
 import * as Sentry from "@sentry/node";
@@ -36,8 +39,10 @@ export function startWorker(storage: StorageAdapter): void {
         return;
       }
 
-      if (postJob.status !== "pending") {
-        // Already ran (e.g. manually triggered or duplicate) — skip
+      if (postJob.status !== "pending" && postJob.status !== "running") {
+        // Already finished (done/failed) or a duplicate fire — skip.
+        // "running" is allowed through: a target-level network-error retry
+        // re-fires this same postJobId while the job is still in progress.
         console.warn(`[worker] PostJob ${postJobId} status is "${postJob.status}" — skipping`);
         return;
       }
