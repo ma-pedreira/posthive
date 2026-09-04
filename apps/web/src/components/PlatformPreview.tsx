@@ -158,8 +158,17 @@ export function InstagramPreview({ account, text, commentText, mediaItems = [], 
           {video ? (
             <video src={video.previewUrl} className="w-full h-full object-cover" muted playsInline loop autoPlay />
           ) : images.length > 0 ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={images[0].previewUrl} alt="" className="w-full h-full object-cover" />
+            // Matches the server-side letterbox: a blurred cover fill behind
+            // the full un-cropped image, since Instagram Stories are a fixed
+            // 9:16 frame and would otherwise crop a non-9:16 source image.
+            <div className="absolute inset-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={images[0].previewUrl} alt="" aria-hidden
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ filter: "blur(20px)", transform: "scale(1.15)" }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={images[0].previewUrl} alt="" className="absolute inset-0 w-full h-full object-contain" />
+            </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-center">
