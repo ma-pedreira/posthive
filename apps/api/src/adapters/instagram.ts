@@ -71,9 +71,10 @@ interface InstagramCredentials {
   expiresAt?: string;
 }
 
-function getCredentials(account: Account): InstagramCredentials {
+export function getCredentials(account: Account): InstagramCredentials {
   return JSON.parse(decrypt(account.credentials)) as InstagramCredentials;
 }
+export type { InstagramCredentials };
 
 async function apiGet<T>(path: string, token: string, params: Record<string, string> = {}): Promise<T> {
   const url = new URL(`${API}${path}`);
@@ -93,6 +94,67 @@ async function apiPost<T>(path: string, token: string, body: Record<string, stri
   const json = await res.json() as T & { error?: { message: string } };
   if (!res.ok) throw new Error((json as { error?: { message: string } }).error?.message ?? `Instagram API error: ${res.status}`);
   return json;
+}
+
+// ── Comment auto-reply (engagement) helpers ─────────────────────────────────
+// Used by the engagement webhook/worker/reconciler, not by the post-publishing
+// flow above. Kept separate from apiPost since the private-reply endpoint
+// needs a nested JSON body, not flattened query params.
+
+/** Public reply posted under a comment. */
+export async function sendCommentReply(
+  accessToken: string,
+  commentId: string,
+  message: string
+): Promise<{ id: string }> {
+  return apiPost<{ id: string }>(`/${commentId}/replies`, accessToken, { message });
+}
+
+/** Private reply (DM) to the person who left a comment — Meta's official
+ * "Private Replies to Comments" mechanism, distinct from a cold/unsolicited DM. */
+export async function sendPrivateReply(
+  accessToken: string,
+  instagramAccountId: string,
+  commentId: string,
+  message: string
+): Promise<{ recipient_id?: string; message_id?: string }> {
+  const url = new URL(`${API}/${instagramAccountId}/messages`);
+  url.searchParams.set("access_token", accessToken);
+  const res = await fetch(url.toString(), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ recipient: { comment_id: commentId }, message: { text: message } }),
+  });
+  const json = await res.json() as { recipient_id?: string; message_id?: string; error?: { message: string } };
+  if (!res.ok) throw new Error(json.error?.message ?? `Instagram private reply error: ${res.status}`);
+  return json;
+}
+
+/** Recent media for an account — used by "any post" rules. */
+export async function getRecentMedia(
+  accessToken: string,
+  instagramAccountId: string,
+  limit = 10
+): Promise<Array<{ id: string; caption?: string; timestamp?: string }>> {
+  const res = await apiGet<{ data: Array<{ id: string; caption?: string; timestamp?: string }> }>(
+    `/${instagramAccountId}/media`,
+    accessToken,
+    { fields: "id,caption,timestamp", limit: String(limit) }
+  );
+  return res.data;
+}
+
+/** Comments on a specific media item. */
+export async function getMediaComments(
+  accessToken: string,
+  mediaId: string
+): Promise<Array<{ id: string; text: string; username?: string; timestamp?: string }>> {
+  const res = await apiGet<{ data: Array<{ id: string; text: string; username?: string; timestamp?: string }> }>(
+    `/${mediaId}/comments`,
+    accessToken,
+    { fields: "id,text,username,timestamp" }
+  );
+  return res.data;
 }
 
 async function refreshIfNeeded(account: Account): Promise<Account> {

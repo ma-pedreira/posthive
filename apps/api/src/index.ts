@@ -41,6 +41,10 @@ import { workspaceRoutes } from "./routes/workspaces.js";
 import { publicApiRoutes } from "./routes/publicApi.js";
 import { mcpRoutes } from "./routes/mcp.js";
 import { oauthRoutes } from "./routes/oauth.js";
+import { engagementRoutes } from "./routes/engagement.js";
+import { instagramWebhookRoutes } from "./routes/instagramWebhook.js";
+import { startEngagementWorker } from "./lib/engagementWorker.js";
+import { startEngagementReconcileCron } from "./lib/engagementReconcileCron.js";
 import { startWorker } from "./lib/worker.js";
 import { startTokenRefreshCron } from "./lib/tokenRefreshCron.js";
 import { startStatsCron, runStatsCronNow } from "./lib/statsCron.js";
@@ -157,6 +161,8 @@ async function main() {
   await app.register(trackRoutes);
   await app.register(feedbackRoutes);
   await app.register(aiRoutes);
+  await app.register(engagementRoutes);
+  await app.register(instagramWebhookRoutes);
 
   app.get("/health", async () => ({ ok: true }));
 
@@ -253,6 +259,8 @@ async function main() {
   startStatsCron();
   setCleanupStorage(storage);
   startCleanupCron();
+  startEngagementWorker();
+  startEngagementReconcileCron();
 }
 
 main().catch((err) => {

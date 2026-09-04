@@ -266,7 +266,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     const url = new URL("https://www.instagram.com/oauth/authorize");
     url.searchParams.set("client_id", IG_APP_ID);
     url.searchParams.set("redirect_uri", IG_REDIRECT_URI);
-    url.searchParams.set("scope", "instagram_business_basic,instagram_business_content_publish,instagram_business_manage_insights,instagram_business_manage_comments");
+    url.searchParams.set("scope", "instagram_business_basic,instagram_business_content_publish,instagram_business_manage_insights,instagram_business_manage_comments,instagram_business_manage_messages");
     url.searchParams.set("response_type", "code");
     url.searchParams.set("state", state);
     return reply.redirect(url.toString());

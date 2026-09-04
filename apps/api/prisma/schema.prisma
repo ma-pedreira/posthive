@@ -39,6 +39,7 @@ model User {
   events        Event[]
   workspaceMembers WorkspaceMember[]
   feedbacks     Feedback[]
+  engagementRules EngagementRule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,6 +69,7 @@ model Workspace {
   templates Template[]
   apiKeys   ApiKey[]
   feedbacks Feedback[]
+  engagementRules EngagementRule[]
 
   // Back-ref for users whose activeWorkspace points here
   activeForUsers User[] @relation("UserActiveWorkspace")
@@ -135,6 +137,7 @@ model Account {
   workspace    Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   targets PostJobTarget[]
+  engagementRules EngagementRule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -362,4 +365,58 @@ model CancellationFeedback {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+// Instagram comment auto-reply rule: keyword -> public reply + private DM.
+model EngagementRule {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId String?
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  accountId   String
+  account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  name        String
+  keyword     String
+  matchType   String   @default("partial") // "partial" | "whole_word"
+  targetMode  String   @default("any")     // "any" | "specific"
+  targetMediaId String?                    // Instagram media id, required when targetMode = "specific"
+
+  publicReplyEnabled Boolean @default(true)
+  publicReplyText    String?
+  dmText             String
+
+  enabled     Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  logs        EngagementLog[]
+
+  @@index([accountId])
+  @@index([workspaceId])
+}
+
+// One row per Instagram comment already actioned by an EngagementRule —
+// the unique commentId is what prevents the webhook and the polling
+// reconciler from double-processing the same comment.
+model EngagementLog {
+  id           String   @id @default(cuid())
+  ruleId       String
+  rule         EngagementRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  commentId    String   @unique
+  commenterUsername String?
+  commentText  String
+
+  publicReplySentAt DateTime?
+  dmStatus     String   @default("pending") // pending | sent | failed
+  dmError      String?
+  source       String   @default("webhook") // webhook | polling
+
+  createdAt    DateTime @default(now())
+
+  @@index([ruleId])
 }
