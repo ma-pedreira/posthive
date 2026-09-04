@@ -213,7 +213,7 @@ export default function EngagementPage() {
             <p className="text-sm" style={{ color: MUTED }}>
               Todavía no creaste ninguna regla de auto-respuesta.
               {accounts.length === 0 && (
-                <> Necesitás una cuenta de Instagram conectada — andá a <a href="/accounts" style={{ color: "#5b63d3" }}>Cuentas</a>.</>
+                <> Necesitas una cuenta de Instagram conectada: ve a <a href="/accounts" style={{ color: "#5b63d3" }}>Cuentas</a>.</>
               )}
             </p>
           </div>
@@ -226,7 +226,7 @@ export default function EngagementPage() {
                   <p className="font-semibold text-sm" style={{ color: TEXT }}>{rule.name}</p>
                   <p className="text-xs" style={{ color: MUTED }}>
                     {rule.account.displayName} · palabra clave &quot;{rule.keyword}&quot; ({rule.matchType === "whole_word" ? "palabra completa" : "coincidencia parcial"})
-                    {" · "}{rule.targetMode === "any" ? "cualquier post" : `post específico`}
+                    {" · "}{rule.targetMode === "any" ? "cualquier publicación" : `publicación específica`}
                   </p>
                 </div>
                 <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
@@ -299,7 +299,7 @@ export default function EngagementPage() {
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={labelStyle}>Cuenta de Instagram</label>
                 <select required value={form.accountId} onChange={(e) => setForm((f) => ({ ...f, accountId: e.target.value }))} style={inputStyle}>
-                  <option value="">Elegí una cuenta…</option>
+                  <option value="">Elige una cuenta…</option>
                   {accounts.map((a) => <option key={a.id} value={a.id}>{a.displayName}</option>)}
                 </select>
               </div>
@@ -323,13 +323,13 @@ export default function EngagementPage() {
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={labelStyle}>Aplicar a</label>
                 <select value={form.targetMode} onChange={(e) => setForm((f) => ({ ...f, targetMode: e.target.value as "any" | "specific" }))} style={inputStyle}>
-                  <option value="any">Cualquier post reciente</option>
-                  <option value="specific">Un post específico</option>
+                  <option value="any">Cualquier publicación reciente</option>
+                  <option value="specific">Una publicación específica</option>
                 </select>
               </div>
               {form.targetMode === "specific" && (
                 <div>
-                  <label className="block text-xs font-medium mb-1.5" style={labelStyle}>ID del post de Instagram</label>
+                  <label className="block text-xs font-medium mb-1.5" style={labelStyle}>ID de la publicación de Instagram</label>
                   <input required value={form.targetMediaId} onChange={(e) => setForm((f) => ({ ...f, targetMediaId: e.target.value }))}
                     placeholder="Ej: 17912345678901234" style={inputStyle} />
                 </div>
@@ -349,7 +349,7 @@ export default function EngagementPage() {
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={labelStyle}>Mensaje privado (DM)</label>
                 <textarea required rows={3} value={form.dmText} onChange={(e) => setForm((f) => ({ ...f, dmText: e.target.value }))}
-                  placeholder="Ej: ¡Hola! Acá tenés toda la info sobre precios: desagendado.com/precios" style={{ ...inputStyle, resize: "vertical" as const }} />
+                  placeholder="Ej: ¡Hola! Aquí tienes toda la info sobre precios: desagendado.com/precios" style={{ ...inputStyle, resize: "vertical" as const }} />
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" id="enabled" checked={form.enabled}

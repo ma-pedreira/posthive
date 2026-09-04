@@ -18,7 +18,7 @@ const ruleShape = z.object({
 
 const ruleBody = ruleShape.refine(
   (v) => v.targetMode !== "specific" || !!v.targetMediaId?.trim(),
-  { message: "targetMediaId is required when targetMode is 'specific'", path: ["targetMediaId"] }
+  { message: "Debes indicar el ID de la publicación cuando eliges \"publicación específica\"", path: ["targetMediaId"] }
 );
 
 const patchBody = ruleShape.partial();
@@ -44,7 +44,7 @@ export async function engagementRoutes(app: FastifyInstance): Promise<void> {
     const account = await prisma.account.findFirst({
       where: { id: data.accountId, workspaceId, platform: "instagram" },
     });
-    if (!account) return reply.status(400).send({ error: "accountId must be a connected Instagram account" });
+    if (!account) return reply.status(400).send({ error: "La cuenta seleccionada debe ser una cuenta de Instagram conectada" });
 
     const rule = await prisma.engagementRule.create({
       data: { ...data, userId, workspaceId },
@@ -59,7 +59,7 @@ export async function engagementRoutes(app: FastifyInstance): Promise<void> {
     if (!parsed.success) return reply.status(400).send({ error: parsed.error.flatten() });
 
     const existing = await prisma.engagementRule.findFirst({ where: { id, workspaceId } });
-    if (!existing) return reply.status(404).send({ error: "Rule not found" });
+    if (!existing) return reply.status(404).send({ error: "Regla no encontrada" });
 
     const rule = await prisma.engagementRule.update({ where: { id }, data: parsed.data });
     return reply.send({ rule });
@@ -69,7 +69,7 @@ export async function engagementRoutes(app: FastifyInstance): Promise<void> {
     const workspaceId = getWorkspaceId(req);
     const { id } = req.params as { id: string };
     const existing = await prisma.engagementRule.findFirst({ where: { id, workspaceId } });
-    if (!existing) return reply.status(404).send({ error: "Rule not found" });
+    if (!existing) return reply.status(404).send({ error: "Regla no encontrada" });
     await prisma.engagementRule.delete({ where: { id } });
     return reply.status(204).send();
   });
@@ -78,7 +78,7 @@ export async function engagementRoutes(app: FastifyInstance): Promise<void> {
     const workspaceId = getWorkspaceId(req);
     const { id } = req.params as { id: string };
     const rule = await prisma.engagementRule.findFirst({ where: { id, workspaceId } });
-    if (!rule) return reply.status(404).send({ error: "Rule not found" });
+    if (!rule) return reply.status(404).send({ error: "Regla no encontrada" });
 
     const logs = await prisma.engagementLog.findMany({
       where: { ruleId: id },
