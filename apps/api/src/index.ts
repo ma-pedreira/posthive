@@ -20,6 +20,7 @@ import { Queue } from "bullmq";
 import { prisma } from "./lib/prisma.js";
 import { LocalDiskStorage, SupabaseStorage } from "./lib/storage.js";
 import { setBlueskyStorage } from "./adapters/bluesky.js";
+import { setInstagramStorage } from "./adapters/instagram.js";
 import { setStorageAdapter as setMastodonStorage } from "./adapters/mastodon.js";
 import { setStorageAdapter as setPixelfedStorage } from "./adapters/pixelfed.js";
 import { setTelegramStorage } from "./adapters/telegram.js";
@@ -62,6 +63,7 @@ async function main() {
     ? new SupabaseStorage()
     : new LocalDiskStorage(UPLOADS_DIR);
   setBlueskyStorage(storage);
+  setInstagramStorage(storage);
   setMastodonStorage(storage);
   setPixelfedStorage(storage);
   setTelegramStorage(storage);

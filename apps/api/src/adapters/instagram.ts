@@ -1,9 +1,69 @@
+import sharp from "sharp";
 import type { Account } from "@prisma/client";
 import { decrypt, encrypt } from "../lib/encryption.js";
 import type { AnalyticsResult, CommentResult, PlatformAdapter, PostResult } from "./types.js";
 import { prisma } from "../lib/prisma.js";
+import type { StorageAdapter } from "../lib/storage.js";
 
 const API = "https://graph.instagram.com/v21.0";
+
+// Instagram Stories are a fixed 9:16 frame — a non-9:16 source image (e.g. a
+// square feed post reused as a story) gets center-cropped by Instagram itself
+// if sent as-is. Storage adapter injected at startup — allows swapping local
+// disk → S3/R2, same convention as the other adapters.
+let storageAdapter: StorageAdapter | null = null;
+export function setInstagramStorage(s: StorageAdapter): void {
+  storageAdapter = s;
+}
+
+const STORY_WIDTH = 1080;
+const STORY_HEIGHT = 1920;
+const STORY_RATIO = STORY_WIDTH / STORY_HEIGHT;
+const RATIO_TOLERANCE = 0.02;
+
+/**
+ * If `url` isn't already ~9:16, letterboxes it onto a 1080x1920 canvas with a
+ * blurred copy of itself as background (matches what the Instagram app does
+ * when you post a non-story-shaped image) instead of letting Meta crop it.
+ * Uploads the result via the injected storage and returns its URL — falls
+ * back to the original url on any failure (fetch, decode, missing storage).
+ */
+async function fitStoryImage(url: string): Promise<string> {
+  if (!storageAdapter) return url;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return url;
+    const buffer = Buffer.from(await res.arrayBuffer());
+    const meta = await sharp(buffer).metadata();
+    if (!meta.width || !meta.height) return url;
+
+    const ratio = meta.width / meta.height;
+    if (Math.abs(ratio - STORY_RATIO) <= RATIO_TOLERANCE) return url;
+
+    const background = await sharp(buffer)
+      .resize(STORY_WIDTH, STORY_HEIGHT, { fit: "cover" })
+      .blur(40)
+      .toBuffer();
+    const foreground = await sharp(buffer)
+      .resize(STORY_WIDTH, STORY_HEIGHT, { fit: "inside" })
+      .toBuffer();
+    const fgMeta = await sharp(foreground).metadata();
+    const left = Math.round((STORY_WIDTH - (fgMeta.width ?? STORY_WIDTH)) / 2);
+    const top = Math.round((STORY_HEIGHT - (fgMeta.height ?? STORY_HEIGHT)) / 2);
+
+    const composed = await sharp(background)
+      .composite([{ input: foreground, left, top }])
+      .jpeg({ quality: 90 })
+      .toBuffer();
+
+    const storedPath = await storageAdapter.upload(composed, "image/jpeg", "story-fit");
+    const apiBase = process.env.PUBLIC_API_URL ?? "";
+    return storedPath.startsWith("http") ? storedPath : `${apiBase}${storedPath}`;
+  } catch (err) {
+    console.error("[instagram] fitStoryImage failed, using original:", err);
+    return url;
+  }
+}
 
 interface InstagramCredentials {
   accessToken: string;
@@ -114,7 +174,7 @@ export const instagramAdapter: PlatformAdapter = {
       const isStoryVideo = isVideoUrl(absoluteUrls[0]);
       const body: Record<string, string> = isStoryVideo
         ? { media_type: "STORIES", video_url: absoluteUrls[0] }
-        : { media_type: "STORIES", image_url: absoluteUrls[0] };
+        : { media_type: "STORIES", image_url: await fitStoryImage(absoluteUrls[0]) };
       const { id: containerId } = await apiPost<{ id: string }>(`/${userId}/media`, accessToken, body);
       await waitForContainer(userId, accessToken, containerId);
       const postId = await publishContainer(userId, accessToken, containerId);
