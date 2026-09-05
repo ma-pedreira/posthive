@@ -86,10 +86,10 @@ export default function EngagementPage() {
     try {
       const [rulesRes, accountsRes] = await Promise.all([
         apiFetch<{ rules: EngagementRule[] }>("/engagement/rules"),
-        apiFetch<{ accounts: InstagramAccount[] }>("/accounts"),
+        apiFetch<InstagramAccount[]>("/accounts"),
       ]);
       setRules(rulesRes.rules ?? []);
-      setAccounts((accountsRes.accounts ?? []).filter((a) => a.platform === "instagram"));
+      setAccounts((accountsRes ?? []).filter((a) => a.platform === "instagram"));
     } catch (err) {
       toast(err instanceof Error ? err.message : "No se pudieron cargar las reglas", "error");
     } finally {
